@@ -12,11 +12,12 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 * I do not intend to display your items for sale.
 
 ## To Do: 
-* Get better at python
+* Get better at python / PHP
 * Lots of tweaks to add more information
 * Create single release view
 * Auto crop images to square format
 * Add check to avoid re-downloading folder data that hasn't changed.
+* Add option to make it fully dynamic (no downloading of data, just images.)
 
 ## To Fix:
 * Figure out logic to display Notes in expanded view / release view.
