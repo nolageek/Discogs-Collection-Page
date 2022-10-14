@@ -23,20 +23,24 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 
 # Requirements:
 * PHP 7.4 (Recommended)
-* Python 3.9
+* Python 2.x (See notes below)
 * Python modules getopt, sys, json, urllib.request, and os.path
 * A Discogs personal access token to access the Discogs API: https://www.discogs.com/settings/developers
+
+## Notes for python 3.x:
+ Change all occurances of `urllib` in the python script to `urllib.request`, including the **import** statement as well as all instances of `urllib.urlretrieve` to
+ `urllib.request.urlretrieve`.
 
 # Usage:
 
 * Upload the files to your web server in it's own directory off of your public_html. Be sure to create subdirectories named **img** and **json**.
-* You can either hardcode your Discogs token and username in the python script, or you can pass them via the --token and/or --username arguments.
-* In SSH run the discogs-update.py script with the **updateall** type (-t) argument: `python3 ./discogs-update.py -t updateall`
+* You can either hardcode your Discogs token and username in the python script, or you can pass them via the *--token* and/or *--username* arguments.
+* In SSH run the discogs-update.py script with the **updateall** *--type* (*-t*) argument, ie: `python ./discogs-update.py -t updateall`
 
-  Or, if you would like to pass the token on the command line: `python3 ./discogs-update.py -t updateall --username <username> --token <ABC123>`
+  Or, if you would like to pass the token on the command line, ie: `python ./discogs-update.py -t updateall --username <username> --token <ABC123>`
   
   This will download your list of folders, your releases in each folder sorted by *added* and by *artists* (both ascending and descending for each), as well as all images for the items in your collection. The script will not overwrite images that already exist but it will overwrite data files.
   
 * At this point you should have a working website with your collection sortable by artist and by date added.
 * One it's up and running you can use `-t updatefolderlist`, `-t updatefolders`, and `-t updateimages` if you will to avoid running **updateall**.
-* Set up a cron job to run the updateall command as often as you wish (try not to abuse their servers so your account doesn't get blocked.)
+* Set up a cron job to run the *updateall* command as often as you wish (try not to abuse their servers so your account doesn't get blocked.)
