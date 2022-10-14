@@ -2,29 +2,29 @@
 
 This PHP python script will generate a friendly view of your Discogs media collection.
 
-##Current Functiontionality:
+## Current Functiontionality:
 * Pulls down list of folders.
 * Displays gallery view of album covers, with release and artist names and some additional information.
 * Stores JSON data locally to cut down on API calls (updated via cron job).
 * Stores cover images locally to cut down on API calls (updated via cron job).
 
-##To Do: 
+## To Do: 
 * Get better at python
 * Lots of tweaks to add more information
 * Create single release view
 * Auto crop images to square format
 
-##To Fix:
+## To Fix:
 * Figure out logic to display Notes in expanded view / release view.
 
 
-#Requirements:
+# Requirements:
 * PHP 7.4 (Recommended)
 * Python 3.9
 * Python modules getopt, sys, json, urllib.request, and os.path
 * A Discogs personal access token to access the Discogs API: https://www.discogs.com/settings/developers
 
-#Usage:
+# Usage:
 
 * Upload the files to your web server in it's own directory off of your public_html. Be sure to create subdirectories named **img** and **json**.
 * You can either hardcode your Discogs token and username in the python script, or you can pass them via the --token and/or --username arguments.
