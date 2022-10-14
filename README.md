@@ -2,11 +2,14 @@
 
 This PHP python script will generate a friendly view of your Discogs media collection.
 
-## Current Functiontionality:
+ ![image](https://user-images.githubusercontent.com/2931834/195755371-078b95ce-2621-4110-928c-4754450845eb.png)
+ 
+## Current Functionality:
 * Pulls down list of folders.
 * Displays gallery view of album covers, with release and artist names and some additional information.
 * Stores JSON data locally to cut down on API calls (updated via cron job).
 * Stores cover images locally to cut down on API calls (updated via cron job).
+* I do not intend to display your items for sale.
 
 ## To Do: 
 * Get better at python
@@ -35,8 +38,5 @@ This PHP python script will generate a friendly view of your Discogs media colle
   This will download your list of folders, your releases in each folder sorted by *added* and by *artists* (both ascending and descending for each), as well as all images for the items in your collection. The script will not overwrite images that already exist but it will overwrite data files.
   
 * At this point you should have a working website with your collection sortable by artist and by date added.
-  
- ![image](https://user-images.githubusercontent.com/2931834/195755371-078b95ce-2621-4110-928c-4754450845eb.png)
- 
- * One it's up and running you can use `-t updatefolderlist`, `-t updatefolders`, and `-t updateimages` if you will to avoid running **updateall**.
- * Set up a cron job to run the updateall command as often as you wish (try not to abuse their servers so your account doesn't get blocked.)
+* One it's up and running you can use `-t updatefolderlist`, `-t updatefolders`, and `-t updateimages` if you will to avoid running **updateall**.
+* Set up a cron job to run the updateall command as often as you wish (try not to abuse their servers so your account doesn't get blocked.)
