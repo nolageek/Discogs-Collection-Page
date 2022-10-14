@@ -32,57 +32,65 @@ body {
 </head>
 
 <body>
-
-
-<!--
-
-<div class="container-fluid">
-  <div class="px-lg-5">
-    <!-- For demo purpose -->
-    <!--
-    <div class="row py-5">
-      <div class="col-lg-12 mx-auto">
-        <div class="text-white p-5 shadow-sm rounded banner">
-          <h1 class="display-4">Vincent's Record Collection</h1>
-          <p class="lead">Sorted by date, Newest First.</p>
-        </div>
-      </div>
-    </div>
-    <!-- End -->
-
-
-
-    <div class="py-5 text-center">
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
+//ini_set('display_errors', 'On');
 
-$json_file = "3220309";
+$folder_id = "0";
 $sort_by = "added";
 $order = "desc";
 $artist = "all";
-$pagenum = "1";
+$page_num = "1";
 
 // Folder
-if(isset($_GET['json']))
-$json_file = $_GET['json'];
 
 if(isset($_GET['folder']))
-$folderID = $_GET['folder'];
+$folder_id = $_GET['folder'];
 
 if(isset($_GET['sort_by']))
 $sort_by = $_GET['sort_by'];
 
 if(isset($_GET['pagenum']))
-$pagenum = $_GET['pagenum'];
+$page_num = $_GET['page_num'];
 
-if(isset($_GET['order'])) {
+if(isset($_GET['order'])) 
 $order = $_GET['order'];
-} 
+
+if(isset($_GET['artist']))
+$artist = $_GET['artist'];
+
 
 $folderjson = './json/folders.json'; // path to your FOLDER JSON file
 $folderdata = file_get_contents($folderjson); // put the contents of the file into a variable
 $folders = json_decode($folderdata,true); // decode the JSON feed
+
+foreach ($folders['folders'] as $folder) { 
+if ($folder['id'] == $folder_id) {
+	
+$foldername = $folder['name'];
+$foldercount = $folder['count'];
+}
+}
+?>
+
+
+<div class="container-fluid">
+	    <!-- For demo purpose -->
+
+    <div class="row py-2">
+      <div class="col-lg-12 mx-auto">
+        <div class="text-white p-5 shadow-sm rounded banner">
+          <h1 class="display-4">Discogs Collection Page</h1>
+          <p class="lead"><?php echo $foldername;?>, <?php echo $foldercount;?> items: Sorted by <?php echo $sort_by ?>, <?php echo $order ?>ending</p>
+        </div>
+      </div>
+    </div>
+    <!-- End -->
+	
+  <div class="px-lg-5">
+    <div class="py-5 text-center">
+
+<?php
 
 foreach ($folders['folders'] as $folder) { 
 $folderid = $folder['id'];
@@ -91,24 +99,26 @@ $foldercount = $folder['count'];
 
 if ($foldercount > 0) {
 ?>
-    <a href="/?json=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>" class="btn btn-primary px-2 py-1 text-uppercase<?php if ($json_file == $folderid) echo " disabled"; ?>"><?php echo $foldername; ?> (<?php echo $foldercount; ?>)</a>
+    <a href="/?folder=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>" class="btn btn-primary px-2 py-1 text-uppercase<?php if ($folder_id == $folderid) echo " disabled"; ?>"><?php echo $foldername; ?> (<?php echo $foldercount; ?>)</a>
 <?php } } ?>
 
     <?php if ($sort_by == "artist") { ?>
-    <a href="/?json=<?php echo $json_file; ?>&sort_by=added&order=<?php echo $order; ?>" class="btn btn-info px-2 py-1 text-uppercase">Added</a>
+    <a href="/?folder=<?php echo $folder_id; ?>&sort_by=added&order=<?php echo $order; ?>" class="btn btn-info px-2 py-1 text-uppercase">Added</a>
     <?php } else { ?>
-    <a href="/?json=<?php echo $json_file; ?>&sort_by=artist&order=<?php echo $order; ?>" class="btn btn-info px-2 py-1 text-uppercase">Artist</a> 
+    <a href="/?folder=<?php echo $folder_id; ?>&sort_by=artist&order=<?php echo $order; ?>" class="btn btn-info px-2 py-1 text-uppercase">Artist</a> 
 <?php } ?>
-    <a href="/?json=<?php echo $json_file; ?>&sort_by=<?php echo $sort_by; ?>&order=asc" class="btn btn-info px-2 py-1 text-uppercase">ASC</a>
-     <a href="/?json=<?php echo $json_file; ?>&sort_by=<?php echo $sort_by; ?>&order=desc" class="btn btn-info px-2 py-1 text-uppercase">DESC</a> 
+    <a href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=asc" class="btn btn-secondary px-2 py-1 text-uppercase<?php if ($order == "asc") echo " disabled"; ?>">ASC</a>
+     <a href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=desc" class="btn btn-secondary px-2 py-1 text-uppercase<?php if ($order == "desc") echo " disabled"; ?>">DESC</a> 
      
 
- <!--    <a href="/?json=<?php echo $json_file; ?>-title" class="btn btn-dark px-5 py-3 text-uppercase">Title</a> 
-     <a href="/?json=<?php echo $json_file; ?>-year" class="btn btn-dark px-5 py-3 text-uppercase">Year (asc)</a>
-     <a href="/?json=vinyl-year&sort=desc" class="btn btn-dark px-5 py-3 text-uppercase">Year (desc)</a>-->
+ <!--    <a href="/?folder=<?php echo $folder_id; ?>-title" class="btn btn-dark px-5 py-3 text-uppercase">Title</a> 
+     <a href="/?folder=<?php echo $folder_id; ?>-year" class="btn btn-dark px-5 py-3 text-uppercase">Year (asc)</a>
+     <a href="/?folder=vinyl-year&sort=desc" class="btn btn-dark px-5 py-3 text-uppercase">Year (desc)</a>-->
 
     </div>
+	
   </div>
+
 
   <div class="row">
   
@@ -116,7 +126,7 @@ if ($foldercount > 0) {
 <?php
 
 
-$pagejson = 'json/' . $json_file . "-" . $sort_by . "-" . $order . '.json'; // path to your JSON file
+$pagejson = 'json/' . $folder_id . "-" . $sort_by . "-" . $order . '.json'; // path to your JSON file
 $pagedata = file_get_contents($pagejson); // put the contents of the file into a variable
 $collection = json_decode($pagedata,true); // decode the JSON feed
 
@@ -139,6 +149,7 @@ $note = "Notes not working.";
 
 <!-- Gallery item -->
 
+	
 <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
         <?php $imagefile = "img/" . $release['basic_information']['id'] . ".jpeg"; 
               if (!file_exists($imagefile))
@@ -206,6 +217,7 @@ $note = "Notes not working.";
           </div>
         </div>
       </div>
+	  
 
     <!-- End gallery Item
 
