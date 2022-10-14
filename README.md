@@ -16,6 +16,7 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 * Lots of tweaks to add more information
 * Create single release view
 * Auto crop images to square format
+* Add check to avoid re-downloading folder data that hasn't changed.
 
 ## To Fix:
 * Figure out logic to display Notes in expanded view / release view.
@@ -44,3 +45,25 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 * At this point you should have a working website with your collection sortable by artist and by date added.
 * One it's up and running you can use `-t updatefolderlist`, `-t updatefolders`, and `-t updateimages` if you will to avoid running **updateall**.
 * Set up a cron job to run the *updateall* command as often as you wish (try not to abuse their servers so your account doesn't get blocked.)
+
+```
+$ python ./discogs-update.py -t updateall
+('Type: ', 'updateall')
+Downloading Folder List To ./json/folders.json
+Downloading Data For Folder All (ID: 0, Count: 321)
+Downloading Data For Folder CDs (ID: 3220306, Count: 77)
+Downloading Data For Folder Uncategorized (ID: 1, Count: 0)
+Downloading Data For Folder Vinyl 10 Inch (ID: 3946258, Count: 2)
+Downloading Data For Folder Vinyl 12 Inch (ID: 3220309, Count: 232)
+./img/4674050.jpeg (Two Lectures By Nathaniel Branden: The Psychology Of Pleasure - Social Metaphysics) already exists.
+./img/19427773.jpeg (Black Pumas) already exists.
+./img/556175.jpeg (The Booker T. Set) already exists.
+./img/652381.jpeg (Introduce Yourself) already exists.
+./img/22700786.jpeg (Get Behind Me Satan) already exists.
+...
+./img/9212076.jpeg (The Man Who Could Fall Backwards) already exists.
+./img/1542894.jpeg (August And Everything After) already exists.
+./img/1513456.jpeg (Woodstock 99) already exists.
+./img/1386071.jpeg (Tigerlily) already exists.
+./img/1248761.jpeg (War All The Time) already exists.
+```
