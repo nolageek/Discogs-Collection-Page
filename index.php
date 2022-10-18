@@ -33,14 +33,15 @@ body {
 
 <body>
 <?php
-//error_reporting(E_ALL);
-//ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
 
 $folder_id = "0";
 $sort_by = "added";
 $order = "desc";
 $artist = "all";
-$page_num = "1";
+$page = "1";
+$per = "50";
 
 // Folder
 
@@ -56,19 +57,40 @@ $page_num = $_GET['page_num'];
 if(isset($_GET['order'])) 
 $order = $_GET['order'];
 
+if(isset($_GET['page'])) 
+$page = $_GET['page'];
+
 if(isset($_GET['artist']))
 $artist = $_GET['artist'];
 
+if(isset($_GET['per']))
+$per = $_GET['per'];
 
-$folderjson = './json/folders.json'; // path to your FOLDER JSON file
-$folderdata = file_get_contents($folderjson); // put the contents of the file into a variable
+
+
+$DISCOGS_API_URL="https://api.discogs.com";
+$DISCOGS_USERNAME="";
+$DISCOGS_TOKEN="";
+
+$options  = array('http' => array('user_agent' => 'DiscogsCollectionPage'));
+$context  = stream_context_create($options);
+$folderjson = $DISCOGS_API_URL . "/users/" . $DISCOGS_USERNAME . "/collection/folders?token=" .$DISCOGS_TOKEN;
+
+//$folderjson = './json/folders.json'; // path to your FOLDER JSON file
+$folderdata = file_get_contents($folderjson, false, $context); // put the contents of the file into a variable
 $folders = json_decode($folderdata,true); // decode the JSON feed
 
+$pagejson = $DISCOGS_API_URL. "/users/" . $DISCOGS_USERNAME . "/collection/folders/" . $folder_id . "/releases?sort=" . $sort_by . "&sort_order=" . $order . "&page=" . $page . "&per_page=" . $per . "&token=" . $DISCOGS_TOKEN;
+//$pagejson = 'json/' . $folder_id . "-" . $sort_by . "-" . $order . '.json'; // path to your JSON file
+$pagedata = file_get_contents($pagejson, false, $context); // put the contents of the file into a variable
+$collection = json_decode($pagedata,true); // decode the JSON feed
+
+
+// Figure out name, ID and number of items of current folder.
 foreach ($folders['folders'] as $folder) { 
 if ($folder['id'] == $folder_id) {
-	
-$foldername = $folder['name'];
-$foldercount = $folder['count'];
+$currentfoldername = $folder['name'];
+$currentfoldercount = $folder['count'];
 }
 }
 ?>
@@ -77,11 +99,11 @@ $foldercount = $folder['count'];
 <div class="container-fluid">
 	    <!-- For demo purpose -->
 
-    <div class="row py-2">
+    <div class="row py-1">
       <div class="col-lg-12 mx-auto">
         <div class="text-white p-5 shadow-sm rounded banner">
           <h1 class="display-4">Discogs Collection Page</h1>
-          <p class="lead"><?php echo $foldername;?>, <?php echo $foldercount;?> items: Sorted by <?php echo $sort_by ?>, <?php echo $order ?>ending</p>
+          <p class="lead">[<?php echo $currentfoldername;?>] (<?php echo $currentfoldercount;?> items) Sorted by: <?php echo $sort_by ?>, <?php echo $order ?>ending</p>
         </div>
       </div>
     </div>
@@ -99,16 +121,16 @@ $foldercount = $folder['count'];
 
 if ($foldercount > 0) {
 ?>
-    <a href="/?folder=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>" class="btn btn-primary px-2 py-1 text-uppercase<?php if ($folder_id == $folderid) echo " disabled"; ?>"><?php echo $foldername; ?> (<?php echo $foldercount; ?>)</a>
+    <a href="/?folder=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per=<?php echo $per; ?>&page=1" class="btn btn-primary px-2 py-1 text-uppercase<?php if ($folder_id == $folderid) echo " disabled"; ?>"><?php echo $foldername; ?> (<?php echo $foldercount; ?>)</a>
 <?php } } ?>
 
     <?php if ($sort_by == "artist") { ?>
-    <a href="/?folder=<?php echo $folder_id; ?>&sort_by=added&order=<?php echo $order; ?>" class="btn btn-info px-2 py-1 text-uppercase">Added</a>
+    <a href="/?folder=<?php echo $folder_id; ?>&sort_by=added&order=<?php echo $order; ?>&per=<?php echo $per; ?>&page=<?php echo $page; ?>" class="btn btn-info px-2 py-1 text-uppercase">Added</a>
     <?php } else { ?>
-    <a href="/?folder=<?php echo $folder_id; ?>&sort_by=artist&order=<?php echo $order; ?>" class="btn btn-info px-2 py-1 text-uppercase">Artist</a> 
+    <a href="/?folder=<?php echo $folder_id; ?>&sort_by=artist&order=<?php echo $order; ?>&page=<?php echo $page; ?>" class="btn btn-info px-2 py-1 text-uppercase">Artist</a> 
 <?php } ?>
-    <a href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=asc" class="btn btn-secondary px-2 py-1 text-uppercase<?php if ($order == "asc") echo " disabled"; ?>">ASC</a>
-     <a href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=desc" class="btn btn-secondary px-2 py-1 text-uppercase<?php if ($order == "desc") echo " disabled"; ?>">DESC</a> 
+    <a href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=asc&per=<?php echo $per; ?>" class="btn btn-secondary px-2 py-1 text-uppercase<?php if ($order == "asc") echo " disabled"; ?>">ASC</a>
+     <a href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=desc&per=<?php echo $per; ?>&page=<?php echo $page; ?>" class="btn btn-secondary px-2 py-1 text-uppercase<?php if ($order == "desc") echo " disabled"; ?>">DESC</a> 
      
 
  <!--    <a href="/?folder=<?php echo $folder_id; ?>-title" class="btn btn-dark px-5 py-3 text-uppercase">Title</a> 
@@ -119,16 +141,30 @@ if ($foldercount > 0) {
 	
   </div>
 
+<nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item <?php if($page == 1) echo "disabled"; ?>">
+	      <a class="page-link" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per=<?php echo $per; ?>&page=<?php if($page != 1) echo (intval($page) - 1); ?>" tabindex="-1">Previous</a>
+
+    </li>
+	
+<?php 	$x = 1;
+		$pages = $collection['pagination']['pages'];
+		while($x <= $pages) {?>
+		
+    <li class="page-item <?php if($page == $x) echo "active"; ?>"><a class="page-link" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per=<?php echo $per; ?>&page=<?php echo $x;?>"><?php echo $x;?></a></li>
+		<?php $x++; } ?>
+		
+    <li class="page-item <?php if($page == $collection['pagination']['pages']) echo "disabled"; ?>">
+      <a class="page-link" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per=<?php echo $per; ?>&page=<?php if($page != $pages) echo (intval($page) + 1); ?>" tabindex="-1">Next</a>
+    </li>
+  </ul>
+</nav>
 
   <div class="row">
   
 
 <?php
-
-
-$pagejson = 'json/' . $folder_id . "-" . $sort_by . "-" . $order . '.json'; // path to your JSON file
-$pagedata = file_get_contents($pagejson); // put the contents of the file into a variable
-$collection = json_decode($pagedata,true); // decode the JSON feed
 
 foreach ($collection['releases'] as $release) { 
 $artists = implode(", ", array_column($release['basic_information']['artists'], "name"));
@@ -143,13 +179,13 @@ if ($release['basic_information']['formats'][0]['descriptions'])
   $formatdesc = implode(", ", $release['basic_information']['formats'][0]['descriptions']);
 $genres = implode(", ", $release['basic_information']['genres']);
 $styles = implode(", ", $release['basic_information']['styles']);
-$note = "Notes not working.";
+$notes = implode(", ", $release['basic_information']['notes']);
+
 
 ?>
 
-<!-- Gallery item -->
 
-	
+<!-- Gallery item -->
 <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
         <?php $imagefile = "img/" . $release['basic_information']['id'] . ".jpeg"; 
               if (!file_exists($imagefile))
@@ -196,10 +232,8 @@ $note = "Notes not working.";
     <tr class="collapse multi-collapse<?php echo $id; ?>" id='<?php echo $id; ?>B'>
       <th scope="row">Notes</th>
        <td>
-       <?php //foreach ($release['basic_information']["notes"] as $notes) {
-         //$note = $notes['value'];
-       if($note) echo $note;
-     //} ?>
+       <?php if($notes) echo $notes;
+      ?>
       </td>      
     </tr>
 </tbody>
@@ -217,9 +251,7 @@ $note = "Notes not working.";
           </div>
         </div>
       </div>
-	  
-
-    <!-- End gallery Item
+	  <!-- End gallery Item
 
 <?php } ?>
 
