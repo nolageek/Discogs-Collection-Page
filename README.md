@@ -7,7 +7,8 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 ## Current Functionality:
 * Pulls down list of folders.
 * Displays gallery view of album covers, with release and artist names and some additional information.
-* Stores JSON data locally to cut down on API calls (updated via cron job).
+* ~~Stores JSON data locally to cut down on API calls (updated via cron job).~~ This is no longer default behavior. Now pulls data down using API when needed.
+* Auto paginates (50 per page by default,)
 * Stores cover images locally to cut down on API calls (updated via cron job).
 * I do not intend to display your items for sale.
 
@@ -15,9 +16,10 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 * Get better at python / PHP
 * Lots of tweaks to add more information
 * Create single release view
-* Auto crop images to square format
-* Add check to avoid re-downloading folder data that hasn't changed.
-* Add option to make it fully dynamic (no downloading of data, just images.)
+* Auto crop images better to square format
+* ~~Add check to avoid re-downloading folder data that hasn't changed.
+* ~~Add option to make it fully dynamic (no downloading of data, just images.)
+* Add option to no longer dynamically pull API data and use local data.
 
 ## To Fix:
 * Figure out logic to display Notes in expanded view / release view.
@@ -35,16 +37,17 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 
 # Usage:
 
-* Upload the files to your web server in it's own directory off of your public_html. Be sure to create subdirectories named **img** and **json**.
+* Upload the files to your web server in it's own directory off of your public_html.
+* Create subdirectory named **img** and **json**.
 * You can either hardcode your Discogs token and username in the python script, or you can pass them via the *--token* and/or *--username* arguments.
-* In SSH run the discogs-update.py script with the **updateall** *--type* (*-t*) argument, ie: `python ./discogs-update.py -t updateall`
+* In SSH run the discogs-update.py script with the **--updateimages** argument, ie: `python ./discogs-update.py --updateimages`
 
-  Or, if you would like to pass the token on the command line, ie: `python ./discogs-update.py -t updateall --username <username> --token <ABC123>`
+  Or, if you would like to pass the token on the command line, ie: `python ./discogs-update.py --updateimages --username <username> --token <ABC123>`
   
-  This will download your list of folders, your releases in each folder sorted by *added* and by *artists* (both ascending and descending for each), as well as all images for the items in your collection. The script will not overwrite images that already exist but it will overwrite data files.
+This will download your list of folders, your releases in each folder sorted by *added* and by *artists* (both ascending and descending for each), as well as all images for the items in your collection. The script will not overwrite images that already exist but it will overwrite data files.
   
 * At this point you should have a working website with your collection sortable by artist and by date added.
-* One it's up and running you can use `-t updatefolderlist`, `-t updatefolders`, and `-t updateimages` if you will to avoid running **updateall**.
+* One it's up and running you can use `--updatefolderlist`, `--updatefolders`, or `--updateimages` if you would like to avoid running **updateall**.
 * Set up a cron job to run the *updateall* command as often as you wish (try not to abuse their servers so your account doesn't get blocked.)
 
 ```
