@@ -44,7 +44,7 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 
   Or, if you would like to pass the token on the command line, ie: `python ./discogs-update.py --updateimages --username <username> --token <ABC123>`
   
-This will download your list of folders, your releases in each folder sorted by *added* and by *artists* (both ascending and descending for each), as well as all images for the items in your collection. The script will not overwrite images that already exist but it will overwrite data files.
+This will download your list of folders, your list of releases in the folder sorted by *added* and by *artists* (both ascending and descending for each), as well as all images for the items in your collection. The script will not overwrite images that already exist but it will overwrite data files.
   
 * At this point you should have a working website with your collection sortable by artist and by date added.
 * One it's up and running you can use `--updatefolderlist`, `--updatefolders`, or `--updateimages` if you would like to avoid running **updateall**.
