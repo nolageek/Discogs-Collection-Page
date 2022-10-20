@@ -9,8 +9,8 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 * Displays gallery view of album covers, with release and artist names and some additional information.
 * ~~Stores JSON data locally to cut down on API calls (updated via cron job).~~ This is no longer default behavior. Now pulls data down using API when needed.
 * Auto paginates (50 per page by default,)
-* Stores cover images locally to cut down on API calls (updated via cron job).
-* I do not intend to display your items for sale.
+* **Optionnally and stongly recommended**: Stores cover images locally to cut down on API calls and hotlinking (updated via cron job).
+* I do not currently intend to display your items for sale.
 
 ## To Do: 
 * Get better at python / PHP
@@ -19,12 +19,13 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 * Auto crop images better to square format
 * ~~Add check to avoid re-downloading folder data that hasn't changed.
 * ~~Add option to make it fully dynamic (no downloading of data, just images.)
-* Add option to no longer dynamically pull API data and use local data.
+* ~~Add option to no longer dynamically pull API data and use local data.
 
 ## To Fix:
 * Figure out logic to display Notes in expanded view / release view.
 
 
+# A lot of the below items are outdated but still valid.
 # Requirements:
 * PHP 7.4 (Recommended)
 * Python 2.x (See notes below)
@@ -36,13 +37,13 @@ These PHP and python scripts will generate a friendly view of your Discogs media
  `urllib.request.urlretrieve`.
 
 # Usage:
-
+## This will still work, but is a little outdated.
 * Upload the files to your web server in it's own directory off of your public_html.
 * Create subdirectory named **img** and **json**.
 * You can either hardcode your Discogs token and username in the python script, or you can pass them via the *--token* and/or *--username* arguments.
 * In SSH run the discogs-update.py script with the **--updateimages** argument, ie: `python ./discogs-update.py --updateimages`
 
-  Or, if you would like to pass the token on the command line, ie: `python ./discogs-update.py --updateimages --username <username> --token <ABC123>`
+Or, if you would like to pass the token on the command line, ie: `python ./discogs-update.py --updateimages --username <username> --token <ABC123>`
   
 This will download your list of folders, your list of releases in the folder sorted by *added* and by *artists* (both ascending and descending for each), as well as all images for the items in your collection. The script will not overwrite images that already exist but it will overwrite data files.
   
