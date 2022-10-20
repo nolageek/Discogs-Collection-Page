@@ -9,7 +9,7 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 * Displays gallery view of album covers, with release and artist names and some additional information.
 * ~~Stores JSON data locally to cut down on API calls (updated via cron job).~~ This is no longer default behavior. Now pulls data down using API when needed.
 * Auto paginates (50 per page by default,)
-* **Optionnally and stongly recommended**: Stores cover images locally to cut down on API calls and hotlinking (updated via cron job).
+* **Optionally and stongly recommended:** Stores cover images locally to cut down on API calls and hotlinking (updated via cron job or automagically).
 * I do not currently intend to display your items for sale.
 
 ## To Do: 
@@ -18,9 +18,9 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 * Create single release view
 * Auto crop images better to square format
 * Add dark mode
-* ~~Add check to avoid re-downloading folder data that hasn't changed.
-* ~~Add option to make it fully dynamic (no downloading of data, just images.)
-* ~~Add option to no longer dynamically pull API data and use local data.
+* ~~Add check to avoid re-downloading folder data that hasn't changed.~~
+* ~~Add option to make it fully dynamic (no downloading of data, just images.)~~
+* ~~Add option to no longer dynamically pull API data and use local data.~~
 
 ## To Fix:
 * Figure out logic to display Notes in expanded view / release view.
