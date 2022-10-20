@@ -2,8 +2,8 @@
 
 These PHP and python scripts will generate a friendly view of your Discogs media collection organized by your Discogs folders.
 
- ![image](https://user-images.githubusercontent.com/2931834/195755371-078b95ce-2621-4110-928c-4754450845eb.png)
- 
+![image](https://user-images.githubusercontent.com/2931834/197074374-b008bf17-ffd7-44db-9e57-18cf1b95e1f2.png)
+
 ## Current Functionality:
 * Pulls down list of folders.
 * Displays gallery view of album covers, with release and artist names and some additional information.
@@ -17,6 +17,7 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 * Lots of tweaks to add more information
 * Create single release view
 * Auto crop images better to square format
+* Add dark mode
 * ~~Add check to avoid re-downloading folder data that hasn't changed.
 * ~~Add option to make it fully dynamic (no downloading of data, just images.)
 * ~~Add option to no longer dynamically pull API data and use local data.
