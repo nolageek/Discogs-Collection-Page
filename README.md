@@ -5,25 +5,23 @@ These PHP and python scripts will generate a friendly view of your Discogs media
 ![image](https://user-images.githubusercontent.com/2931834/197074374-b008bf17-ffd7-44db-9e57-18cf1b95e1f2.png)
 
 ## Current Functionality:
-* Pulls down list of folders.
-* Displays gallery view of album covers, with release and artist names and some additional information.
-* ~~Stores JSON data locally to cut down on API calls (updated via cron job).~~ This is no longer default behavior. Now pulls data down using API when needed.
+* Mobile friendly
+* Displays gallery view of album covers, with title and artist name(s).
 * Auto paginates (50 per page by default,)
-* **Optionally and stongly recommended:** Stores cover images locally to cut down on API calls and hotlinking (updated via cron job or automagically).
 * I do not currently intend to display your items for sale.
+* Gallery images link to single release view with more information about release, including ratings/notes on copy in collection.
 
 ## To Do: 
 * Get better at python / PHP
-* Lots of tweaks to add more information
-* Create single release view
 * Auto crop images better to square format
 * Add dark mode
+* ~~Create single release view~~
 * ~~Add check to avoid re-downloading folder data that hasn't changed.~~
 * ~~Add option to make it fully dynamic (no downloading of data, just images.)~~
 * ~~Add option to no longer dynamically pull API data and use local data.~~
 
 ## To Fix:
-* Figure out logic to display Notes in expanded view / release view.
+* ~~Figure out logic to display Notes in expanded view / release view.~~
 
 
 # A lot of the below items are outdated but still valid.
