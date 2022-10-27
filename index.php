@@ -3,8 +3,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 $DISCOGS_API_URL="https://api.discogs.com";
-$DISCOGS_USERNAME="nolageek";
-$DISCOGS_TOKEN="ZylBbtsdWZrBEdEwhAdVSBZuuthKdDmqJvllmjBg";
+$DISCOGS_USERNAME="";
+$DISCOGS_TOKEN="";
 
 $folder_id = "0";
 $sort_by = "added";
