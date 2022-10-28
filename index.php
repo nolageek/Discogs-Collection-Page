@@ -2,9 +2,11 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
+$start_time = microtime(true);
+
 $DISCOGS_API_URL="https://api.discogs.com";
-$DISCOGS_USERNAME="";
-$DISCOGS_TOKEN="";
+$DISCOGS_USERNAME="nolageek";
+$DISCOGS_TOKEN="ZylBbtsdWZrBEdEwhAdVSBZuuthKdDmqJvllmjBg";
 
 $folder_id = "0";
 $sort_by = "added";
@@ -14,7 +16,7 @@ $page = "1";
 $per = "50";
 $releaseid = "";
 
-// Folder
+// GET ATTRIBUTES FROM URL
 
 if(isset($_GET['folder']))
 $folder_id = $_GET['folder'];
@@ -40,16 +42,24 @@ $releaseid = $_GET['releaseid'];
 $options  = array('http' => array('user_agent' => 'DiscogsCollectionPage'));
 $context  = stream_context_create($options);
 
+// IF THIS IS A SINGLE RELEASE VIEW, GET INFORMATION FROM RELEASE AND FROM USER COLLECTION FOR THAT RELEASE
 if($releaseid) {
 	$releasejson = $DISCOGS_API_URL . "/releases/" . $releaseid . "?token=" .$DISCOGS_TOKEN;
 	$releasedata = file_get_contents($releasejson, false, $context); // put the contents of the file into a variable
 	$releaseinfo = json_decode($releasedata,true); // decode the JSON feed
+	
+	$myreleasejson = $DISCOGS_API_URL . "/users/" . $DISCOGS_USERNAME . "/collection/releases/" . $releaseid . "?token=" .$DISCOGS_TOKEN;
+	$myreleasedata = file_get_contents($myreleasejson, false, $context); // put the contents of the file into a variable
+	$myreleaseinfo = json_decode($myreleasedata,true); // decode the JSON feed
+
+// IF NOT A SINGLE RELEASE VIEW, GET DATA FOR USER COLLECTION TO DISPLAY COVER GALLERY.
 } else {
 	$pagejson = $DISCOGS_API_URL. "/users/" . $DISCOGS_USERNAME . "/collection/folders/" . $folder_id . "/releases?sort=" . $sort_by . "&sort_order=" . $order . "&page=" . $page . "&per_page=" . $per . "&token=" . $DISCOGS_TOKEN;
 	$pagedata = file_get_contents($pagejson, false, $context); // put the contents of the file into a variable
 	$collection = json_decode($pagedata,true); // decode the JSON feed
 }
 
+// GET FOLDER DATA FOR NAVIGATION BAR
 $folderjson = $DISCOGS_API_URL . "/users/" . $DISCOGS_USERNAME . "/collection/folders?token=" .$DISCOGS_TOKEN;
 $folderdata = file_get_contents($folderjson, false, $context); // put the contents of the file into a variable
 $folders = json_decode($folderdata,true); // decode the JSON feed
@@ -62,12 +72,12 @@ $currentfoldercount = $folder['count'];
 }
 }
 ?>
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 
-    <title>Discogs Collection Page</title>
-    <meta name="viewport" content="width=device-width, initial-scale=.8">
+<title>Discogs Collection Page</title>
+<meta name="viewport" content="width=device-width, initial-scale=.8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
 <script src="https://kit.fontawesome.com/7e1a0bb728.js" crossorigin="anonymous"></script>
@@ -75,7 +85,6 @@ $currentfoldercount = $folder['count'];
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 
 <style>
-
 /*
 *
 * ==========================================
@@ -95,14 +104,11 @@ body {
 }
 
 .list-group-item { word-wrap: break-word; }
-
 </style>
 
 </head>
 
 <body>
-
-
 
 <div class="container-fluid"> <!-- Outer Container -->
 
@@ -111,7 +117,12 @@ body {
       <div class="col-12 mx-auto my-1">
         <div class="text-white p-3 shadow-sm rounded banner">
           <h2 class="display-6">Discogs Collection Page for <?php echo $DISCOGS_USERNAME ?></h2>
+
+		  <?php if($releaseid) { ?>
+		  <p class="lead"><?php echo $releaseinfo['title'];?> by <?php echo implode(", ", array_column($releaseinfo['artists'], "name"));?></p>
+		  <?php } else { ?>
           <p class="lead">[<?php echo $currentfoldername;?>] (<?php echo $currentfoldercount;?> items) Sorted by: <?php echo $sort_by ?>, <?php echo $order ?>ending</p>
+		  <?php } ?>
         </div>
       </div>
     </div>
@@ -121,7 +132,7 @@ body {
 <!-- Pagination / Nav / Filter Bar-->
 <div class="btn-toolbar d-flex justify-content-center p-3" role="toolbar" aria-label="Toolbar with button groups">
 
-    <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Pagination">
+ <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Pagination">
 	<?php if(!$releaseid) { ?>
         <a class="btn btn-primary text-uppercase <?php if($page == 1) echo "disabled"; ?>" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per=<?php echo $per; ?>&page=<?php if($page != 1) echo (intval($page) - 1); ?>" tabindex="-1">&#12298;</a>
 <?php 	$x = 1;
@@ -131,76 +142,66 @@ body {
 		<?php $x++; } 
 ?>
 		<a class="btn btn-primary text-uppercase <?php if($page == $collection['pagination']['pages']) echo "disabled"; ?>" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per=<?php echo $per; ?>&page=<?php if($page != $pages) echo (intval($page) + 1); ?>" tabindex="-1">&#12299;</a>
-	</div>
+  </div>
 	
-	<div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Per Page">
+  <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Per Page">
     <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <?php echo $per; ?> Per Page
     </button>
-    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+  <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
       <a class="dropdown-item" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per=25&page=1">25</a>
       <a class="dropdown-item" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per=50&page=1">50</a>
 	  <a class="dropdown-item" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per=100&page=1">100</a>
-    </div>
+  </div>
 	
 	<?php } else {?>
   <button type="button" class="btn btn-primary text-uppercase" onclick="javascript:history.go(-1)">Back</button>
   <?php } ?>
-  </div>
+</div>
 
   
-	    <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Folder Navigation">
-		
-<?php
+  <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Folder Navigation">
+<?php foreach ($folders['folders'] as $folder) { 
 
-foreach ($folders['folders'] as $folder) { 
-$folderid = $folder['id'];
-$foldername = $folder['name'];
-$foldercount = $folder['count'];
+		$folderid = $folder['id'];
+		$foldername = $folder['name'];
+		$foldercount = $folder['count'];
 
-if ($foldercount > 1) {
-?>
+		if ($foldercount > 1) { ?>
     <a href="/?folder=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per=<?php echo $per; ?>&page=1" class="btn btn-primary text-uppercase<?php if ($folder_id == $folderid) echo " disabled"; ?>"><?php echo $foldername; ?> (<?php echo $foldercount; ?>)</a>
 <?php } } ?>
-    </div>
+  </div>
 	
 <?php if(!$releaseid) { ?>	
-	
-    <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Sort by Artist or Date Added">
+  <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Sort by Artist or Date Added">
     <?php if ($sort_by == "artist") { ?>
     <a href="/?folder=<?php echo $folder_id; ?>&sort_by=added&order=<?php echo $order; ?>&per=<?php echo $per; ?>&page=<?php echo $page; ?>" class="btn btn-info text-uppercase">Added</A>
     <?php } else { ?>
     <a href="/?folder=<?php echo $folder_id; ?>&sort_by=artist&order=<?php echo $order; ?>&page=<?php echo $page; ?>" class="btn btn-info text-uppercase">Artist</a> 
 <?php } ?>
-    </div>
-    <div class="btn-group btn-group-sm  p-1" role="group" aria-label="Ascending or Descending">
+  </div>
+  
+  <div class="btn-group btn-group-sm  p-1" role="group" aria-label="Ascending or Descending">
     <a href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=asc&per=<?php echo $per; ?>" class="btn btn-secondary text-uppercase<?php if ($order == "asc") echo " disabled"; ?>">ASC</a>
      <a href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=desc&per=<?php echo $per; ?>&page=<?php echo $page; ?>" class="btn btn-secondary text-uppercase<?php if ($order == "desc") echo " disabled"; ?>">DESC</a> 
-    </div>
+ </div>
 <?php } ?>	
-	
-    </div> <!-- Pagination / Nav / Filter Bar-->
+</div> <!-- Pagination / Nav / Filter Bar-->
 
+
+<div class="row"> <!-- Gallery of Releases -->
+  <?php $start_time = microtime(true); ?>
   
-
-
-
-  <div class="row"> <!-- Gallery of Releases -->
-
-
-  
-  <?php 
-  	if ($releaseid) {
+<?php if ($releaseid) {
 	  display_release_data($releaseid);
-  } else {
-	  
-  foreach ($collection['releases'] as $release) { 
-	display_gallery_item($release);
+	} else {
+	  foreach ($collection['releases'] as $release) { 
+		display_gallery_item($release);
 }
   }	  
+	$end_time = microtime(true);
+	$execution_time = ($end_time - $start_time);
 
-  
-  
 ?>
 
 </div> <!-- Gallery of Releases End -->
@@ -213,16 +214,6 @@ function display_gallery_item($release) {
 $artists = implode(", ", array_column($release['basic_information']['artists'], "name"));
 $title = $release['basic_information']['title'];
 $id = $release['basic_information']['id'];
-$year = $release['basic_information']['year'];
-$resourceurl = $release['basic_information']['resource_url'];
-$labelname = implode(", ", array_column($release['basic_information']['labels'], "name"));
-$formatname = implode(", ", array_column($release['basic_information']['formats'], "name"));
-$formattext = implode("", array_column($release['basic_information']['formats'], "text"));
-if (@$release['basic_information']['formats'][0]['descriptions'])
-  $formatdesc = implode(", ", $release['basic_information']['formats'][0]['descriptions']);
-$genres = implode(", ", $release['basic_information']['genres']);
-$styles = implode(", ", $release['basic_information']['styles']);
-$notes = sizeof(array_column($release['basic_information'],'notes'));
 $imageupdatedtext = "";
 $imagefile = "./img/" . $release['basic_information']['id'] . ".jpeg"; 
               if (!file_exists($imagefile) && is_dir( "./img/" ) ) {
@@ -232,8 +223,9 @@ $imagefile = "./img/" . $release['basic_information']['id'] . ".jpeg";
               } elseif (!file_exists($imagefile) && !is_dir( "./img/" ) ) {
                 $imageupdatedtext = "Missing file has been hotlinked from Discogs server.";  
                 $imagefile = $release['basic_information']['cover_image'];
+
               }
-			  
+	  
 ?>
 
 
@@ -264,33 +256,13 @@ $imagefile = "./img/" . $release['basic_information']['id'] . ".jpeg";
       <td>Artist</td>
       <td><?php echo $artists; ?></td>
     </tr>
-    <tr class="collapse multi-collapse<?php echo $id; ?>" id='<?php echo $id; ?>B'>
-      <th scope="row"><i class="fa-fw fa-solid fa-file-pen"></i></th>
-      <td>Notes</td>
-       <td>
-	   
-       <?php foreach ($release['basic_information']['notes'] as $notes) {
-	   echo $notes['field_id']; }
-	  
-		   
-	   if($notes) echo $notes;
-      ?>
-      </td>      
-    </tr>
-    <tr class="collapse multi-collapse<?php echo $id; ?>" id='<?php echo $id; ?>B'>
-      <th scope="row"><i class="fa-fw fa-solid fa-file-pen"></i></th>
-      <td colspan="2" align="right"><a class="btn btn-secondary btn-sm" href="/?releaseid=<?php echo $id ?>">More</a>
-       <a class="btn btn-secondary btn-sm" href="https://www.discogs.com/release/<?php echo $id ?>">Discogs <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-           
-      </td>      
-    </tr>
 </tbody>
 </table>
  
             <div class="d-flex align-items-center justify-content-between bg-light px-3 py-2 mt-4">
               <p class="small mb-0 text-muted">added <?php $adddate = $release['date_added']; echo date('m/d/y', strtotime(substr($adddate,0,10))) ?></p>
               <?php $todaydate = date("Y-m-d");
-               if(strtotime($adddate) > strtotime('-10 days')) {
+               if(strtotime($adddate) > strtotime('-14 days')) {
                 ?>
               <div class="badge badge-danger px-3 rounded-pill font-weight-normal">New</div>
               <?php  } ?>
@@ -306,8 +278,12 @@ $imagefile = "./img/" . $release['basic_information']['id'] . ".jpeg";
 
 <?php function display_release_data($releaseid) {
 global $releaseinfo;
+global $myreleaseinfo;
+
 
 #$resourceurl = $release['basic_information']['resource_url'];
+$id = $releaseinfo['id'];
+
 $labelname = implode(", ", array_column($releaseinfo['labels'], "name"));
 $formatname = implode(", ", array_column($releaseinfo['formats'], "name"));
 $formattext = implode("", array_column($releaseinfo['formats'], "text"));
@@ -318,7 +294,7 @@ $styles = "";
 @$styles = implode(", ", $releaseinfo['styles']);
 
 
-$title = $releaseinfo['title'];
+$title = $releaseinfo["title"];
 //$artists = $releaseinfo['artists'];
 $artists = implode(", ", array_column($releaseinfo['artists'], "name"));
 $identifiers = $releaseinfo['identifiers'];
@@ -327,7 +303,7 @@ $extraartists = $releaseinfo['extraartists'];
 $releasenotes = $releaseinfo['notes'];
 $images = $releaseinfo['images'];
 $year = $releaseinfo['released'];
-$notes = "Notes not dworking yet.";
+$notes = "Notes not working yet.";
 
 ?>
 <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
@@ -335,25 +311,25 @@ $notes = "Notes not dworking yet.";
  
 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">
-  
-  <?php for($i=0; $i<sizeof($images);$i++) { echo '<div class="carousel-item'; if($i == 0) { echo " active"; } echo '"><img class="d-block w-100" src="' . $images[$i]['resource_url'] . '" alt="' . $images[$i]['type'] . '">
-  </div>'; } ?>
+    <?php for($i=0; $i<sizeof($images);$i++) { echo '<div class="carousel-item'; if($i == 0) { echo " active"; } echo '"><img class="d-block w-100" src="' . $images[$i]['resource_url'] . '" alt="' . $images[$i]['type'] . '"></div>
+	'; } ?>
    </div>
+   
 <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="sr-only">Previous</span>
   </a>
-  <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+
+<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="sr-only">Next</span>
   </a>
+  
 </div>
 
-		<div class="p-1 table-responsive">
-		
-		
-		           <table class="table table-striped">
-            <tbody>
+<div class="p-1 table-responsive">
+ <table class="table table-striped">
+  <tbody>
     <tr>
       <th scope="row"><i class="fa-fw fa-solid fa-quote-right"></i></th>
       <td>Title</td>
@@ -393,25 +369,37 @@ $notes = "Notes not dworking yet.";
       </td>
       </tr>
     <tr>
-      <th scope="row"><i class="fa-fw fa-solid fa-file-pen"></i></th>
-      <td>Notes</td>
-       <td>
-       <?php if($notes) echo $notes;
-      ?>
-      </td>      
-    </tr>
+<?php foreach ($myreleaseinfo['releases'][0]['notes'] as $notes) {
+	   echo '<th scope="row">'; if ($notes['field_id'] == 1) echo '<i class="fa-fw fa-solid fa-compact-disc"></i></th><td>Media</td>'; if ($notes['field_id'] == 2) echo '<i class="fa-fw fa-solid fa-square-full"></i></th><td>Sleeve</td>'; if ($notes['field_id'] == 3) echo '<i class="fa-fw fa-solid fa-clipboard"></i></th><td>Notes</td>'; echo '<td>' . $notes['value'] .'</td></tr>
+	   '; } ?>
     <tr>
-      <th scope="row"><i class="fa-fw fa-solid fa-file-pen"></i></th>
-      <td colspan="2" align="right"><a class="btn btn-secondary btn-sm" href="/?releaseid=<?php echo $id ?>">More</a>
+      <th scope="row"></th>
+      <td colspan="3" align="right">
        <a class="btn btn-secondary btn-sm" href="https://www.discogs.com/release/<?php echo $id ?>">Discogs <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
            
       </td>      
     </tr>
-</tbody>
-</table>
+  </tbody>
+ </table>
 </div></div></div>		
 
-<div class="col-xl-3 col-lg-6 col-md-6 mb-4">
+<!-- BEGIN TRACKLIST -->
+<div class="col-xl-9 col-lg-6 col-md-6 mb-4">
+	<div class="bg-white rounded shadow-sm">
+		<div class="p-1 table-responsive">
+           <table class="table table-striped">
+            <tbody>
+				<tr><th scope="row" colspan="3">Tracklist</th></tr>
+					<?php for($i=0; $i<sizeof($tracklist);$i++) echo '<tr><td data-align="left">' . $tracklist[$i]['position'] . ": " . '</td><td data-align="left">' .  $tracklist[$i]['title'] .  '</td><td data-align="left">' . $tracklist[$i]['duration'] . '</td></tr>
+					'; ?>
+			</tbody>
+		  </table>
+		</div>
+	</div>
+</div>	<!-- END TRACKLIST -->	
+
+<!-- BEGIN IDENTIFIERS -->
+<div class="col-xl-9 col-lg-6 col-md-6 mb-4">
 	<div class="bg-white rounded shadow-sm">
 		<div class="p-1 table-responsive">
            <table class="table table-striped">
@@ -423,49 +411,32 @@ $notes = "Notes not dworking yet.";
 					'; ?>
 			</tbody>
 		  </table>
-	
 		</div>
 	</div>
-</div>		
+</div>	<!-- END IDENTIFIERS -->	
 
-<div class="col-xl-3 col-lg-6 col-md-6 mb-4">
+<!-- BEGIN CREDITS -->
+<div class="col-xl-9 col-lg-6 col-md-6 mb-4">
 	<div class="bg-white rounded shadow-sm">
 		<div class="p-1 table-responsive">
            <table class="table table-striped">
             <tbody>
-				<tr><th scope="row" colspan="3">Tracklist</th></tr>
-					<?php for($i=0; $i<sizeof($tracklist);$i++) echo '<tr><td data-align="left">' . $tracklist[$i]['position'] . ": " . '</td><td data-align="left">' .  $tracklist[$i]['title'] .  '</td><td data-align="left">' . $tracklist[$i]['duration'] . '</td></tr>
-					'; ?>
-			</tbody>
-		  </table>
-	
-		</div>
-	</div>
-</div>		
-
-<div class="col-xl-3 col-lg-6 col-md-6 mb-4">
-	<div class="bg-white rounded shadow-sm">
-		<div class="p-1 table-responsive">
-           <table class="table table-striped">
-            <tbody>
-				<th scope="row" colspan = "3">Extra Artists</th></tr>
+				<th scope="row" colspan = "3">Credits</th></tr>
 					<?php for($i=0; $i<sizeof($extraartists);$i++) echo '<tr><td>' . $extraartists[$i]['role'] . ": " .  "</td><td> " . $extraartists[$i]['name'] .  "</td><td> " . '</td></tr>
 					'; ?>
 			</tbody>
 		  </table>
-	
 		</div>
 	</div>
-</div>	
+</div>  <!-- END CREDITS -->	
 
 <?php  #echo $releasedata; 
 } ?>
 
 
-    <div class="py-5 text-center"><a href="#" class="btn btn-dark px-5 py-3 text-uppercase">BACK TO TOP</a></div>
+    <div class="py-5 text-center"><a href="#" class="btn btn-dark px-5 py-3 text-uppercase">BACK TO TOP</a>
+	<?php echo "</br> Execution time of script = ".$execution_time." sec"; ?></div>
   </div> <!-- Outer Container End -->
-
-
 
 </body>
 </html>
