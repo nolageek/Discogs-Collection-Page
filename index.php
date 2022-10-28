@@ -5,13 +5,14 @@ ini_set('display_errors', 'On');
 $start_time = microtime(true);
 
 $DISCOGS_API_URL="https://api.discogs.com";
-$DISCOGS_USERNAME="nolageek";
-$DISCOGS_TOKEN="ZylBbtsdWZrBEdEwhAdVSBZuuthKdDmqJvllmjBg";
+$DISCOGS_USERNAME="";
+$DISCOGS_TOKEN="";
 
+// DEFAULT VALUES FOR ATTRIBUTES
 $folder_id = "0";
 $sort_by = "added";
 $order = "desc";
-$artistid = "";
+//$artistid = "";
 $page = "1";
 $per = "50";
 $releaseid = "";
@@ -30,8 +31,8 @@ $order = $_GET['order'];
 if(isset($_GET['page'])) 
 $page = $_GET['page'];
 
-if(isset($_GET['artistid']))
-$artistid = $_GET['artistid'];
+//if(isset($_GET['artistid']))
+//$artistid = $_GET['artistid'];
 
 if(isset($_GET['per']))
 $per = $_GET['per'];
@@ -44,34 +45,74 @@ $context  = stream_context_create($options);
 
 // IF THIS IS A SINGLE RELEASE VIEW, GET INFORMATION FROM RELEASE AND FROM USER COLLECTION FOR THAT RELEASE
 if($releaseid) {
-	$releasejson = $DISCOGS_API_URL . "/releases/" . $releaseid . "?token=" .$DISCOGS_TOKEN;
-	$releasedata = file_get_contents($releasejson, false, $context); // put the contents of the file into a variable
-	$releaseinfo = json_decode($releasedata,true); // decode the JSON feed
+	// PULL DISCOGS REGARDING THE RELEASE IN MY COLLECTION
+	$releasejson = $DISCOGS_API_URL 
+		. "/releases/" 
+		. $releaseid 
+		. "?token=" .$DISCOGS_TOKEN;
+	// put the contents of the JSON into a variable
+	$releasedata = file_get_contents($releasejson, false, $context); 
+	// decode the JSON feed
+	$releaseinfo = json_decode($releasedata,true); 
 	
-	$myreleasejson = $DISCOGS_API_URL . "/users/" . $DISCOGS_USERNAME . "/collection/releases/" . $releaseid . "?token=" .$DISCOGS_TOKEN;
-	$myreleasedata = file_get_contents($myreleasejson, false, $context); // put the contents of the file into a variable
-	$myreleaseinfo = json_decode($myreleasedata,true); // decode the JSON feed
+	// PULL MY DATA REGARDING THE RELEASE IN MY COLLECTION
+	$myreleasejson = $DISCOGS_API_URL 
+		. "/users/" 
+		. $DISCOGS_USERNAME 
+		. "/collection/releases/" 
+		. $releaseid 
+		. "?token=" 
+		. $DISCOGS_TOKEN;
+	// put the contents of the JSON into a variable
+	$myreleasedata = file_get_contents($myreleasejson, false, $context); 
+	// decode the JSON feed
+	$myreleaseinfo = json_decode($myreleasedata,true);
 
-// IF NOT A SINGLE RELEASE VIEW, GET DATA FOR USER COLLECTION TO DISPLAY COVER GALLERY.
+// IF NOT A SINGLE RELEASE VIEW, GET DATA FOR USER'S COLLECTION TO DISPLAY COVER GALLERY.
 } else {
-	$pagejson = $DISCOGS_API_URL. "/users/" . $DISCOGS_USERNAME . "/collection/folders/" . $folder_id . "/releases?sort=" . $sort_by . "&sort_order=" . $order . "&page=" . $page . "&per_page=" . $per . "&token=" . $DISCOGS_TOKEN;
-	$pagedata = file_get_contents($pagejson, false, $context); // put the contents of the file into a variable
-	$collection = json_decode($pagedata,true); // decode the JSON feed
+	// PULL DISCOGS DATA REGARDING MY COLLECTION, PAGINATED
+	$pagejson = $DISCOGS_API_URL 
+		. "/users/"
+		. $DISCOGS_USERNAME
+		. "/collection/folders/"
+		. $folder_id
+		. "/releases?sort="
+		. $sort_by
+		. "&sort_order="
+		. $order
+		. "&page="
+		. $page
+		. "&per_page="
+		. $per
+		. "&token="
+		. $DISCOGS_TOKEN;
+	// put the contents of the JSON into a variable
+	$pagedata = file_get_contents($pagejson, false, $context); 
+	// decode the JSON feed
+	$collection = json_decode($pagedata,true); 
 }
 
+
 // GET FOLDER DATA FOR NAVIGATION BAR
-$folderjson = $DISCOGS_API_URL . "/users/" . $DISCOGS_USERNAME . "/collection/folders?token=" .$DISCOGS_TOKEN;
-$folderdata = file_get_contents($folderjson, false, $context); // put the contents of the file into a variable
+$folderjson = $DISCOGS_API_URL
+	. "/users/"
+	. $DISCOGS_USERNAME
+	. "/collection/folders?token="
+	. $DISCOGS_TOKEN;
+// put the contents of the file into a variable
+$folderdata = file_get_contents($folderjson, false, $context); 
 $folders = json_decode($folderdata,true); // decode the JSON feed
+
 
 // Figure out name, ID and number of items of current folder.
 foreach ($folders['folders'] as $folder) { 
-if ($folder['id'] == $folder_id) {
-$currentfoldername = $folder['name'];
-$currentfoldercount = $folder['count'];
-}
-}
+	if ($folder['id'] == $folder_id) {
+		$currentfoldername = $folder['name'];
+		$currentfoldercount = $folder['count'];
+		}
+	} 
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -119,7 +160,7 @@ body {
           <h2 class="display-6">Discogs Collection Page for <?php echo $DISCOGS_USERNAME ?></h2>
 
 		  <?php if($releaseid) { ?>
-		  <p class="lead"><?php echo $releaseinfo['title'];?> by <?php echo implode(", ", array_column($releaseinfo['artists'], "name"));?></p>
+		  <p class="lead">"<?php echo $releaseinfo['title'];?> by <?php echo implode(", ", array_column($releaseinfo['artists'], "name"));?></p>
 		  <?php } else { ?>
           <p class="lead">[<?php echo $currentfoldername;?>] (<?php echo $currentfoldercount;?> items) Sorted by: <?php echo $sort_by ?>, <?php echo $order ?>ending</p>
 		  <?php } ?>
@@ -230,7 +271,7 @@ $imagefile = "./img/" . $release['basic_information']['id'] . ".jpeg";
 
 
 <!-- Gallery item -->
-<div class="col-xl-3 col-lg-6 col-md-6 mb-4">
+<div class="col-xl-4 col-lg-6 col-md-6 mb-4">
 
   <div class="bg-white rounded shadow-sm">
     <a href="/?releaseid=<?php echo $id ?>">
@@ -281,7 +322,14 @@ global $myreleaseinfo;
 
 $id = $releaseinfo['id'];
 
-$labelname = implode(", ", array_column($releaseinfo['labels'], "name"));
+$labelname = '';
+for($i=0; $i<sizeof($releaseinfo['labels']);$i++) {
+	if(array_key_exists('name', $releaseinfo['labels'][$i]))
+		$labelname = $labelname . $releaseinfo['labels'][$i]['name'];
+	if(array_key_exists('catno', $releaseinfo['labels'][$i]))
+		$labelname = $labelname . ' ' . $releaseinfo['labels'][$i]['catno'] . '</br>';	
+}	
+//$labelname = implode(", ", array_column($releaseinfo['labels'], "name")) . implode(", ", array_column($releaseinfo['labels'], "catno"));
 $formatname = implode(", ", array_column($releaseinfo['formats'], "name"));
 $formattext = implode("", array_column($releaseinfo['formats'], "text"));
 if(array_key_exists('descriptions', $releaseinfo['formats'][0]))
@@ -303,10 +351,10 @@ $images = $releaseinfo['images'];
 $year = 'Unknown';
 if(array_key_exists('released', $releaseinfo))
 	$year = $releaseinfo['released'];
-$notes = "Notes not working yet.";
+//$notes = "Notes not working yet.";
 
 ?>
-<div class="col-xl-3 col-lg-6 col-md-6 mb-4">
+<div class="col-xl-4 col-lg-6 col-md-6 mb-4">
  <div class="bg-white rounded shadow-sm">
  
 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
@@ -390,7 +438,7 @@ $notes = "Notes not working yet.";
 </div></div></div>		
 
 <!-- BEGIN TRACKLIST -->
-<div class="col-xl-9 col-lg-6 col-md-6 mb-4">
+<div class="col-xl-8 col-lg-6 col-md-6 mb-4">
 	<div class="bg-white rounded shadow-sm">
 		<div class="p-1 table-responsive">
            <table class="table table-striped">
@@ -401,12 +449,10 @@ $notes = "Notes not working yet.";
 			</tbody>
 		  </table>
 		</div>
-	</div>
-</div>	<!-- END TRACKLIST -->	
+
 
 <!-- BEGIN IDENTIFIERS -->
-<div class="col-xl-9 col-lg-6 col-md-6 mb-4">
-	<div class="bg-white rounded shadow-sm">
+
 		<div class="p-1 table-responsive">
            <table class="table table-striped">
             <tbody>
@@ -418,12 +464,10 @@ $notes = "Notes not working yet.";
 			</tbody>
 		  </table>
 		</div>
-	</div>
-</div>	<!-- END IDENTIFIERS -->	
+
 
 <!-- BEGIN CREDITS -->
-<div class="col-xl-9 col-lg-6 col-md-6 mb-4">
-	<div class="bg-white rounded shadow-sm">
+
 		<div class="p-1 table-responsive">
            <table class="table table-striped">
             <tbody>
