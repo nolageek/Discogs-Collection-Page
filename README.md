@@ -1,8 +1,8 @@
 # Discogs Collection Page
 
-These PHP and python scripts will generate a friendly view of your Discogs media collection organized by your Discogs folders.
+These PHP and (optional) python scripts will generate a friendly view of your Discogs media collection organized by your Discogs folders.
 
-![image](https://user-images.githubusercontent.com/2931834/197074374-b008bf17-ffd7-44db-9e57-18cf1b95e1f2.png)
+![image](https://user-images.githubusercontent.com/2931834/198485846-531472d0-e806-4ec0-b3ab-76717b53612b.png)
 
 ## Current Functionality:
 * Mobile friendly
