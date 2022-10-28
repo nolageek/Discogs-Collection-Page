@@ -232,20 +232,18 @@ $imagefile = "./img/" . $release['basic_information']['id'] . ".jpeg";
 <!-- Gallery item -->
 <div class="col-xl-3 col-lg-6 col-md-6 mb-4">
 
-        <div class="bg-white rounded shadow-sm">
-<!--<a data-toggle="collapse" href=".multi-collapse<?php echo $release['basic_information']['id']; ?>" role="button" aria-expanded="false" aria-controls="<?php //echo $release['basic_information']['id']; ?>A <?php //echo $release['basic_information']['id']; ?>B $release['basic_information']['id']; ?>C" > -->
-
-<a href="/?releaseid=<?php echo $id ?>">
-
-  <img src="<?php echo $imagefile; ?>" class="figure-img img-fluid rounded" alt="<?php echo $title; ?>"></a>
+  <div class="bg-white rounded shadow-sm">
+    <a href="/?releaseid=<?php echo $id ?>">
+      <img src="<?php echo $imagefile; ?>" class="figure-img img-fluid rounded" alt="<?php echo $title; ?>">
+     </a>
   <?php if ($imageupdatedtext) { ?>
   <div class="d-flex align-items-center justify-content-between bg-light px-3 py-2"><small class="text-muted text-center"><?php echo $imageupdatedtext; ?></small></div>
   <?php } ?>
         
-          <div class="p-1">
+<div class="p-1">
 
-            <table class="table table-striped">
-            <tbody>
+<table class="table table-striped">
+  <tbody>
     <tr>
       <th scope="row"><i class="fa-fw fa-solid fa-quote-right"></i></th>
       <td>Title</td>
@@ -256,20 +254,20 @@ $imagefile = "./img/" . $release['basic_information']['id'] . ".jpeg";
       <td>Artist</td>
       <td><?php echo $artists; ?></td>
     </tr>
-</tbody>
+  </tbody>
 </table>
  
-            <div class="d-flex align-items-center justify-content-between bg-light px-3 py-2 mt-4">
-              <p class="small mb-0 text-muted">added <?php $adddate = $release['date_added']; echo date('m/d/y', strtotime(substr($adddate,0,10))) ?></p>
-              <?php $todaydate = date("Y-m-d");
-               if(strtotime($adddate) > strtotime('-14 days')) {
-                ?>
-              <div class="badge badge-danger px-3 rounded-pill font-weight-normal">New</div>
-              <?php  } ?>
-             </div>
-          </div>
-        </div>
-      </div>
+    <div class="d-flex align-items-center justify-content-between bg-light px-3 py-2 mt-4">
+        <p class="small mb-0 text-muted">added <?php $adddate = $release['date_added']; echo date('m/d/y', strtotime(substr($adddate,0,10))) ?></p>
+        <?php $todaydate = date("Y-m-d");
+              if(strtotime($adddate) > strtotime('-14 days')) {
+            ?>
+             <div class="badge badge-danger px-3 rounded-pill font-weight-normal">New</div>
+        <?php  } ?>
+    </div>
+</div>
+  </div>
+</div>
 	  <!-- End gallery Item -->
 
 <?php } ?>
@@ -281,13 +279,12 @@ global $releaseinfo;
 global $myreleaseinfo;
 
 
-#$resourceurl = $release['basic_information']['resource_url'];
 $id = $releaseinfo['id'];
 
 $labelname = implode(", ", array_column($releaseinfo['labels'], "name"));
 $formatname = implode(", ", array_column($releaseinfo['formats'], "name"));
 $formattext = implode("", array_column($releaseinfo['formats'], "text"));
-if ($releaseinfo['formats'][0]['descriptions'])
+if(array_key_exists('descriptions', $releaseinfo['formats'][0]))
   $formatdesc = implode(", ", $releaseinfo['formats'][0]['descriptions']);
 $genres = implode(", ", $releaseinfo['genres']);
 $styles = "";
@@ -295,14 +292,17 @@ $styles = "";
 
 
 $title = $releaseinfo["title"];
-//$artists = $releaseinfo['artists'];
 $artists = implode(", ", array_column($releaseinfo['artists'], "name"));
 $identifiers = $releaseinfo['identifiers'];
 $tracklist = $releaseinfo['tracklist'];
 $extraartists = $releaseinfo['extraartists'];
-$releasenotes = $releaseinfo['notes'];
+$releasenotes = '';
+if(array_key_exists('notes', $releaseinfo))
+	$releasenotes = $releaseinfo['notes'];
 $images = $releaseinfo['images'];
-$year = $releaseinfo['released'];
+$year = 'Unknown';
+if(array_key_exists('released', $releaseinfo))
+	$year = $releaseinfo['released'];
 $notes = "Notes not working yet.";
 
 ?>
@@ -354,9 +354,12 @@ $notes = "Notes not working yet.";
       <th scope="row"><i class="fa-fw fa-solid fa-compact-disc"></i></th>
       <td>Format</td>
        <td>
-        <?php  if( $formatname ) echo $formatname;
-               if( $formattext ) echo ", " . $formattext;  
-               if( $formatdesc ) echo ", "  . $formatdesc;
+        <?php  if(isset($formatname) && ($formatname != ""))
+					echo $formatname;
+               if(isset($formattext) && ($formattext != ""))
+					echo ", " . $formattext;  
+               if(isset($formatdesc) && ($formatdesc != ""))
+				    echo ", "  . $formatdesc;
           ?>
         </td>
     </tr>
@@ -365,13 +368,16 @@ $notes = "Notes not working yet.";
       <td>Genres</td>
        <td>
          <?php   echo $genres; 
-                 if( $styles ) echo ", "  . @$styles; ?>
+                 if( $styles ) echo ", "  . $styles; ?>
       </td>
       </tr>
     <tr>
-<?php foreach ($myreleaseinfo['releases'][0]['notes'] as $notes) {
-	   echo '<th scope="row">'; if ($notes['field_id'] == 1) echo '<i class="fa-fw fa-solid fa-compact-disc"></i></th><td>Media</td>'; if ($notes['field_id'] == 2) echo '<i class="fa-fw fa-solid fa-square-full"></i></th><td>Sleeve</td>'; if ($notes['field_id'] == 3) echo '<i class="fa-fw fa-solid fa-clipboard"></i></th><td>Notes</td>'; echo '<td>' . $notes['value'] .'</td></tr>
-	   '; } ?>
+	
+<?php 
+	if(array_key_exists('notes', $myreleaseinfo['releases'][0]))
+	   foreach ($myreleaseinfo['releases'][0]['notes'] as $mynotes) {
+			echo '<th scope="row">'; if ($mynotes['field_id'] == 1) echo '<i class="fa-fw fa-solid fa-compact-disc"></i></th><td>Media</td>'; if ($mynotes['field_id'] == 2) echo '<i class="fa-fw fa-solid fa-square-full"></i></th><td>Sleeve</td>'; if ($mynotes['field_id'] == 3) echo '<i class="fa-fw fa-solid fa-clipboard"></i></th><td>Notes</td>'; echo '<td>' . $mynotes['value'] .'</td></tr>
+			'; } ?>
     <tr>
       <th scope="row"></th>
       <td colspan="3" align="right">
@@ -407,7 +413,7 @@ $notes = "Notes not working yet.";
 				<tr><th scope="row" colspan = "3">Identifiers</th></tr>
 					<?php for($i=0; $i<sizeof($identifiers);$i++) echo '<tr><td data-align="left">' . @$identifiers[$i]['type'] . '</td><td data-align="left">' . @$identifiers[$i]['value'] . '</td><td data-align="left">' .  @$identifiers[$i]['description'] . '</td></tr>
 					' ?>
-					<?php if ($releasenotes) echo '<tr><td colspan="3" data-align="left">' . @$releasenotes . '</td></tr>
+					<?php if (isset($releasenotes) && ($formatdesc != "")) echo '<tr><td colspan="3" data-align="left">' . $releasenotes . '</td></tr>
 					'; ?>
 			</tbody>
 		  </table>
