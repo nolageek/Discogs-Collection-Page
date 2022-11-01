@@ -161,11 +161,11 @@ body {
 
 		  <?php if ($release_id): ?>
 					<p class="lead">
-						"<?php echo $releaseinfo['title'];?> by <?php echo implode (", ", array_column($releaseinfo['artists'], "name"));?>
+						"<?php echo $releaseinfo['title'];?>" by <?php echo implode (", ", array_column($releaseinfo['artists'], "name"));?>
 					</p>
 		  <?php else: ?>
 					<p class="lead">
-						[<?php echo $currentfoldername;?>](<?php echo $currentfoldercount;?> items) Sorted by: <?php echo $sort_by ?>, <?php echo $order ?>ending
+						<b><?php echo $currentfoldername;?></b> (<?php echo $currentfoldercount;?> items) Sorted by: <?php echo $sort_by ?>, <?php echo $order ?>ending
 					</p>
 		  <?php endif; ?>
         </div>
@@ -261,24 +261,24 @@ $artists = implode(", ", array_column($release['basic_information']['artists'], 
 $title = $release['basic_information']['title'];
 $id = $release['basic_information']['id'];
 $imageupdatedtext = "";
-$imagefile = "./img/" . $release['basic_information']['id'] . ".jpeg"; 
-              if (!file_exists($imagefile) && is_dir( "./img/" ) ) {
-                $imageupdatedtext = "Missing file has been downloaded from Discogs server.";  
-                $imagename = file_get_contents($release['basic_information']['cover_image']);
-                file_put_contents($imagefile, $imagename);
-              } elseif (!file_exists($imagefile) && !is_dir( "./img/" ) ) {
-                $imageupdatedtext = "Missing file has been hotlinked from Discogs server.";  
-                $imagefile = $release['basic_information']['cover_image'];
+$imagefile = './img/' . $release["basic_information"]["id"] . 'jpeg'; 
+    if (!file_exists($imagefile) && is_dir( "./img/" ) ):
+        $imageupdatedtext = "Missing file has been downloaded from Discogs server.";  
+        $imagename = file_get_contents($release['basic_information']['cover_image']);
+		file_put_contents($imagefile, $imagename);
+		$imagefile = "./img/" . $release['basic_information']['id'] . ".jpeg"; 
+    elseif (!file_exists($imagefile) && !is_dir( "./img/" ) ):
+        $imageupdatedtext = "Missing file has been hotlinked from Discogs server.";  
+        $imagefile = $release['basic_information']['cover_image'];
+    endif;
 
-              }
 	  
 ?>
 
 
 <!-- Gallery item -->
 <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
-
-  <div class="bg-white rounded shadow-sm">
+ <div class="bg-white rounded shadow-sm">
     <a href="/?releaseid=<?php echo $id ?>">
       <img src="<?php echo $imagefile; ?>" class="figure-img img-fluid rounded" alt="<?php echo $title; ?>">
      </a>
@@ -286,35 +286,25 @@ $imagefile = "./img/" . $release['basic_information']['id'] . ".jpeg";
   <div class="d-flex align-items-center justify-content-between bg-light px-3 py-2"><small class="text-muted text-center"><?php echo $imageupdatedtext; ?></small></div>
   <?php } ?>
         
-<div class="p-1">
+   <div class="p-1">
 
-<table class="table table-striped">
-  <tbody>
-    <tr>
-      <th scope="row" style="width:1%"><i class="fa-fw fa-solid fa-quote-right"></i></th>
-      <td style="width:1%">Title</td>
-      <td><?php echo $title; ?></td>
-    </tr>                
-    <tr>
-      <th scope="row"><i class="fa-fw fa-solid fa-people-group"></i></th>
-      <td >Artist</td>
-      <td><?php echo $artists; ?></td>
-    </tr>
-  </tbody>
-</table>
+    <table class="table table-striped">
+    <tbody>
+    <tr><th scope="row" style="width:1%"><i class="fa-fw fa-solid fa-quote-right"></i></th><td style="width:1%">Title</td><td><?php echo $title; ?></td></tr>
+    <tr><th scope="row"><i class="fa-fw fa-solid fa-people-group"></i></th><td>Artist</td><td><?php echo $artists; ?></td></tr>
+    </tbody>
+    </table>
  
-    <div class="d-flex align-items-center justify-content-between bg-light px-3 py-2 mt-4">
-        <p class="small mb-0 text-muted">added <?php $adddate = $release['date_added']; echo date('m/d/y', strtotime(substr($adddate,0,10))) ?></p>
-        <?php $todaydate = date("Y-m-d");
-              if(strtotime($adddate) > strtotime('-14 days')) {
-            ?>
-             <div class="badge badge-danger px-3 rounded-pill font-weight-normal">New</div>
-        <?php  } ?>
+	<div class="d-flex align-items-center justify-content-between bg-light px-3 py-2 mt-4">
+		<p class="small mb-0 text-muted">added <?php $adddate = $release['date_added']; echo date('m/d/y', strtotime(substr($adddate,0,10))) ?></p>
+		<?php $todaydate = date("Y-m-d"); if(strtotime($adddate) > strtotime('-14 days')) : ?>
+        <div class="badge badge-danger px-3 rounded-pill font-weight-normal">New</div>
+        <?php endif; ?>
     </div>
+   </div>
+ </div>
 </div>
-  </div>
-</div>
-	  <!-- End gallery Item -->
+<!-- End gallery Item -->
 
 <?php } // End display_gallery_item() ?>
 
@@ -327,69 +317,102 @@ global $myreleaseinfo;
 $id = $releaseinfo['id'];
 
 $labelname = '';
-$number_of_labels = sizeof($releaseinfo['labels']);
-for($i=0; $i<$number_of_labels;$i++) {
-	if(array_key_exists('name', $releaseinfo['labels'][$i]))
-		$labelname = $labelname . $releaseinfo['labels'][$i]['name'];
-	if(array_key_exists('catno', $releaseinfo['labels'][$i]))
-		$labelname = $labelname . ', ' . $releaseinfo['labels'][$i]['catno'] . '</br>';	
-}
-
+if( array_key_exists('labels', $releaseinfo) ) :
+	$number_of_labels = sizeof($releaseinfo['labels']);
+	for( $i=0; $i<$number_of_labels;$i++ ) :
+		if( array_key_exists('name', $releaseinfo['labels'][$i]) )
+			$labelname = $labelname 
+			. $releaseinfo['labels'][$i]['name'];
+		if( array_key_exists('catno', $releaseinfo['labels'][$i]) )
+			$labelname = $labelname 
+			. ', ' . $releaseinfo['labels'][$i]['catno'] 
+			. '</br>';
+	endfor;
+endif;
 $formats = '';
-$number_of_formats = sizeof($releaseinfo['formats']);
-for($i=0; $i<$number_of_formats;$i++) {
-	if(array_key_exists('name', $releaseinfo['formats'][$i]))
-		$formats = $formats . '<span class="font-weight-bold">' . $releaseinfo['formats'][$i]['name'] . '</span>';
-	if( !array_key_exists( 'text', $releaseinfo['formats'][$i]) && !array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
-		$formats = $formats . '</br>';
-	if(array_key_exists('text', $releaseinfo['formats'][$i]))
-		$formats = $formats . ', ' . $releaseinfo['formats'][$i]['text'];
-	if(!array_key_exists('descriptions', $releaseinfo['formats'][$i]))
-		$formats = $formats . '</br>';
-	if(array_key_exists('descriptions', $releaseinfo['formats'][$i]))
-		$formats = $formats . ', ' . implode(", ", $releaseinfo['formats'][$i]['descriptions']) . '</br>';	
-}
+if( array_key_exists('formats', $releaseinfo) ) :
+	$number_of_formats = sizeof($releaseinfo['formats']);
+	for($i=0; $i<$number_of_formats;$i++) :
+		if( array_key_exists('name', $releaseinfo['formats'][$i]) )
+			$formats = $formats 
+			. '<span class="font-weight-bold">' 
+			. $releaseinfo['formats'][$i]['name'] 
+			. '</span>';
+		if( !array_key_exists( 'text', $releaseinfo['formats'][$i]) && !array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
+			$formats = $formats
+			. '</br>';
+		if( array_key_exists('text', $releaseinfo['formats'][$i]) )
+			$formats = $formats 
+			. ', ' . $releaseinfo['formats'][$i]['text'];
+		if( !array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
+			$formats = $formats 
+			. '</br>';
+		if( array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
+			$formats = $formats 
+			. ', ' . implode(", ", $releaseinfo['formats'][$i]['descriptions']) 
+			. '</br>';
+	endfor;
+endif;
 
-	
-//$formatdesc = implode(", ", $releaseinfo['formats'][0]['descriptions']);
-//$formatname = implode(", ", array_column($releaseinfo['formats'], "name"));
-//$formattext = implode("", array_column($releaseinfo['formats'], "text"));
-//if(array_key_exists('descriptions', $releaseinfo['formats'][0]))
- // $formatdesc = implode(", ", $releaseinfo['formats'][0]['descriptions']);
 $genres = implode(", ", $releaseinfo['genres']);
-$styles = "";
-if(array_key_exists('styles', $releaseinfo))
-$styles = implode(", ", $releaseinfo['styles']);
 
+$styles = "";
+if( array_key_exists('styles', $releaseinfo) )
+	$styles = implode(", ", $releaseinfo['styles']);
 
 $title = $releaseinfo["title"];
 $artists = implode(", ", array_column($releaseinfo['artists'], "name"));
-$identifiers = $releaseinfo['identifiers'];
+
+$identifier_rows = '';
+if( array_key_exists('identifiers', $releaseinfo) ) :
+	$identifiers = $releaseinfo['identifiers'];
+	$number_of_identifiers = sizeof($identifiers);
+	$identifier_rows = '';
+	for( $i=0; $i<$number_of_identifiers;$i++ ) :
+		$identifier_type = '';
+		$identifier_value = '';
+		$identifier_description = '';
+		$identifier_type = $identifiers[$i]['type'];
+		$identifier_value = $identifiers[$i]['value'];
+		if ( isset($identifiers[$i]['description']) ) 
+			$identifier_description = $identifiers[$i]['description'];
+			
+			$identifier_rows = $identifier_rows . '<tr class="collapse" id="collapseIdentifiers"><td data-align="left">' 
+			. $identifier_type
+			. '</td><td>' 
+			. $identifier_value 
+			. '</td><td>' 
+			. @$identifier_description 
+			. '</td></tr>
+			'; 
+		
+	endfor;
+endif;
+					
 $companies = $releaseinfo['companies'];
-$extraartists = $releaseinfo['extraartists'];
 
 $releasenotes = '';
-if(array_key_exists('notes', $releaseinfo))
+if( array_key_exists('notes', $releaseinfo) )
 	$releasenotes = $releaseinfo['notes'];
 $images = $releaseinfo['images'];
-$year = 'Unknown';
-if(array_key_exists('released', $releaseinfo))
+$year = '?';
+if( array_key_exists('released', $releaseinfo) )
 	$year = $releaseinfo['released'];
 
 $my_release_notes_rows = '';
-	if(array_key_exists('notes', $myreleaseinfo['releases'][0]))
-	   foreach ($myreleaseinfo['releases'][0]['notes'] as $mynotes) {
-		   if ( $mynotes['field_id'] == 1 ):
-				$noteicon = 'fa-compact-disc';
-				$notetype = 'Media';
-		   elseif ( $mynotes['field_id'] == 2 ):
-				$noteicon = 'fa-square-full';
-				$notetype = 'Jacket';
-		   elseif ( $mynotes['field_id'] == 3 ):
-				$noteicon = 'fa-clipboard';
-				$notetype = 'Notes';
-		   endif;
-		
+if( array_key_exists('notes', $myreleaseinfo['releases'][0]) ) :
+	foreach ($myreleaseinfo['releases'][0]['notes'] as $mynotes) :
+		if ( $mynotes['field_id'] == 1 ):
+			$noteicon = 'fa-compact-disc';
+			$notetype = 'Media';
+		elseif ( $mynotes['field_id'] == 2 ):
+			$noteicon = 'fa-square-full';
+			$notetype = 'Jacket';
+		elseif ( $mynotes['field_id'] == 3 ):
+			$noteicon = 'fa-clipboard';
+			$notetype = 'Notes';
+		endif;
+	
 		$my_release_notes_rows = $my_release_notes_rows
 			. '<tr><th><i class="fa-fw fa-solid ' 
 			. $noteicon 
@@ -398,15 +421,51 @@ $my_release_notes_rows = '';
 			. '</td><td>' 
 			. $mynotes['value'] 
 			.'</td></tr>
-			'; }
+			'; 
+	endforeach;
+endif;
 			
 $release_tracklist_rows = '';
-if( array_key_exists('tracklist', $releaseinfo) )
+if( array_key_exists('tracklist', $releaseinfo) ) :
 	$tracklist = $releaseinfo['tracklist'];
 	$number_of_release_tracklist_tracks = sizeof($tracklist);
-	for($i=0; $i<$number_of_release_tracklist_tracks;$i++) 
-		$release_tracklist_rows = $release_tracklist_rows . '<tr><td data-align="left" style="width:1%">' . $tracklist[$i]['position'] . ": " . '</td><td data-align="left">' .  $tracklist[$i]['title'] .  '</td><td data-align="left">' . $tracklist[$i]['duration'] . '</td></tr>
-					'; ?>
+	for($i=0; $i<$number_of_release_tracklist_tracks;$i++)  :
+		$release_tracklist_rows = $release_tracklist_rows 
+		. '<tr><td data-align="left" style="width:1%">' 
+		. $tracklist[$i]['position'] 
+		. ": " 
+		. '</td><td data-align="left">' 
+		.  $tracklist[$i]['title'] 
+		.  '</td><td data-align="left">' 
+		. $tracklist[$i]['duration'] 
+		. '</td></tr>
+		';
+	endfor;
+endif;
+
+$extra_artists_rows = '';
+if( array_key_exists('extraartists', $releaseinfo) ) :
+	$extraartists = $releaseinfo['extraartists'];
+	$number_of_extra_artists = sizeof($extraartists);
+	for($i=0; $i<$number_of_extra_artists;$i++) :
+		$artist_role = $extraartists[$i]['role'];
+		$artist_name = $extraartists[$i]['name'];
+		$artist_tracks = $extraartists[$i]['tracks'];
+		if ( $artist_tracks)
+			$artist_tracks = ' (' . $artist_tracks . ')';
+		
+		$extra_artists_rows = $extra_artists_rows
+		. '<tr class="collapse" id="collapseCredits"><td  colspan="3">' 
+		. $artist_role
+		. ': ' 
+		. $artist_name 
+		. $artist_tracks 
+		. '</td><td>' 
+		. '</td></tr>
+		';
+	endfor;
+endif;
+?>
 			
 			
 
@@ -415,8 +474,17 @@ if( array_key_exists('tracklist', $releaseinfo) )
  
 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">
-    <?php for($i=0; $i<sizeof($images);$i++) { echo '<div class="carousel-item'; if($i == 0) { echo " active"; } echo '"><img class="d-block w-100" src="' . $images[$i]['resource_url'] . '" alt="' . $images[$i]['type'] . '"></div>
-	'; } ?>
+    <?php for($i=0; $i<sizeof($images);$i++) {
+		echo '<div class="carousel-item'; 
+		if($i == 0) { 
+			echo " active"; 
+		} 
+		echo '"><img class="d-block w-100" src="' 
+			. $images[$i]['resource_url'] 
+			. '" alt="' 
+			. $images[$i]['type'] 
+			. '"></div>
+			'; } ?>
    </div>
    
 <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -509,38 +577,32 @@ if( array_key_exists('tracklist', $releaseinfo) )
 		<div class="p-1 table-responsive">
            <table class="table table-striped">
             <tbody>
-				<tr><th scope="row" colspan = "3" data-toggle="collapse" href="#collapseCredits" role="button" aria-expanded="false" aria-controls="collapseCredits">Credits</th></tr>
-					<?php for($i=0; $i<sizeof($extraartists);$i++)
-					echo '<tr class="collapse" id="collapseCredits"><td  colspan="3">' 
-					. $extraartists[$i]['role'] 
-					. ": " 
-					. $extraartists[$i]['name'] 
-					. ' (' 
-					. $extraartists[$i]['tracks'] 
-					. ")</td><td>" 
-					. '</td></tr>
-					'; ?>
+				<tr><th scope="row" colspan = "3" data-toggle="collapse" href="#collapseCredits" role="button" aria-expanded="false" aria-controls="collapseCredits">Credits & Extra Artists</th></tr>
+					<?php
+					echo $extra_artists_rows;
+						?>
 			</tbody>
 		  </table>
 		</div> <!-- END CREDITS -->
  	
 
 <!-- BEGIN COMPANIES -->
-
-		<div class="p-1 table-responsive">
-           <table class="table table-striped">
-            <tbody>
-				<tr><th scope="row" colspan = "3" data-toggle="collapse" href="#collapseCompanies" role="button" aria-expanded="false" aria-controls="collapseCompanies">Companies</th></tr>
-					<?php for($i=0; $i<sizeof($companies);$i++)
-					echo '<tr class="collapse" id="collapseCompanies"><td data-align="left" colspan="3">' 
-					. $companies[$i]['entity_type_name'] 
-					. ' ' 
-					. $companies[$i]['name'] 
-					. '</td></tr>
-					' ?>
-			</tbody>
-		  </table>
-		</div> <!-- END COMPANIES -->
+	<div class="p-1 table-responsive">
+        <table class="table table-striped">
+        <tbody>
+		<tr><th scope="row" colspan = "3" data-toggle="collapse" href="#collapseCompanies" role="button" aria-expanded="false" aria-controls="collapseCompanies">Companies</th></tr>
+		<?php 
+			for($i=0; $i<sizeof($companies);$i++) :
+				echo '<tr class="collapse" id="collapseCompanies"><td data-align="left" colspan="3">' 
+						. $companies[$i]['entity_type_name'] 
+						. ' ' 
+						. $companies[$i]['name'] 
+						. '</td></tr>
+						';
+			endfor;?>
+		</tbody>
+		</table>
+	</div> <!-- END COMPANIES -->
 		
 
 <!-- BEGIN IDENTIFIERS -->
@@ -549,16 +611,10 @@ if( array_key_exists('tracklist', $releaseinfo) )
            <table class="table table-striped">
             <tbody>
 				<tr data-toggle="collapse" href="#collapseIdentifiers" role="button" aria-expanded="false" aria-controls="collapseIdentifiers"><th scope="row" colspan = "3">Identifiers</th></tr>
-					<?php for($i=0; $i<sizeof($identifiers);$i++)
-					echo '<tr class="collapse" id="collapseIdentifiers"><td data-align="left">' 
-					. $identifiers[$i]['type'] 
-					. '</td><td data-align="left">' 
-					. $identifiers[$i]['value'] 
-					. '</td><td data-align="left">' 
-					.  $identifiers[$i]['description'] 
-					. '</td></tr>
-					' ?>
-					<?php if (isset($releasenotes) && ($releasenotes != "")) echo '<tr><td colspan="3" data-align="left">' . $releasenotes . '</td></tr>
+					<?php
+					echo $identifier_rows; 
+					
+					if (isset($releasenotes) && ($releasenotes != "")) echo '<tr><td colspan="3" data-align="left">' . $releasenotes . '</td></tr>
 					'; ?>
 			</tbody>
 		  </table>
