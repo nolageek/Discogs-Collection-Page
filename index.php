@@ -145,6 +145,7 @@ body {
 }
 
 .list-group-item { word-wrap: break-word; }
+
 </style>
 
 </head>
@@ -260,50 +261,55 @@ function display_gallery_item($release) {
 $artists = implode(", ", array_column($release['basic_information']['artists'], "name"));
 $title = $release['basic_information']['title'];
 $id = $release['basic_information']['id'];
-$imageupdatedtext = "";
+$imageupdatedtext = '';
 $imagefile = './img/' . $release["basic_information"]["id"] . 'jpeg'; 
-    if (!file_exists($imagefile) && is_dir( "./img/" ) ):
+    if ( !file_exists($imagefile) && is_dir( "./img/" ) ):
         $imageupdatedtext = "Missing file has been downloaded from Discogs server.";  
         $imagename = file_get_contents($release['basic_information']['cover_image']);
 		file_put_contents($imagefile, $imagename);
-		$imagefile = "./img/" . $release['basic_information']['id'] . ".jpeg"; 
     elseif (!file_exists($imagefile) && !is_dir( "./img/" ) ):
         $imageupdatedtext = "Missing file has been hotlinked from Discogs server.";  
         $imagefile = $release['basic_information']['cover_image'];
     endif;
 
-	  
+$adddate = date('m/d/y', strtotime(substr($release['date_added'],0,10)));
+$todaydate = date("Y-m-d"); 
+$is_new_class = '';
+$is_new_badge ='';
+if(strtotime($adddate) > strtotime('-14 days')) :
+$is_new_class = ' border-success';
+$is_new_badge = '<div class="badge badge-success px-3 rounded-pill">New</div>';
+endif;	
 ?>
 
-
 <!-- Gallery item -->
-<div class="col-xl-4 col-lg-6 col-md-6 mb-4">
- <div class="bg-white rounded shadow-sm">
-    <a href="/?releaseid=<?php echo $id ?>">
-      <img src="<?php echo $imagefile; ?>" class="figure-img img-fluid rounded" alt="<?php echo $title; ?>">
-     </a>
-  <?php if ($imageupdatedtext) { ?>
-  <div class="d-flex align-items-center justify-content-between bg-light px-3 py-2"><small class="text-muted text-center"><?php echo $imageupdatedtext; ?></small></div>
-  <?php } ?>
-        
-   <div class="p-1">
+<div class="col-xl-3 col-md-6 col-sm-6 my-3">
+ <div class="card h-100<?php echo $is_new_class; ?>">
 
-    <table class="table table-striped">
-    <tbody>
-    <tr><th scope="row" style="width:1%"><i class="fa-fw fa-solid fa-quote-right"></i></th><td style="width:1%">Title</td><td><?php echo $title; ?></td></tr>
-    <tr><th scope="row"><i class="fa-fw fa-solid fa-people-group"></i></th><td>Artist</td><td><?php echo $artists; ?></td></tr>
-    </tbody>
-    </table>
- 
-	<div class="d-flex align-items-center justify-content-between bg-light px-3 py-2 mt-4">
-		<p class="small mb-0 text-muted">added <?php $adddate = $release['date_added']; echo date('m/d/y', strtotime(substr($adddate,0,10))) ?></p>
-		<?php $todaydate = date("Y-m-d"); if(strtotime($adddate) > strtotime('-14 days')) : ?>
-        <div class="badge badge-danger px-3 rounded-pill font-weight-normal">New</div>
-        <?php endif; ?>
-    </div>
+
+<a href="/?releaseid=<?php echo $id ?>">
+   <img class="card-img-top rounded p-2" src="<?php echo $imagefile; ?>" alt="<?php echo $title; ?>">
+</a>
+        
+   <div class="card-body d-flex flex-column">
+   <?php if ( $imageupdatedtext ) : ?>
+     <p class="alert alert-warning" role="alert"">
+	  <small class="text-muted text-center"><?php echo $imageupdatedtext; ?></small>
+	 </p>
+   <?php endif; ?>
+	<div class="d-flex flex-column mt-auto">
+    <h5 class="card-title"><i class="fa-solid fa-quote-right text-muted"></i> <?php echo $title; ?></h5>
+    <h6 class="card-title"><i class="fa-solid fa-people-group text-muted"></i> <?php echo $artists; ?></h6>
+	</div>
+   </div> 
+   
+   <div class="card-footer text-muted d-flex justify-content-between"><small>added <?php echo $adddate; ?></small>
+    <?php echo $is_new_badge; ?>
    </div>
+
+  </div>
  </div>
-</div>
+
 <!-- End gallery Item -->
 
 <?php } // End display_gallery_item() ?>
@@ -333,23 +339,28 @@ $formats = '';
 if( array_key_exists('formats', $releaseinfo) ) :
 	$number_of_formats = sizeof($releaseinfo['formats']);
 	for($i=0; $i<$number_of_formats;$i++) :
-		if( array_key_exists('name', $releaseinfo['formats'][$i]) )
-			$formats = $formats 
-			. '<span class="font-weight-bold">' 
+		if( array_key_exists('name', $releaseinfo['formats'][$i]) ) :
+			$qty = '';
+			if ( $releaseinfo['formats'][$i]['qty'] > 1 )
+				$qty = $releaseinfo['formats'][$i]['qty'] . ' x ';
+			$formats = $formats
+			. $qty
+			. '<b>' 
 			. $releaseinfo['formats'][$i]['name'] 
-			. '</span>';
+			. '</b>';
+		endif;
 		if( !array_key_exists( 'text', $releaseinfo['formats'][$i]) && !array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
+			$formats = $formats
+			. '</br>';
+		if( array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
+			$formats = $formats
+			. ', ' . implode(", ", $releaseinfo['formats'][$i]['descriptions']);
+		if( !array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
 			$formats = $formats
 			. '</br>';
 		if( array_key_exists('text', $releaseinfo['formats'][$i]) )
 			$formats = $formats 
-			. ', ' . $releaseinfo['formats'][$i]['text'];
-		if( !array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
-			$formats = $formats 
-			. '</br>';
-		if( array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
-			$formats = $formats 
-			. ', ' . implode(", ", $releaseinfo['formats'][$i]['descriptions']) 
+			. ', <i>' . $releaseinfo['formats'][$i]['text'] . '</i>'
 			. '</br>';
 	endfor;
 endif;
@@ -388,7 +399,14 @@ if( array_key_exists('identifiers', $releaseinfo) ) :
 		
 	endfor;
 endif;
-					
+
+$series = $releaseinfo['series'];
+if( !empty($series )) :
+	$series = $series[0]['name'];
+else:
+	$series = '';
+endif;
+
 $companies = $releaseinfo['companies'];
 
 $releasenotes = '';
@@ -517,6 +535,13 @@ endif;
       <td>Released</td>
       <td><?php echo $year; ?></td>
     </tr>
+<?php if (!empty($series)) : ?>
+    <tr>
+      <th scope="row"><i class="fa-fw fa-solid fa-calendar-days"></i></th>
+      <td>Series</td>
+      <td><?php if( $series ) echo $series; ?></td>
+    </tr>
+<?php endif; ?>
     <tr>
       <th scope="row"><i class="fa-fw fa-solid fa-building"></i></th>
       <td>Label</td>
@@ -628,7 +653,7 @@ endif;
 
 
     <div class="py-5 text-center"><a href="#" class="btn btn-dark px-5 py-3 text-uppercase">BACK TO TOP</a>
-	<?php echo '</br> Execution time of script = ' . $execution_time . ' sec'; ?></div>
+	</br> Like this page? Run your own: <a href="https://github.com/nolageek/Discogs-Collection-Page"><i class="fa-brands fa-github"></i> / Discogs Collection Page <a></div>
   </div> <!-- Outer Container End -->
 
 </body>
