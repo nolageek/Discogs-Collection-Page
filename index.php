@@ -2,8 +2,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-$start_time = microtime(true);
-
 $DISCOGS_API_URL="https://api.discogs.com";
 $DISCOGS_USERNAME="";
 $DISCOGS_TOKEN="";
@@ -119,11 +117,12 @@ foreach ($folders['folders'] as $folder) {
 
 <title>Discogs Collection Page</title>
 <meta name="viewport" content="width=device-width, initial-scale=.8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
 <script src="https://kit.fontawesome.com/7e1a0bb728.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
 <style>
 /*
@@ -238,7 +237,6 @@ body {
 
 
 <div class="row"> <!-- Gallery of Releases -->
-  <?php $start_time = microtime(true); ?>
   
 <?php if ($release_id) {
 	  display_release_data($release_id);
@@ -247,8 +245,6 @@ body {
 		display_gallery_item($release);
 }
   }	  
-	$end_time = microtime(true);
-	$execution_time = ($end_time - $start_time);
 
 ?>
 
@@ -256,6 +252,74 @@ body {
 
 
 <?php
+
+function wrap_table_rows($title,$rows) {
+$table = '<!-- START ' . $title . ' -->
+		<div class="p-1 table-responsive">
+           <table class="table table-striped">
+            <tbody>';
+if ( $title ) :
+	$table = $table . '<tr><th scope="row" colspan="3" style="width:1%">' . $title . '</th></tr>';
+endif;
+
+$table = $table . $rows;
+
+$table = $table . '		</tbody>
+		</table>
+	</div> <!-- END ' . $title . ' -->';	
+
+return $table;
+}
+
+
+function wrap_accordian_rows($header, $data, $open=0) {
+
+$accordian = '<!-- START ' 
+			. $header . ' -->
+			<div class="accordion-item">
+			<h2 class="accordion-header font-weight-bold" id="heading' 
+			. $header 
+			. '">
+            <button class="accordion-button';
+	if ( $open ) :
+		$accordian = $accordian . '';
+	else:
+		$accordian = $accordian . ' collapsed';
+	endif;
+$accordian = $accordian 
+			. '" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' 
+			. $header 
+			. '" aria-expanded="false" aria-controls="collapse' 
+			. $header 
+			. '"><strong>'
+			. $header 
+			. '</strong></button></h2>
+			<div id="collapse' 
+			. $header 
+			. '" class="accordion-collapse collapse';
+
+	if ( $open ) :
+		$accordian = $accordian. ' show';
+	endif;
+
+$accordian = $accordian 
+			. '" aria-labelledby="heading' 
+			. $header 
+			. '">
+      <div class="accordion-body">';
+	  
+$accordian = $accordian . $data;
+
+$accordian = $accordian 
+		. ' </div>
+    </div>
+  </div> <!-- END ' 
+		. $header 
+		. ' -->';	
+  
+  return $accordian;
+}
+
 function display_gallery_item($release) { 
 
 $artists = implode(", ", array_column($release['basic_information']['artists'], "name"));
@@ -388,7 +452,7 @@ if( array_key_exists('identifiers', $releaseinfo) ) :
 		if ( isset($identifiers[$i]['description']) ) 
 			$identifier_description = $identifiers[$i]['description'];
 			
-			$identifier_rows = $identifier_rows . '<tr class="collapse" id="collapseIdentifiers"><td data-align="left">' 
+			$identifier_rows = $identifier_rows . '<tr><td data-align="left">' 
 			. $identifier_type
 			. '</td><td>' 
 			. $identifier_value 
@@ -407,7 +471,20 @@ else:
 	$series = '';
 endif;
 
-$companies = $releaseinfo['companies'];
+$list_of_companies_rows = '';
+if( array_key_exists('companies', $releaseinfo) ) :
+	$companies = $releaseinfo['companies'];
+			for($i=0; $i<sizeof($companies);$i++) :
+				$list_of_companies_rows = $list_of_companies_rows . '<tr><td data-align="left" colspan="3">' 
+						. $companies[$i]['entity_type_name'] 
+						. ' ' 
+						. $companies[$i]['name'] 
+						. '</td></tr>
+						';
+			endfor;
+endif;
+			
+			
 
 $releasenotes = '';
 if( array_key_exists('notes', $releaseinfo) )
@@ -473,12 +550,11 @@ if( array_key_exists('extraartists', $releaseinfo) ) :
 			$artist_tracks = ' (' . $artist_tracks . ')';
 		
 		$extra_artists_rows = $extra_artists_rows
-		. '<tr class="collapse" id="collapseCredits"><td  colspan="3">' 
+		. '<tr><td  colspan="3">' 
 		. $artist_role
 		. ': ' 
 		. $artist_name 
 		. $artist_tracks 
-		. '</td><td>' 
 		. '</td></tr>
 		';
 	endfor;
@@ -585,68 +661,26 @@ endif;
  </table>
 </div></div></div>		
 
-<!-- BEGIN TRACKLIST -->
+
 <div class="col-xl-8 col-lg-6 col-md-6 mb-4">
 	<div class="bg-white rounded shadow-sm">
-		<div class="p-1 table-responsive">
-           <table class="table table-striped">
-            <tbody>
-				<tr><th scope="row" colspan="3" style="width:1%">Tracklist</th></tr>
-					<?php echo $release_tracklist_rows; ?>
-			</tbody>
-		  </table>
-		</div> <!-- END TRACKLIST -->
+	
+<div class="accordion" id="accordionExample">
 
-<!-- BEGIN CREDITS -->
+<?php if ( isset($releasenotes) && ($releasenotes != '') ) :
+			echo wrap_accordian_rows('Notes',wrap_table_rows('', $releasenotes),'opened');
+ 	  endif; ?>	
+<?php echo wrap_accordian_rows('TrackList',wrap_table_rows('',$release_tracklist_rows),'opened'); ?>
+<?php echo wrap_accordian_rows('Credits',wrap_table_rows('',$extra_artists_rows)); ?>
+<?php echo wrap_accordian_rows('Companies',wrap_table_rows('',$list_of_companies_rows)); ?>
+<?php echo wrap_accordian_rows('Identifiers',wrap_table_rows('',$identifier_rows)); ?>
 
-		<div class="p-1 table-responsive">
-           <table class="table table-striped">
-            <tbody>
-				<tr><th scope="row" colspan = "3" data-toggle="collapse" href="#collapseCredits" role="button" aria-expanded="false" aria-controls="collapseCredits">Credits & Extra Artists</th></tr>
-					<?php
-					echo $extra_artists_rows;
-						?>
-			</tbody>
-		  </table>
-		</div> <!-- END CREDITS -->
- 	
+</div>
 
-<!-- BEGIN COMPANIES -->
-	<div class="p-1 table-responsive">
-        <table class="table table-striped">
-        <tbody>
-		<tr><th scope="row" colspan = "3" data-toggle="collapse" href="#collapseCompanies" role="button" aria-expanded="false" aria-controls="collapseCompanies">Companies</th></tr>
-		<?php 
-			for($i=0; $i<sizeof($companies);$i++) :
-				echo '<tr class="collapse" id="collapseCompanies"><td data-align="left" colspan="3">' 
-						. $companies[$i]['entity_type_name'] 
-						. ' ' 
-						. $companies[$i]['name'] 
-						. '</td></tr>
-						';
-			endfor;?>
-		</tbody>
-		</table>
-	</div> <!-- END COMPANIES -->
-		
-
-<!-- BEGIN IDENTIFIERS -->
-
-		<div class="p-1 table-responsive">
-           <table class="table table-striped">
-            <tbody>
-				<tr data-toggle="collapse" href="#collapseIdentifiers" role="button" aria-expanded="false" aria-controls="collapseIdentifiers"><th scope="row" colspan = "3">Identifiers</th></tr>
-					<?php
-					echo $identifier_rows; 
-					
-					if (isset($releasenotes) && ($releasenotes != "")) echo '<tr><td colspan="3" data-align="left">' . $releasenotes . '</td></tr>
-					'; ?>
-			</tbody>
-		  </table>
-		</div> <!-- END IDENTIFIERS -->
-
-	</div>
+ </div>
 </div> 
+
+
 
 <?php  #echo $releasedata; 
 } ?>
