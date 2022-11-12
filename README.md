@@ -1,6 +1,6 @@
 # Discogs Collection Page
 
-These PHP scrips will generate a friendly view of your Discogs media collection organized by your Discogs folders.
+This PHP scripst will generate a friendly view of your Discogs media collection organized by your Discogs folders.
 
 ![image](https://user-images.githubusercontent.com/2931834/198485846-531472d0-e806-4ec0-b3ab-76717b53612b.png)
 
