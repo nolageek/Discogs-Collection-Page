@@ -145,6 +145,23 @@ body {
 
 .list-group-item { word-wrap: break-word; }
 
+ul.striped-list {
+    list-style-type: none;
+}
+ul.striped-list > li {
+    border-bottom: 1px solid rgb(221,221,221);
+    padding: .75rem;
+    padding-left: .55rem;
+}
+ul.striped-list > li:nth-of-type(odd) {
+    background-color: #f8f9fa ;
+}
+ul.striped-list > li:last-child {
+   /*  border-bottom: none;*/
+}
+
+
+
 </style>
 
 </head>
@@ -254,68 +271,106 @@ body {
 <?php
 
 function wrap_table_rows($title,$rows) {
-$table = '<!-- START ' . $title . ' -->
-		<div class="p-1 table-responsive">
-           <table class="table table-striped">
-            <tbody>';
-if ( $title ) :
-	$table = $table . '<tr><th scope="row" colspan="3" style="width:1%">' . $title . '</th></tr>';
-endif;
 
-$table = $table . $rows;
+	$table = '<!-- START ' . $title . ' -->' . "\n"
+	. '<div class="p-1 table-responsive">' . "\n"
+	. '<table class="table table-striped table-bordered">' . "\n"
+	. '<tbody>';
 
-$table = $table . '		</tbody>
-		</table>
-	</div> <!-- END ' . $title . ' -->';	
+	if ( $title ) :
+	 $table = $table . '<tr><th scope="row" colspan="3" style="width:1%">' . $title . '</th></tr>' . "\n";
+	endif;
 
-return $table;
+	$table = $table . $rows;
+
+	$table = $table 
+	. '</tbody>' . "\n"
+	. '</table>' . "\n"
+	. '</div> <!-- END ' . $title . ' -->' . "\n";	
+
+  return $table;
+
 }
+
+function wrap_listgroup_items($groupname,$items) {
+
+	$table = '<!-- START ' . $groupname . ' -->' . "\n"
+	. '<ul class="list-group striped-list">' . "\n";
+
+	if ( $groupname ) :
+	 $table = $table . '<li class="list-group-item striped-list">' . $groupname . '</li>' . "\n";
+	endif;
+
+	$table = $table . $items;
+
+	$table = $table 
+	. '</ul> <!-- END ' . $groupname . ' -->' . "\n";	
+
+  return $table;
+
+}
+
+function wrap_definitionlist_items($groupname,$items) {
+
+	$table = '<!-- START ' . $groupname . ' -->' . "\n"
+	. '<dl class="row striped-list px-1 py-3">' . "\n";
+
+
+	$table = $table . $items;
+
+	$table = $table 
+	. '</dl> <!-- END ' . $groupname . ' -->' . "\n";	
+
+  return $table;
+
+}
+
 
 
 function wrap_accordian_rows($header, $data, $open=0) {
 
-$accordian = '<!-- START ' 
-			. $header . ' -->
-			<div class="accordion-item">
-			<h2 class="accordion-header font-weight-bold" id="heading' 
-			. $header 
-			. '">
-            <button class="accordion-button';
+	$accordian = '<!-- START ' . $header . ' -->' . "\n"
+	. '<div class="accordion-item">' . "\n"
+	. '<h2 class="accordion-header font-weight-bold" id="heading'
+	. $header 
+	. '">' . "\n"
+	. '<button class="accordion-button';
+	
 	if ( $open ) :
-		$accordian = $accordian . '';
+	 $accordian = $accordian . '';
 	else:
-		$accordian = $accordian . ' collapsed';
+	 $accordian = $accordian . ' collapsed';
 	endif;
-$accordian = $accordian 
-			. '" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' 
-			. $header 
-			. '" aria-expanded="false" aria-controls="collapse' 
-			. $header 
-			. '"><strong>'
-			. $header 
-			. '</strong></button></h2>
-			<div id="collapse' 
-			. $header 
-			. '" class="accordion-collapse collapse';
+	
+	$accordian = $accordian 
+	. '" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' 
+	. $header 
+	. '" aria-expanded="false" aria-controls="collapse' 
+	. $header 
+	. '"><strong>'
+	. $header 
+	. '</strong></button></h2>' . "\n"
+	. '<div id="collapse'
+	. $header
+	. '" class="accordion-collapse collapse';
 
 	if ( $open ) :
-		$accordian = $accordian. ' show';
+	 $accordian = $accordian. ' show';
 	endif;
 
-$accordian = $accordian 
-			. '" aria-labelledby="heading' 
-			. $header 
-			. '">
-      <div class="accordion-body">';
+	$accordian = $accordian 
+	. '" aria-labelledby="heading' 
+	. $header 
+	. '">' . "\n"
+	. '<div class="accordion-body">' . "\n";
 	  
-$accordian = $accordian . $data;
+	$accordian = $accordian . $data;
 
-$accordian = $accordian 
-		. ' </div>
-    </div>
-  </div> <!-- END ' 
-		. $header 
-		. ' -->';	
+	$accordian = $accordian 
+	. ' </div>' . "\n"
+	. '</div>' . "\n"
+	. '</div>' . "\n"
+	. '<!-- END ' . $header . ' -->' . "\n";	
   
   return $accordian;
 }
@@ -385,6 +440,7 @@ global $releaseinfo;
 global $myreleaseinfo;
 
 $id = $releaseinfo['id'];
+$resource_url = $releaseinfo['resource_url'];
 
 $labelname = '';
 if( array_key_exists('labels', $releaseinfo) ) :
@@ -396,7 +452,7 @@ if( array_key_exists('labels', $releaseinfo) ) :
 		if( array_key_exists('catno', $releaseinfo['labels'][$i]) )
 			$labelname = $labelname 
 			. ', ' . $releaseinfo['labels'][$i]['catno'] 
-			. '</br>';
+			. '<br/>';
 	endfor;
 endif;
 $formats = '';
@@ -415,17 +471,17 @@ if( array_key_exists('formats', $releaseinfo) ) :
 		endif;
 		if( !array_key_exists( 'text', $releaseinfo['formats'][$i]) && !array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
 			$formats = $formats
-			. '</br>';
+			. '<br/>';
 		if( array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
 			$formats = $formats
 			. ', ' . implode(", ", $releaseinfo['formats'][$i]['descriptions']);
 		if( !array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
 			$formats = $formats
-			. '</br>';
+			. '<br/>';
 		if( array_key_exists('text', $releaseinfo['formats'][$i]) )
 			$formats = $formats 
 			. ', <i>' . $releaseinfo['formats'][$i]['text'] . '</i>'
-			. '</br>';
+			. '<br/>';
 	endfor;
 endif;
 
@@ -475,11 +531,11 @@ $list_of_companies_rows = '';
 if( array_key_exists('companies', $releaseinfo) ) :
 	$companies = $releaseinfo['companies'];
 			for($i=0; $i<sizeof($companies);$i++) :
-				$list_of_companies_rows = $list_of_companies_rows . '<tr><td data-align="left" colspan="3">' 
+				$list_of_companies_rows = $list_of_companies_rows . '<li class="list-group-item"><strong>' 
 						. $companies[$i]['entity_type_name'] 
-						. ' ' 
+						. '</strong> ' 
 						. $companies[$i]['name'] 
-						. '</td></tr>
+						. '</li>
 						';
 			endfor;
 endif;
@@ -521,20 +577,43 @@ if( array_key_exists('notes', $myreleaseinfo['releases'][0]) ) :
 endif;
 			
 $release_tracklist_rows = '';
+$track_extraartists_list = '';
 if( array_key_exists('tracklist', $releaseinfo) ) :
 	$tracklist = $releaseinfo['tracklist'];
 	$number_of_release_tracklist_tracks = sizeof($tracklist);
+	$release_tracklist_rows = '<tr><th data-align="left" style="width:1%">#</th><td>Track Name</td><td>m:s</td></tr>';
 	for($i=0; $i<$number_of_release_tracklist_tracks;$i++)  :
+		if( array_key_exists('extraartists', $releaseinfo['tracklist'][$i]) ) :
+			$track_extraartists = $tracklist[$i]['extraartists'];
+			$number_of_track_extraartists = sizeof($track_extraartists);
+			$track_extraartists_list = '';
+			for($e=0; $e<$number_of_track_extraartists; $e++) :
+				$track_extraartists_list = $track_extraartists_list 
+				. $releaseinfo['tracklist'][$i]['extraartists'][$e]['role']
+				. ' '
+				. '<strong>'
+				. $releaseinfo['tracklist'][$i]['extraartists'][$e]['name']
+				. '</strong>';
+				if ( $e != ($number_of_track_extraartists - 1) ) :
+					$track_extraartists_list = $track_extraartists_list 
+					. ', ';
+				endif;
+				
+			endfor;
+		endif;
 		$release_tracklist_rows = $release_tracklist_rows 
-		. '<tr><td data-align="left" style="width:1%">' 
+		. '<tr><th data-align="left" style="width:1%">' 
 		. $tracklist[$i]['position'] 
-		. ": " 
-		. '</td><td data-align="left">' 
+		. ":  " 
+		. '</th><td data-align="left">' 
 		.  $tracklist[$i]['title'] 
+		. '<br/>'
+		. $track_extraartists_list
 		.  '</td><td data-align="left">' 
 		. $tracklist[$i]['duration'] 
 		. '</td></tr>
 		';
+	$track_extraartists_list = '';
 	endfor;
 endif;
 
@@ -550,12 +629,12 @@ if( array_key_exists('extraartists', $releaseinfo) ) :
 			$artist_tracks = ' (' . $artist_tracks . ')';
 		
 		$extra_artists_rows = $extra_artists_rows
-		. '<tr><td  colspan="3">' 
+		. '<li class="list-group-item"><strong>' 
 		. $artist_role
-		. ': ' 
+		. ':</strong> ' 
 		. $artist_name 
 		. $artist_tracks 
-		. '</td></tr>
+		. '</li>
 		';
 	endfor;
 endif;
@@ -652,8 +731,9 @@ endif;
 	
     <tr>
       <th scope="row"></th>
-      <td colspan="3" align="right">
+      <td colspan="2">
        <a class="btn btn-secondary btn-sm" href="https://www.discogs.com/release/<?php echo $id ?>">Discogs <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+	   <a class="btn btn-secondary btn-sm" href="<?php echo $resource_url; ?>">JSON <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
            
       </td>      
     </tr>
@@ -668,11 +748,11 @@ endif;
 <div class="accordion" id="accordionExample">
 
 <?php if ( isset($releasenotes) && ($releasenotes != '') ) :
-			echo wrap_accordian_rows('Notes',wrap_table_rows('', $releasenotes),'opened');
+			echo wrap_accordian_rows('Notes',wrap_table_rows('', '<tr><td>' . $releasenotes. '</td></tr>'),'opened');
  	  endif; ?>	
 <?php echo wrap_accordian_rows('TrackList',wrap_table_rows('',$release_tracklist_rows),'opened'); ?>
-<?php echo wrap_accordian_rows('Credits',wrap_table_rows('',$extra_artists_rows)); ?>
-<?php echo wrap_accordian_rows('Companies',wrap_table_rows('',$list_of_companies_rows)); ?>
+<?php echo wrap_accordian_rows('Credits',wrap_listgroup_items('',$extra_artists_rows)); ?>
+<?php echo wrap_accordian_rows('Companies',wrap_listgroup_items('',$list_of_companies_rows)); ?>
 <?php echo wrap_accordian_rows('Identifiers',wrap_table_rows('',$identifier_rows)); ?>
 
 </div>
@@ -687,7 +767,7 @@ endif;
 
 
     <div class="py-5 text-center"><a href="#" class="btn btn-dark px-5 py-3 text-uppercase">BACK TO TOP</a>
-	</br> Like this page? Run your own: <a href="https://github.com/nolageek/Discogs-Collection-Page"><i class="fa-brands fa-github"></i> / Discogs Collection Page <a></div>
+	<br/> Like this page? Run your own: <a href="https://github.com/nolageek/Discogs-Collection-Page"><i class="fa-brands fa-github"></i> / Discogs Collection Page <a></div>
   </div> <!-- Outer Container End -->
 
 </body>
