@@ -1,6 +1,6 @@
 # Discogs Collection Page
 
-These PHP and (optional) python scripts will generate a friendly view of your Discogs media collection organized by your Discogs folders.
+These PHP scrips will generate a friendly view of your Discogs media collection organized by your Discogs folders.
 
 ![image](https://user-images.githubusercontent.com/2931834/198485846-531472d0-e806-4ec0-b3ab-76717b53612b.png)
 
@@ -8,66 +8,18 @@ These PHP and (optional) python scripts will generate a friendly view of your Di
 * Mobile friendly
 * Displays gallery view of album covers, with title and artist name(s).
 * Auto paginates (50 per page by default,)
-* I do not currently intend to display your items for sale.
 * Gallery images link to single release view with more information about release, including ratings/notes on copy in collection.
 
 ## To Do: 
-* Get better at python / PHP
+* Get better at PHP
 * Auto crop images better to square format
 * Add dark mode
 * ~~Create single release view~~
 * ~~Add check to avoid re-downloading folder data that hasn't changed.~~
-* ~~Add option to make it fully dynamic (no downloading of data, just images.)~~
-* ~~Add option to no longer dynamically pull API data and use local data.~~
 
 ## To Fix:
 * ~~Figure out logic to display Notes in expanded view / release view.~~
 
-
-# A lot of the below items are outdated but still valid.
 # Requirements:
-* PHP 7.4 (Recommended)
-* Python 2.x (See notes below)
-* Python modules getopt, sys, json, urllib.request, and os.path
 * A Discogs personal access token to access the Discogs API: https://www.discogs.com/settings/developers
-
-## Notes for python 3.x:
- Change all occurances of `urllib` in the python script to `urllib.request`, including the **import** statement as well as all instances of `urllib.urlretrieve` to
- `urllib.request.urlretrieve`.
-
-# Usage:
-## This will still work, but is a little outdated.
-* Upload the files to your web server in it's own directory off of your public_html.
-* Create subdirectory named **img** and **json**.
-* You can either hardcode your Discogs token and username in the python script, or you can pass them via the *--token* and/or *--username* arguments.
-* In SSH run the discogs-update.py script with the **--updateimages** argument, ie: `python ./discogs-update.py --updateimages`
-
-Or, if you would like to pass the token on the command line, ie: `python ./discogs-update.py --updateimages --username <username> --token <ABC123>`
-  
-This will download your list of folders, your list of releases in the folder sorted by *added* and by *artists* (both ascending and descending for each), as well as all images for the items in your collection. The script will not overwrite images that already exist but it will overwrite data files.
-  
-* At this point you should have a working website with your collection sortable by artist and by date added.
-* One it's up and running you can use `--updatefolderlist`, `--updatefolders`, or `--updateimages` if you would like to avoid running **updateall**.
-* Set up a cron job to run the *updateall* command as often as you wish (try not to abuse their servers so your account doesn't get blocked.)
-
-```
-$ python ./discogs-update.py -t updateall
-('Type: ', 'updateall')
-Downloading Folder List To ./json/folders.json
-Downloading Data For Folder All (ID: 0, Count: 321)
-Downloading Data For Folder CDs (ID: 3220306, Count: 77)
-Downloading Data For Folder Uncategorized (ID: 1, Count: 0)
-Downloading Data For Folder Vinyl 10 Inch (ID: 3946258, Count: 2)
-Downloading Data For Folder Vinyl 12 Inch (ID: 3220309, Count: 232)
-./img/4674050.jpeg (Two Lectures By Nathaniel Branden: The Psychology Of Pleasure - Social Metaphysics) already exists.
-./img/19427773.jpeg (Black Pumas) already exists.
-./img/556175.jpeg (The Booker T. Set) already exists.
-./img/652381.jpeg (Introduce Yourself) already exists.
-./img/22700786.jpeg (Get Behind Me Satan) already exists.
-...
-./img/9212076.jpeg (The Man Who Could Fall Backwards) already exists.
-./img/1542894.jpeg (August And Everything After) already exists.
-./img/1513456.jpeg (Woodstock 99) already exists.
-./img/1386071.jpeg (Tigerlily) already exists.
-./img/1248761.jpeg (War All The Time) already exists.
-```
+* PHP 7.4+ (Recommended)
