@@ -645,7 +645,7 @@ endif;
 <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
  <div class="bg-white rounded shadow-sm">
  
-<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <?php for($i=0; $i<sizeof($images);$i++) {
 		echo '<div class="carousel-item'; 
@@ -660,15 +660,15 @@ endif;
 			'; } ?>
    </div>
    
-<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+<button class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
+    <span class="visually-hidden">Previous</span>
+  </button>
 
-<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+<button class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
+    <span class="visually-hidden">Next</span>
+  </button>
   
 </div>
 
