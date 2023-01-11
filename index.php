@@ -41,8 +41,80 @@ if ( isset($_GET['releaseid']) )
 $options  = array('http' => array('user_agent' => 'DiscogsCollectionPage'));
 $context  = stream_context_create($options);
 
+// GET FOLDER DATA FOR NAVIGATION BAR
+$folderjson = $DISCOGS_API_URL
+	. "/users/"
+	. $DISCOGS_USERNAME
+	. "/collection/folders?token="
+	. $DISCOGS_TOKEN;
+// put the contents of the file into a variable
+$folderdata = file_get_contents($folderjson, false, $context); 
+$folders = json_decode($folderdata,true); // decode the JSON feed
+
+function get_collection() {
+	global $DISCOGS_API_URL, $DISCOGS_USERNAME, $folder_id, $sort_by, $order, $page;
+	global $per_page, $DISCOGS_TOKEN, $context, $collection;
+		$pagejson = $DISCOGS_API_URL 
+		. "/users/"
+		. $DISCOGS_USERNAME
+		. "/collection/folders/"
+		. $folder_id
+		. "/releases?sort="
+		. $sort_by
+		. "&sort_order="
+		. $order
+		. "&page="
+		. $page
+		. "&per_page="
+		. $per_page
+		. "&token="
+		. $DISCOGS_TOKEN;
+	// put the contents of the JSON into a variable
+	$pagedata = file_get_contents($pagejson, false, $context); 
+	// decode the JSON feed
+	$collection = json_decode($pagedata,true); 
+	return $collection;
+}
+
+function get_folder_count($folder_id){
+	global $folders;
+	foreach ($folders['folders'] as $folder) { 
+	if ($folder['id'] == $folder_id)
+		$folder_count = $folder['count'];
+	}
+		return $folder_count;
+}
+
+function get_random_release() {
+	global $DISCOGS_API_URL, $DISCOGS_USERNAME, $folder_id, $sort_by, $order, $page;
+	global $per_page, $DISCOGS_TOKEN, $context, $collection;
+		$pagejson = $DISCOGS_API_URL 
+		. "/users/"
+		. $DISCOGS_USERNAME
+		. "/collection/folders/"
+		. $folder_id
+		. "/releases?sort="
+		. $sort_by
+		. "&sort_order="
+		. $order
+		. "&page="
+		. rand(1, get_folder_count($folder_id))
+		. "&per_page=1"
+		. "&token="
+		. $DISCOGS_TOKEN;
+	// put the contents of the JSON into a variable
+	$pagedata = file_get_contents($pagejson, false, $context); 
+	// decode the JSON feed
+	$collection = json_decode($pagedata,true); 
+	return $collection['releases'][0]['basic_information']['id'];
+}
+
 // IF THIS IS A SINGLE RELEASE VIEW, GET INFORMATION FROM RELEASE AND FROM USER COLLECTION FOR THAT RELEASE
 if ($release_id) {
+	if ($release_id == "random") {
+	$release_id = get_random_release();
+	}
+	
 	// PULL DISCOGS REGARDING THE RELEASE IN MY COLLECTION
 	$releasejson = $DISCOGS_API_URL 
 		. "/releases/" 
@@ -69,37 +141,8 @@ if ($release_id) {
 // IF NOT A SINGLE RELEASE VIEW, GET DATA FOR USER'S COLLECTION TO DISPLAY COVER GALLERY.
 } else {
 	// PULL DISCOGS DATA REGARDING MY COLLECTION, PAGINATED
-	$pagejson = $DISCOGS_API_URL 
-		. "/users/"
-		. $DISCOGS_USERNAME
-		. "/collection/folders/"
-		. $folder_id
-		. "/releases?sort="
-		. $sort_by
-		. "&sort_order="
-		. $order
-		. "&page="
-		. $page
-		. "&per_page="
-		. $per_page
-		. "&token="
-		. $DISCOGS_TOKEN;
-	// put the contents of the JSON into a variable
-	$pagedata = file_get_contents($pagejson, false, $context); 
-	// decode the JSON feed
-	$collection = json_decode($pagedata,true); 
+	get_collection();
 }
-
-
-// GET FOLDER DATA FOR NAVIGATION BAR
-$folderjson = $DISCOGS_API_URL
-	. "/users/"
-	. $DISCOGS_USERNAME
-	. "/collection/folders?token="
-	. $DISCOGS_TOKEN;
-// put the contents of the file into a variable
-$folderdata = file_get_contents($folderjson, false, $context); 
-$folders = json_decode($folderdata,true); // decode the JSON feed
 
 
 // Figure out name, ID and number of items of current folder.
@@ -120,9 +163,11 @@ foreach ($folders['folders'] as $folder) {
 
 <script src="https://kit.fontawesome.com/7e1a0bb728.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous"> -->
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap-night.min.css" rel="stylesheet">
 
 <style>
 /*
@@ -133,32 +178,9 @@ foreach ($folders['folders'] as $folder) {
 *
 */
 
-body {
-  background: #f4f4f4;
-}
-
-.banner {
-  background: #a770ef;
-  background: -webkit-linear-gradient(to right, #a770ef, #cf8bf3, #fdb99b);
-  background: linear-gradient(to right, #a770ef, #cf8bf3, #fdb99b);
-}
-
 .list-group-item { word-wrap: break-word; }
 
-ul.striped-list {
-    list-style-type: none;
-}
-ul.striped-list > li {
-    border-bottom: 1px solid rgb(221,221,221);
-    padding: .75rem;
-    padding-left: .55rem;
-}
-ul.striped-list > li:nth-of-type(odd) {
-    background-color: #f8f9fa ;
-}
-ul.striped-list > li:last-child {
-   /*  border-bottom: none;*/
-}
+
 
 
 
@@ -249,6 +271,13 @@ ul.striped-list > li:last-child {
     <a href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=asc&per_page=<?php echo $per_page; ?>" class="btn btn-secondary text-uppercase<?php if ($order == "asc") echo " disabled"; ?>">ASC</a>
      <a href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=desc&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" class="btn btn-secondary text-uppercase<?php if ($order == "desc") echo " disabled"; ?>">DESC</a> 
  </div>
+
+<!-- Add a Random Button -->
+  <div class="btn-group btn-group-sm p-1" role="random" aria-label="Randomize">
+    <a href="/?releaseid=random&folder=<?php echo $folder_id ?>" class="btn btn-info text-uppercase">RANDOM ALBUM</a>
+  </div>
+<!-- End of Random Button-->
+
 <?php } ?>	
 </div> <!-- Pagination / Nav / Filter Bar-->
 
@@ -397,13 +426,13 @@ $is_new_class = '';
 $is_new_badge ='';
 if(strtotime($adddate) > strtotime('-14 days')) :
 $is_new_class = ' border-success';
-$is_new_badge = '<div class="badge badge-success px-3 rounded-pill">New</div>';
+$is_new_badge = '<span class="badge bg-success px-3 rounded-pill">New</span>';
 endif;	
 ?>
 
 <!-- Gallery item -->
 <div class="col-xl-3 col-md-6 col-sm-6 my-3">
- <div class="card h-100<?php echo $is_new_class; ?>">
+ <div class="card h-100 <?php echo $is_new_class; ?>">
 
 
 <a href="/?releaseid=<?php echo $id ?>">
@@ -422,7 +451,7 @@ endif;
 	</div>
    </div> 
    
-   <div class="card-footer text-muted d-flex justify-content-between"><small>added <?php echo $adddate; ?></small>
+   <div class="card-footer d-flex justify-content-between"><small>added <?php echo $adddate; ?></small>
     <?php echo $is_new_badge; ?>
    </div>
 
@@ -645,6 +674,7 @@ endif;
 <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
  <div class="bg-white rounded shadow-sm">
  
+ <div class="card h-100">
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <?php for($i=0; $i<sizeof($images);$i++) {
@@ -670,8 +700,9 @@ endif;
     <span class="visually-hidden">Next</span>
   </button>
   
-</div>
+</div> <!-- END carouselExampleControls -->
 
+<div class="card-body">
 <div class="p-1 table-responsive">
  <table class="table table-striped">
   <tbody>
@@ -728,18 +759,16 @@ endif;
 <?php //Release notes are generated as complete rows with headers.
 		echo $my_release_notes_rows; 
 		?>
-	
-    <tr>
-      <th scope="row"></th>
-      <td colspan="2">
-       <a class="btn btn-secondary btn-sm" href="https://www.discogs.com/release/<?php echo $id ?>">Discogs <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-	   <a class="btn btn-secondary btn-sm" href="<?php echo $resource_url; ?>">JSON <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-           
-      </td>      
-    </tr>
-  </tbody>
+	  </tbody>
  </table>
-</div></div></div>		
+</div>
+</div> <!-- END card body -->
+
+      <div class="card-footer d-flex justify-content-between">
+       <a class="btn btn-secondary btn-sm" href="https://www.discogs.com/release/<?php echo $id ?>">Discogs <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+	   <a class="btn btn-secondary btn-sm" href="<?php echo $resource_url; ?>">JSON <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+	   
+	   </div></div></div>	
 
 
 <div class="col-xl-8 col-lg-6 col-md-6 mb-4">
