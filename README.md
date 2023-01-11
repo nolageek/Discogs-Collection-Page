@@ -9,7 +9,7 @@ This PHP script will generate a friendly view of your Discogs media collection o
 * Displays gallery view of album covers, with title and artist name(s).
 * Auto paginates (50 per page by default,)
 * Gallery images link to single release view with more information about release, including ratings/notes on copy in collection.
-* "Random Release" button will display single release view of a random item in your collection (from the current folder.)
+* "Random Release" button will display single release view of a random item in your collection (from the current folder.)  Thank you *laminateddenim* for the suggestion!
 
 ## To Do: 
 * Add Dark / Light mode toggle
