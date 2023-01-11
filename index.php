@@ -17,8 +17,8 @@ $release_id = "";
 
 // GET ATTRIBUTES FROM URL
 
-if( isset($_GET['folder']) )
-	$folder_id = $_GET['folder'];
+if( isset($_GET['folder_id']) )
+	$folder_id = $_GET['folder_id'];
 
 if( isset($_GET['sort_by']) )
 	$sort_by = $_GET['sort_by'];
@@ -51,9 +51,17 @@ $folderjson = $DISCOGS_API_URL
 $folderdata = file_get_contents($folderjson, false, $context); 
 $folders = json_decode($folderdata,true); // decode the JSON feed
 
+// Get name, ID and number of items of current folder.
+foreach ($folders['folders'] as $folder) { 
+	if ($folder['id'] == $folder_id) {
+		$current_folder_name = $folder['name'];
+		$current_folder_count = $folder['count'];
+		}
+	} 
+
 function get_collection() {
 	global $DISCOGS_API_URL, $DISCOGS_USERNAME, $folder_id, $sort_by, $order, $page;
-	global $per_page, $DISCOGS_TOKEN, $context, $collection;
+	global $per_page, $DISCOGS_TOKEN, $context;
 		$pagejson = $DISCOGS_API_URL 
 		. "/users/"
 		. $DISCOGS_USERNAME
@@ -76,18 +84,9 @@ function get_collection() {
 	return $collection;
 }
 
-function get_folder_count($folder_id){
-	global $folders;
-	foreach ($folders['folders'] as $folder) { 
-	if ($folder['id'] == $folder_id)
-		$folder_count = $folder['count'];
-	}
-		return $folder_count;
-}
-
 function get_random_release() {
-	global $DISCOGS_API_URL, $DISCOGS_USERNAME, $folder_id, $sort_by, $order, $page;
-	global $per_page, $DISCOGS_TOKEN, $context, $collection;
+	global $DISCOGS_API_URL, $DISCOGS_USERNAME, $folder_id, $sort_by, $order;
+	global $per_page, $DISCOGS_TOKEN, $context, $current_folder_count;
 		$pagejson = $DISCOGS_API_URL 
 		. "/users/"
 		. $DISCOGS_USERNAME
@@ -98,7 +97,7 @@ function get_random_release() {
 		. "&sort_order="
 		. $order
 		. "&page="
-		. rand(1, get_folder_count($folder_id))
+		. rand(1, $current_folder_count)
 		. "&per_page=1"
 		. "&token="
 		. $DISCOGS_TOKEN;
@@ -106,16 +105,12 @@ function get_random_release() {
 	$pagedata = file_get_contents($pagejson, false, $context); 
 	// decode the JSON feed
 	$collection = json_decode($pagedata,true); 
-	return $collection['releases'][0]['basic_information']['id'];
+	return $collection;
 }
 
-// IF THIS IS A SINGLE RELEASE VIEW, GET INFORMATION FROM RELEASE AND FROM USER COLLECTION FOR THAT RELEASE
-if ($release_id) {
-	if ($release_id == "random") {
-	$release_id = get_random_release();
-	}
-	
-	// PULL DISCOGS REGARDING THE RELEASE IN MY COLLECTION
+function get_release_information($release_id) {
+	global $DISCOGS_API_URL, $DISCOGS_USERNAME,$DISCOGS_TOKEN, $context;
+		// PULL DISCOGS REGARDING THE RELEASE IN MY COLLECTION
 	$releasejson = $DISCOGS_API_URL 
 		. "/releases/" 
 		. $release_id 
@@ -124,7 +119,11 @@ if ($release_id) {
 	$releasedata = file_get_contents($releasejson, false, $context); 
 	// decode the JSON feed
 	$releaseinfo = json_decode($releasedata,true); 
+	return $releaseinfo;
+}
 	
+function get_my_release_information($release_id) {
+	global $DISCOGS_API_URL, $DISCOGS_USERNAME,$DISCOGS_TOKEN, $context;
 	// PULL MY DATA REGARDING THE RELEASE IN MY COLLECTION
 	$myreleasejson = $DISCOGS_API_URL 
 		. "/users/" 
@@ -137,21 +136,27 @@ if ($release_id) {
 	$myreleasedata = file_get_contents($myreleasejson, false, $context); 
 	// decode the JSON feed
 	$myreleaseinfo = json_decode($myreleasedata,true);
+	return $myreleaseinfo;
+}
+
+// IF THIS IS A SINGLE RELEASE VIEW, GET INFORMATION FROM RELEASE AND FROM USER COLLECTION FOR THAT RELEASE
+if ($release_id) {
+	if ($release_id == "random") {
+	$random_release = get_random_release();
+	$release_id = $random_release['releases'][0]['basic_information']['id'];
+	}
+	
+    //get_release_information($release_id);
+	$releaseinfo = get_release_information($release_id);
+	$myreleaseinfo = get_my_release_information($release_id);
 
 // IF NOT A SINGLE RELEASE VIEW, GET DATA FOR USER'S COLLECTION TO DISPLAY COVER GALLERY.
 } else {
-	// PULL DISCOGS DATA REGARDING MY COLLECTION, PAGINATED
-	get_collection();
+	// PULL DISCOGS DATA REGARDING MY COLLECTION
+	$collection = get_collection();
 }
 
 
-// Figure out name, ID and number of items of current folder.
-foreach ($folders['folders'] as $folder) { 
-	if ($folder['id'] == $folder_id) {
-		$currentfoldername = $folder['name'];
-		$currentfoldercount = $folder['count'];
-		}
-	} 
 ?>
 
 <!DOCTYPE html>
@@ -198,13 +203,15 @@ foreach ($folders['folders'] as $folder) {
         <div class="text-white p-3 shadow-sm rounded banner">
           <h2 class="display-6">Discogs Collection Page for <?php echo $DISCOGS_USERNAME ?></h2>
 
-		  <?php if ($release_id): ?>
+		  <?php if ($release_id): 
+		  get_release_information($release_id);?>
+		  
 					<p class="lead">
 						"<?php echo $releaseinfo['title'];?>" by <?php echo implode (", ", array_column($releaseinfo['artists'], "name"));?>
 					</p>
 		  <?php else: ?>
 					<p class="lead">
-						<b><?php echo $currentfoldername;?></b> (<?php echo $currentfoldercount;?> items) Sorted by: <?php echo $sort_by ?>, <?php echo $order ?>ending
+						<b><?php echo $current_folder_name;?></b> (<?php echo $current_folder_count;?> items) Sorted by: <?php echo $sort_by ?>, <?php echo $order ?>ending
 					</p>
 		  <?php endif; ?>
         </div>
@@ -218,16 +225,16 @@ foreach ($folders['folders'] as $folder) {
 
  <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Pagination">
 	<?php if(!$release_id) { ?>
-        <a class="btn btn-primary text-uppercase <?php if($page == 1) echo "disabled"; ?>" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if($page != 1) echo (intval($page) - 1); ?>" tabindex="-1">&#12298;</a>
+        <a class="btn btn-primary text-uppercase <?php if($page == 1) echo "disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if($page != 1) echo (intval($page) - 1); ?>" tabindex="-1">&#12298;</a>
 		<?php
 		$x = 1;
 		$pages = $collection['pagination']['pages'];
 		while($x <= $pages) {
 		?>
-			<a class="btn btn-primary text-uppercase <?php if($page == $x) echo "active disabled"; ?>" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php echo $x;?>"><?php echo $x;?></a>
+			<a class="btn btn-primary text-uppercase <?php if($page == $x) echo "active disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php echo $x;?>"><?php echo $x;?></a>
 <?php 	$x++; } ?>
 
-		<a class="btn btn-primary text-uppercase <?php if($page == $collection['pagination']['pages']) echo "disabled"; ?>" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if($page != $pages) echo (intval($page) + 1); ?>" tabindex="-1">&#12299;</a>
+		<a class="btn btn-primary text-uppercase <?php if($page == $collection['pagination']['pages']) echo "disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if($page != $pages) echo (intval($page) + 1); ?>" tabindex="-1">&#12299;</a>
   </div>
 	
   <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Per Page">
@@ -235,9 +242,9 @@ foreach ($folders['folders'] as $folder) {
       <?php echo $per_page; ?> Per Page
     </button>
   <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-      <a class="dropdown-item" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=25&page=1">25</a>
-      <a class="dropdown-item" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=50&page=1">50</a>
-	  <a class="dropdown-item" href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=100&page=1">100</a>
+      <a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=25&page=1">25</a>
+      <a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=50&page=1">50</a>
+	  <a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=100&page=1">100</a>
   </div>
 	
 	<?php } else {?>
@@ -254,31 +261,28 @@ foreach ($folders['folders'] as $folder) {
 		$foldercount = $folder['count'];
 
 		if ($foldercount > 1) { ?>
-    <a href="/?folder=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=1" class="btn btn-primary text-uppercase<?php if ($folder_id == $folderid) echo " disabled"; ?>"><?php echo $foldername; ?> (<?php echo $foldercount; ?>)</a>
+    <a href="/?folder_id=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=1" title="View Folder '<?php echo $foldername; ?>'" class="btn btn-primary text-uppercase<?php if ($folder_id == $folderid) echo " disabled"; ?>"><?php echo $foldername; ?> (<?php echo $foldercount; ?>)</a>
 <?php } } ?>
   </div>
 	
 <?php if(!$release_id) { ?>	
   <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Sort by Artist or Date Added">
-    <?php if ($sort_by == "artist") { ?>
-    <a href="/?folder=<?php echo $folder_id; ?>&sort_by=added&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" class="btn btn-info text-uppercase">Added</A>
-    <?php } else { ?>
-    <a href="/?folder=<?php echo $folder_id; ?>&sort_by=artist&order=<?php echo $order; ?>&page=<?php echo $page; ?>" class="btn btn-info text-uppercase">Artist</a> 
-<?php } ?>
+     <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=added&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" title="Sort By Added" class="btn btn-info text-uppercase<?php if ($sort_by == "added") echo " disabled"; ?>"><i class="fa-solid fa-clock"></i></A>
+      <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=artist&order=<?php echo $order; ?>&page=<?php echo $page; ?>" title="Sort By Artist" class="btn btn-info text-uppercase<?php if ($sort_by == "artist") echo " disabled"; ?>"><i class="fa-solid fa-user-group"></i></a> 
   </div>
   
   <div class="btn-group btn-group-sm  p-1" role="group" aria-label="Ascending or Descending">
-    <a href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=asc&per_page=<?php echo $per_page; ?>" class="btn btn-secondary text-uppercase<?php if ($order == "asc") echo " disabled"; ?>">ASC</a>
-     <a href="/?folder=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=desc&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" class="btn btn-secondary text-uppercase<?php if ($order == "desc") echo " disabled"; ?>">DESC</a> 
+    <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=asc&per_page=<?php echo $per_page; ?>" title="Ascending" class="btn btn-secondary text-uppercase<?php if ($order == "asc") echo " disabled"; ?>"><i class="fa-solid fa-circle-arrow-down"></i></a>
+     <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=desc&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" title="Descending" class="btn btn-secondary text-uppercase<?php if ($order == "desc") echo " disabled"; ?>"><i class="fa-solid fa-circle-arrow-up"></i></a> 
  </div>
 
+<?php } ?>	
 <!-- Add a Random Button -->
   <div class="btn-group btn-group-sm p-1" role="random" aria-label="Randomize">
-    <a href="/?releaseid=random&folder=<?php echo $folder_id ?>" class="btn btn-info text-uppercase">RANDOM ALBUM</a>
+    <a href="/?releaseid=random&folder_id=<?php echo $folder_id ?>" title="Random Release" class="btn btn-info text-uppercase"><i class="fa-solid fa-circle-question"></i></a>
   </div>
 <!-- End of Random Button-->
 
-<?php } ?>	
 </div> <!-- Pagination / Nav / Filter Bar-->
 
 
