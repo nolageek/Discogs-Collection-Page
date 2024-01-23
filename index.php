@@ -2,9 +2,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-$DISCOGS_API_URL="https://api.discogs.com";
-$DISCOGS_USERNAME="";
-$DISCOGS_TOKEN="";
 
 // DEFAULT VALUES FOR ATTRIBUTES
 $folder_id = "0";
@@ -14,6 +11,10 @@ $order = "desc";
 $page = "1";
 $per_page = "50";
 $release_id = "";
+
+$DISCOGS_API_URL="https://api.discogs.com";
+$DISCOGS_USERNAME="";
+$DISCOGS_TOKEN="";
 
 // GET ATTRIBUTES FROM URL
 
@@ -57,10 +58,75 @@ foreach ($folders['folders'] as $folder) {
 		$current_folder_name = $folder['name'];
 		$current_folder_count = $folder['count'];
 		}
+	if ($folder['id'] == 0) {
+		$total_collection_count = $folder['count'];
+		}
 	} 
 
+
+$DISCOGS_CACHE_FILE = 'jsondata/110000.json';
+
+function get_collection_cached($per_page) {
+	
+	global $DISCOGS_API_URL, $DISCOGS_USERNAME, $DISCOGS_CACHE_FILE, $folder_id, $sort_by, $order, $page;
+	global $per_page, $DISCOGS_TOKEN, $context;
+	$pagejson = $DISCOGS_API_URL 
+	. "/users/"
+	. $DISCOGS_USERNAME
+	. "/collection/folders/"
+	. $folder_id
+	. "/releases?sort="
+	. $sort_by
+	. "&sort_order="
+	. $order
+	. "&page="
+	. $page
+	. "&per_page="
+	. $per_page
+	. "&token="
+	. $DISCOGS_TOKEN;
+	// put the contents of the JSON into a variable
+		$pagedata = file_get_contents($pagejson, false, $context); 
+		file_put_contents($DISCOGS_CACHE_FILE, $pagedata);
+	// decode the JSON feed;
+	}  
+
+	function get_folder_cached($per_page) {
+	
+		global $DISCOGS_API_URL, $DISCOGS_USERNAME, $DISCOGS_CACHE_FILE, $folder_id, $sort_by, $order, $page;
+		global $per_page, $DISCOGS_TOKEN, $context;
+		$pagejson = $DISCOGS_API_URL 
+		. "/users/"
+		. $DISCOGS_USERNAME
+		. "/collection/folders/"
+		. $folder_id
+		. "/releases?sort="
+		. $sort_by
+		. "&sort_order="
+		. $order
+		. "&page="
+		. $page
+		. "&per_page="
+		. $per_page
+		. "&token="
+		. $DISCOGS_TOKEN;
+		// put the contents of the JSON into a variable
+			$pagedata = file_get_contents($pagejson, false, $context); 
+			file_put_contents($DISCOGS_CACHE_FILE, $pagedata);
+		// decode the JSON feed;
+		} 
+
+	#get_collection_cached('1000');
+#if (time()-filemtime($DISCOGS_CACHE_FILE) > 24 * 3600) {
+		// file older than 24 hours
+#	get_collection_cached();
+#} else {
+	// file younger than 24 hours
+#	print "//* JSON less than 24 hours old *//";
+#  }
+
 function get_collection() {
-	global $DISCOGS_API_URL, $DISCOGS_USERNAME, $folder_id, $sort_by, $order, $page;
+	global $DISCOGS_API_URL, $DISCOGS_USERNAME, $DISCOGS_CACHE_FILE, $folder_id, $sort_by, $order, $page;
 	global $per_page, $DISCOGS_TOKEN, $context;
 		$pagejson = $DISCOGS_API_URL 
 		. "/users/"
@@ -78,14 +144,16 @@ function get_collection() {
 		. "&token="
 		. $DISCOGS_TOKEN;
 	// put the contents of the JSON into a variable
-	$pagedata = file_get_contents($pagejson, false, $context); 
+	#$pagedata = file_get_contents($DISCOGS_CACHE_FILE, false, $context); 
+	$pagedata = file_get_contents($pagejson, false, $context);
+	
 	// decode the JSON feed
 	$collection = json_decode($pagedata,true); 
 	return $collection;
 }
 
 function get_random_release() {
-	global $DISCOGS_API_URL, $DISCOGS_USERNAME, $folder_id, $sort_by, $order;
+	global $DISCOGS_API_URL, $DISCOGS_USERNAME, $DISCOGS_CACHE_FILE, $folder_id, $sort_by, $order;
 	global $per_page, $DISCOGS_TOKEN, $context, $current_folder_count;
 		$pagejson = $DISCOGS_API_URL 
 		. "/users/"
@@ -102,14 +170,14 @@ function get_random_release() {
 		. "&token="
 		. $DISCOGS_TOKEN;
 	// put the contents of the JSON into a variable
-	$pagedata = file_get_contents($pagejson, false, $context); 
+	$pagedata = file_get_contents($pagejson, false, $context);
 	// decode the JSON feed
 	$collection = json_decode($pagedata,true); 
 	return $collection;
 }
 
 function get_release_information($release_id) {
-	global $DISCOGS_API_URL, $DISCOGS_USERNAME,$DISCOGS_TOKEN, $context;
+	global $DISCOGS_API_URL, $DISCOGS_USERNAME,$DISCOGS_TOKEN, $context, $DISCOGS_CACHE_FILE;
 		// PULL DISCOGS REGARDING THE RELEASE IN MY COLLECTION
 	$releasejson = $DISCOGS_API_URL 
 		. "/releases/" 
@@ -160,7 +228,7 @@ if ($release_id) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 
 <title>Discogs Collection Page</title>
@@ -201,16 +269,25 @@ if ($release_id) {
     <div class="row">
       <div class="col-12 mx-auto my-1">
         <div class="text-white p-3 shadow-sm rounded banner">
-          <h2 class="display-6">Discogs Collection Page for <?php echo $DISCOGS_USERNAME ?></h2>
+
+<!-- Add this within the <body> tag -->
+<div class="row mb-3">
+    <div class="col-md-6 mx-auto">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search...">
+    </div>
+</div>
+
+
+          <h2 class="lead">Discogs Collection Page for <?php echo $DISCOGS_USERNAME ?></h2>
 
 		  <?php if ($release_id): 
 		  get_release_information($release_id);?>
 		  
-					<p class="lead">
+					<p class="display-6">
 						"<?php echo $releaseinfo['title'];?>" by <?php echo implode (", ", array_column($releaseinfo['artists'], "name"));?>
 					</p>
 		  <?php else: ?>
-					<p class="lead">
+					<p class="display-6">
 						<b><?php echo $current_folder_name;?></b> (<?php echo $current_folder_count;?> items) Sorted by: <?php echo $sort_by ?>, <?php echo $order ?>ending
 					</p>
 		  <?php endif; ?>
@@ -237,15 +314,15 @@ if ($release_id) {
 		<a class="btn btn-primary text-uppercase <?php if($page == $collection['pagination']['pages']) echo "disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if($page != $pages) echo (intval($page) + 1); ?>" tabindex="-1">&#12299;</a>
   </div>
 	
-  <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Per Page">
-    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <div class="dropdown btn-group btn-group-sm p-1">
+  <button class="btn btn-primary text-uppercase dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
       <?php echo $per_page; ?> Per Page
     </button>
-  <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-      <a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=25&page=1">25</a>
-      <a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=50&page=1">50</a>
-	  <a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=100&page=1">100</a>
-  </div>
+  <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=25&page=1">25</a></li>
+      <li><a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=50&page=1">50</a></li>
+	  <li><a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=100&page=1">100</a></li>
+  </ul>
 	
 	<?php } else {?>
 	<button type="button" class="btn btn-primary text-uppercase" onclick="javascript:history.go(-1)">Back</button>
@@ -278,15 +355,16 @@ if ($release_id) {
 
 <?php } ?>	
 <!-- Add a Random Button -->
-  <div class="btn-group btn-group-sm p-1" role="random" aria-label="Randomize">
+  <div class="btn-group btn-group-sm p-1" aria-label="Randomize">
     <a href="/?releaseid=random&folder_id=<?php echo $folder_id ?>" title="Random Release" class="btn btn-info text-uppercase"><i class="fa-solid fa-circle-question"></i></a>
   </div>
 <!-- End of Random Button-->
 
 </div> <!-- Pagination / Nav / Filter Bar-->
 
+<div id="searchResults" class="row"></div>
 
-<div class="row"> <!-- Gallery of Releases -->
+<div id="releaseGallery" class="row"> <!-- Gallery of Releases -->
   
 <?php if ($release_id) {
 	  display_release_data($release_id);
@@ -410,18 +488,29 @@ function wrap_accordian_rows($header, $data, $open=0) {
 
 function display_gallery_item($release) { 
 
+
 $artists = implode(", ", array_column($release['basic_information']['artists'], "name"));
 $title = $release['basic_information']['title'];
 $id = $release['basic_information']['id'];
 $imageupdatedtext = '';
-$imagefile = './img/' . $release["basic_information"]["id"] . 'jpeg'; 
-    if ( !file_exists($imagefile) && is_dir( "./img/" ) ):
-        $imageupdatedtext = "Missing file has been downloaded from Discogs server.";  
-        $imagename = file_get_contents($release['basic_information']['cover_image']);
-		file_put_contents($imagefile, $imagename);
-    elseif (!file_exists($imagefile) && !is_dir( "./img/" ) ):
+$valid_image=0;
+$image_path = './img/' . $release["basic_information"]["id"] . '.jpeg';
+$imagefile = $image_path;
+	if ( !is_dir( "./img/" ) ):
         $imageupdatedtext = "Missing file has been hotlinked from Discogs server.";  
         $imagefile = $release['basic_information']['cover_image'];
+		$valid_image=1;
+	elseif ( !file_exists($image_path) ):
+        $imageupdatedtext = "Missing file has been downloaded from Discogs server.";  
+        $cover_image = file_get_contents($release['basic_information']['cover_image']);
+		file_put_contents($imagefile, $cover_image);
+		#valid_image=1;
+	elseif (filesize($image_path) <= 200 ):
+        $imageupdatedtext = filesize($imagefile) . " byte file has been downloaded from Discogs server. Hotlinking.";  
+        $cover_image = file_get_contents($release['basic_information']['cover_image']);
+		file_put_contents($imagefile, $cover_image);
+		$imagefile = $release['basic_information']['cover_image'];
+		$valid_image=1;
     endif;
 
 $adddate = date('m/d/y', strtotime(substr($release['date_added'],0,10)));
@@ -485,7 +574,7 @@ if( array_key_exists('labels', $releaseinfo) ) :
 		if( array_key_exists('catno', $releaseinfo['labels'][$i]) )
 			$labelname = $labelname 
 			. ', ' . $releaseinfo['labels'][$i]['catno'] 
-			. '<br/>';
+			. '<br>';
 	endfor;
 endif;
 $formats = '';
@@ -504,17 +593,17 @@ if( array_key_exists('formats', $releaseinfo) ) :
 		endif;
 		if( !array_key_exists( 'text', $releaseinfo['formats'][$i]) && !array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
 			$formats = $formats
-			. '<br/>';
+			. '<br>';
 		if( array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
 			$formats = $formats
 			. ', ' . implode(", ", $releaseinfo['formats'][$i]['descriptions']);
 		if( !array_key_exists('descriptions', $releaseinfo['formats'][$i]) )
 			$formats = $formats
-			. '<br/>';
+			. '<br>';
 		if( array_key_exists('text', $releaseinfo['formats'][$i]) )
 			$formats = $formats 
 			. ', <i>' . $releaseinfo['formats'][$i]['text'] . '</i>'
-			. '<br/>';
+			. '<br>';
 	endfor;
 endif;
 
@@ -576,6 +665,8 @@ endif;
 			
 
 $releasenotes = '';
+$my_release_notes = '';
+
 if( array_key_exists('notes', $releaseinfo) )
 	$releasenotes = $releaseinfo['notes'];
 $images = $releaseinfo['images'];
@@ -595,6 +686,10 @@ if( array_key_exists('notes', $myreleaseinfo['releases'][0]) ) :
 		elseif ( $mynotes['field_id'] == 3 ):
 			$noteicon = 'fa-clipboard';
 			$notetype = 'Notes';
+			$my_release_notes = '<tr><td>' . $mynotes['value'] . '</td></tr>';
+		elseif ( $mynotes['field_id'] == 4 ):
+			$noteicon = 'fa-clipboard';
+			$notetype = 'Category';
 		endif;
 	
 		$my_release_notes_rows = $my_release_notes_rows
@@ -640,7 +735,7 @@ if( array_key_exists('tracklist', $releaseinfo) ) :
 		. ":  " 
 		. '</th><td data-align="left">' 
 		.  $tracklist[$i]['title'] 
-		. '<br/>'
+		. '<br>'
 		. $track_extraartists_list
 		.  '</td><td data-align="left">' 
 		. $tracklist[$i]['duration'] 
@@ -694,12 +789,12 @@ endif;
 			'; } ?>
    </div>
    
-<button class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
+<button class="carousel-control-prev" href="#carouselExampleControls" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Previous</span>
   </button>
 
-<button class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
+<button class="carousel-control-next" href="#carouselExampleControls" data-bs-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
@@ -781,7 +876,7 @@ endif;
 <div class="accordion" id="accordionExample">
 
 <?php if ( isset($releasenotes) && ($releasenotes != '') ) :
-			echo wrap_accordian_rows('Notes',wrap_table_rows('', '<tr><td>' . $releasenotes. '</td></tr>'),'opened');
+			echo wrap_accordian_rows('Notes',wrap_table_rows('', '<tr><td>' . $releasenotes. '</td></tr>' . $my_release_notes),'opened');
  	  endif; ?>	
 <?php echo wrap_accordian_rows('TrackList',wrap_table_rows('',$release_tracklist_rows),'opened'); ?>
 <?php echo wrap_accordian_rows('Credits',wrap_listgroup_items('',$extra_artists_rows)); ?>
@@ -800,8 +895,65 @@ endif;
 
 
     <div class="py-5 text-center"><a href="#" class="btn btn-dark px-5 py-3 text-uppercase">BACK TO TOP</a>
-	<br/> Like this page? Run your own: <a href="https://github.com/nolageek/Discogs-Collection-Page"><i class="fa-brands fa-github"></i> / Discogs Collection Page <a></div>
+	<br> Like this page? Run your own: <a href="https://github.com/nolageek/Discogs-Collection-Page"><i class="fa-brands fa-github"></i> / Discogs Collection Page </a></div>
   </div> <!-- Outer Container End -->
+
+<!-- Add this before the closing </body> tag -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+
+<script>
+$(document).ready(function(){
+    $("#searchInput").on("input", function() {
+        var searchTerm = $(this).val().toLowerCase();
+
+        // Get references to the divs
+        var releaseGalleryDiv = $("#releaseGallery");
+        var searchResultsDiv = $("#searchResults");
+
+        // Toggle visibility based on the search term
+        if (searchTerm) {
+            // If there is a search term, hide releaseGallery and show searchResults
+            releaseGalleryDiv.hide();
+            searchResultsDiv.show();
+        } else {
+            // If the search term is empty, show releaseGallery and hide searchResults
+            releaseGalleryDiv.show();
+            searchResultsDiv.hide();
+        }
+
+        // Clear previous search results
+        searchResultsDiv.empty();
+
+        // Load JSON data from a local file
+        $.getJSON('<?php echo $DISCOGS_CACHE_FILE; ?>', function(data) {
+            var filteredReleases = data.releases.filter(function(release) {
+                var title = release.basic_information.title.toLowerCase();
+                var artists = release.basic_information.artists.map(function(artist) {
+                    return artist.name.toLowerCase();
+                }).join(", ");
+                return title.includes(searchTerm) || artists.includes(searchTerm);
+            });
+
+            // Display the search results
+            filteredReleases.forEach(function(release) {
+                var releaseHtml = '<div class="col-md-4 mb-4">';
+                releaseHtml += '<div class="card">';
+                releaseHtml += `<a href="https://discogs.nolageek.com/?releaseid=${release.id}"> <img src="/img/${release.id}.jpeg" class="card-img-top" alt="${release.basic_information.title}"></a>`;
+
+                releaseHtml += '<div class="card-body">';
+                releaseHtml += '<h5 class="card-title">' + release.basic_information.title + '</h5>';
+                releaseHtml += '<p class="card-text">' + release.basic_information.artists.map(function(artist) {
+                    return artist.name;
+                }).join(", ") + '</p>';
+                releaseHtml += '</div></div></div>';
+                searchResultsDiv.append(releaseHtml);
+            });
+        });
+    });
+});
+
+</script>
+
 
 </body>
 </html>
