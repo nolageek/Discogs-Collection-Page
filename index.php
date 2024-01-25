@@ -490,7 +490,7 @@ function display_gallery_item($release) {
 $artists = implode(", ", array_column($release['basic_information']['artists'], "name"));
 $title = $release['basic_information']['title'];
 $id = $release['basic_information']['id'];
-$imageupdatedtext = '';
+$imageupdatedtext = '*';
 $valid_image=0;
 $image_path = './img/' . $release["basic_information"]["id"] . '.jpeg';
 $imagefile = $image_path;
