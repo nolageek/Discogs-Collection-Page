@@ -507,7 +507,7 @@ $image_file = $IMAGE_PATH_ROOT . $release["basic_information"]["id"] . '.jpeg';
         $cover_image = file_get_contents($release['basic_information']['cover_image']);
 		file_put_contents($image_file, $cover_image);
 		#valid_image=1;
-	elseif (filesize($image_path) <= 200 ):
+	elseif (filesize($image_file) <= 200 ):
         $imageupdatedtext = filesize($image_file) . " byte file has been downloaded from Discogs server. Hotlinking.";  
         $cover_image = file_get_contents($release['basic_information']['cover_image']);
 		file_put_contents($image_file, $cover_image);
