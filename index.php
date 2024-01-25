@@ -2,13 +2,13 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-require('auth.php')
+require('settings.php')
 
 // DEFAULT VALUES FOR ATTRIBUTES
 $folder_id = "0";
 $sort_by = "added";
 $order = "desc";
-//$artistid = "";
+$artistid = ""; // Currently not used
 $page = "1";
 $per_page = "50";
 $release_id = "";
@@ -16,26 +16,14 @@ $release_id = "";
 
 // GET ATTRIBUTES FROM URL
 
-if( isset($_GET['folder_id']) )
-	$folder_id = $_GET['folder_id'];
-
-if( isset($_GET['sort_by']) )
-	$sort_by = $_GET['sort_by'];
-
-if( isset($_GET['order']) ) 
-	$order = $_GET['order'];
-
-if( isset($_GET['page']) ) 
-	$page = $_GET['page'];
-
-//if(isset($_GET['artistid']))
-//$artistid = $_GET['artistid'];
-
-if ( isset($_GET['per_page']) )
-	$per_page = $_GET['per_page'];
-
-if ( isset($_GET['releaseid']) )
-	$release_id = $_GET['releaseid'];
+// GET ATTRIBUTES FROM URL
+if (isset($_GET['folder_id'])) $folder_id = $_GET['folder_id'];
+if (isset($_GET['sort_by'])) $sort_by = $_GET['sort_by'];
+if (isset($_GET['order'])) $order = $_GET['order'];
+if (isset($_GET['page'])) $page = $_GET['page'];
+if (isset($_GET['artistid'])) $artistid = $_GET['artistid']; // Currently not used
+if (isset($_GET['per_page'])) $per_page = $_GET['per_page'];
+if (isset($_GET['releaseid'])) $release_id = $_GET['releaseid'];
 
 $options  = array('http' => array('user_agent' => 'DiscogsCollectionPage'));
 $context  = stream_context_create($options);
@@ -486,15 +474,15 @@ function wrap_accordian_rows($header, $data, $open=0) {
 
 function display_gallery_item($release) { 
 
-
+global $IMAGE_PATH_ROOT_URL, $IMAGE_PATH_ROOT
 $artists = implode(", ", array_column($release['basic_information']['artists'], "name"));
 $title = $release['basic_information']['title'];
 $id = $release['basic_information']['id'];
 $imageupdatedtext = '*';
 $valid_image=0;
-$image_path = './img/' . $release["basic_information"]["id"] . '.jpeg';
+$image_path = $IMAGE_PATH_ROOT_URL . $release["basic_information"]["id"] . '.jpeg';
 $imagefile = $image_path;
-	if ( !is_dir( "./img/" ) ):
+	if ( !is_dir( $IMAGE_PATH_ROOT ) ):
         $imageupdatedtext = "Missing file has been hotlinked from Discogs server.";  
         $imagefile = $release['basic_information']['cover_image'];
 		$valid_image=1;
