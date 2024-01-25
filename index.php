@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-require('settings.php')
+require('settings.php');
 
 // DEFAULT VALUES FOR ATTRIBUTES
 $folder_id = "0";
@@ -494,9 +494,9 @@ $artists = implode(", ", array_column($release['basic_information']['artists'], 
 $title = $release['basic_information']['title'];
 $id = $release['basic_information']['id'];
 $imageupdatedtext = '*';
-$valid_image=0;
+$valid_image = 0;
 $image_url = $IMAGE_PATH_ROOT_URL . $release["basic_information"]["id"] . '.jpeg';
-$image_file =  $IMAGE_PATH_ROOT . $release["basic_information"]["id"] . '.jpeg';
+$image_file = $IMAGE_PATH_ROOT . $release["basic_information"]["id"] . '.jpeg';
 #$imagefile = $image_path;
 	if ( !is_dir( $IMAGE_PATH_ROOT ) ):
         $imageupdatedtext = "Missing file has been hotlinked from Discogs server.";  
