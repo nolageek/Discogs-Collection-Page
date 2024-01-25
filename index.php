@@ -495,22 +495,23 @@ $title = $release['basic_information']['title'];
 $id = $release['basic_information']['id'];
 $imageupdatedtext = '*';
 $valid_image=0;
-$image_path = $IMAGE_PATH_ROOT_URL . $release["basic_information"]["id"] . '.jpeg';
-$imagefile = $image_path;
+$image_url = $IMAGE_PATH_ROOT_URL . $release["basic_information"]["id"] . '.jpeg';
+$image_file =  $IMAGE_PATH_ROOT . $release["basic_information"]["id"] . '.jpeg';
+#$imagefile = $image_path;
 	if ( !is_dir( $IMAGE_PATH_ROOT ) ):
         $imageupdatedtext = "Missing file has been hotlinked from Discogs server.";  
-        $imagefile = $release['basic_information']['cover_image'];
+        $image_url = $release['basic_information']['cover_image'];
 		$valid_image=1;
-	elseif ( !file_exists($image_path) ):
+	elseif ( !file_exists($image_file_path) ):
         $imageupdatedtext = "Missing file has been downloaded from Discogs server.";  
         $cover_image = file_get_contents($release['basic_information']['cover_image']);
-		file_put_contents($imagefile, $cover_image);
+		file_put_contents($image_file, $cover_image);
 		#valid_image=1;
 	elseif (filesize($image_path) <= 200 ):
-        $imageupdatedtext = filesize($imagefile) . " byte file has been downloaded from Discogs server. Hotlinking.";  
+        $imageupdatedtext = filesize($image_file) . " byte file has been downloaded from Discogs server. Hotlinking.";  
         $cover_image = file_get_contents($release['basic_information']['cover_image']);
-		file_put_contents($imagefile, $cover_image);
-		$imagefile = $release['basic_information']['cover_image'];
+		file_put_contents($image_file, $cover_image);
+		$image_url = $release['basic_information']['cover_image'];
 		$valid_image=1;
     endif;
 
@@ -530,7 +531,7 @@ endif;
 
 
 <a href="/?releaseid=<?php echo $id ?>">
-   <img class="card-img-top rounded p-2" src="<?php echo $imagefile; ?>" alt="<?php echo $title; ?>">
+   <img class="card-img-top rounded p-2" src="<?php echo $image_url; ?>" alt="<?php echo $title; ?>">
 </a>
         
    <div class="card-body d-flex flex-column">
