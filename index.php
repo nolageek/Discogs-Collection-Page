@@ -502,7 +502,7 @@ $image_file = $IMAGE_PATH_ROOT . $release["basic_information"]["id"] . '.jpeg';
         $imageupdatedtext = "Missing file has been hotlinked from Discogs server.";  
         $image_url = $release['basic_information']['cover_image'];
 		$valid_image=1;
-	elseif ( !file_exists($image_file_path) ):
+	elseif ( !file_exists($image_file) ):
         $imageupdatedtext = "Missing file has been downloaded from Discogs server.";  
         $cover_image = file_get_contents($release['basic_information']['cover_image']);
 		file_put_contents($image_file, $cover_image);
