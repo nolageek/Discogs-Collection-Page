@@ -2,6 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
+require('auth.php')
 
 // DEFAULT VALUES FOR ATTRIBUTES
 $folder_id = "0";
@@ -12,9 +13,6 @@ $page = "1";
 $per_page = "50";
 $release_id = "";
 
-$DISCOGS_API_URL="https://api.discogs.com";
-$DISCOGS_USERNAME="";
-$DISCOGS_TOKEN="";
 
 // GET ATTRIBUTES FROM URL
 

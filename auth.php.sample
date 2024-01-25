@@ -1,0 +1,5 @@
+<?php
+$DISCOGS_API_URL="https://api.discogs.com";
+$DISCOGS_USERNAME="";
+$DISCOGS_TOKEN="";
+?>
