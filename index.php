@@ -287,17 +287,20 @@ if ($release_id) {
 <div class="btn-toolbar d-flex justify-content-center p-3" role="toolbar" aria-label="Toolbar with button groups">
 
  <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Pagination">
-	<?php if(!$release_id) { ?>
-        <a class="btn btn-primary text-uppercase <?php if($page == 1) echo "disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if($page != 1) echo (intval($page) - 1); ?>" tabindex="-1">&#12298;</a>
+	<?php if (!$release_id)
+{ ?>
+        <a class="btn btn-primary text-uppercase <?php if ($page == 1) echo "disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if ($page != 1) echo (intval($page) - 1); ?>" tabindex="-1">&#12298;</a>
 		<?php
-		$x = 1;
-		$pages = $collection['pagination']['pages'];
-		while($x <= $pages) {
-		?>
-			<a class="btn btn-primary text-uppercase <?php if($page == $x) echo "active disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php echo $x;?>"><?php echo $x;?></a>
-<?php 	$x++; } ?>
+    $x = 1;
+    $pages = $collection['pagination']['pages'];
+    while ($x <= $pages)
+    {
+?>
+			<a class="btn btn-primary text-uppercase <?php if ($page == $x) echo "active disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php echo $x; ?>"><?php echo $x; ?></a>
+<?php $x++;
+    } ?>
 
-		<a class="btn btn-primary text-uppercase <?php if($page == $collection['pagination']['pages']) echo "disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if($page != $pages) echo (intval($page) + 1); ?>" tabindex="-1">&#12299;</a>
+		<a class="btn btn-primary text-uppercase <?php if ($page == $collection['pagination']['pages']) echo "disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if ($page != $pages) echo (intval($page) + 1); ?>" tabindex="-1">&#12299;</a>
   </div>
 	
   <div class="dropdown btn-group btn-group-sm p-1">
@@ -310,23 +313,35 @@ if ($release_id) {
 	  <li><a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=100&page=1">100</a></li>
   </ul>
 	
-	<?php } else {?>
+	<?php
+}
+else
+{ ?>
 	<button type="button" class="btn btn-primary text-uppercase" onclick="javascript:history.go(-1)">Back</button>
-    <?php } ?>
+    <?php
+} ?>
 </div>
 
-  
-  <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Folder Navigation">
-<?php foreach ($folders['folders'] as $folder) { 
+  <div class="dropdown btn-group btn-group-sm p-1 mr-2">
+  <button class="btn btn-primary text-uppercase dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <?php echo $current_folder_name . ' ('. $current_folder_count . ')'; ?>
+    </button>
+  <ul class="dropdown-menu">
+  <?php foreach ($folders['folders'] as $folder)
+{
 
-		$folderid = $folder['id'];
-		$foldername = $folder['name'];
-		$foldercount = $folder['count'];
+    $folderid = $folder['id'];
+    $foldername = $folder['name'];
+    $foldercount = $folder['count'];
 
-		if ($foldercount > 1) { ?>
-    <a href="/?folder_id=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=1" title="View Folder '<?php echo $foldername; ?>'" class="btn btn-primary text-uppercase<?php if ($folder_id == $folderid) echo " disabled"; ?>"><?php echo $foldername; ?> (<?php echo $foldercount; ?>)</a>
-<?php } } ?>
-  </div>
+    if ($foldercount > 1 && $current_folder_name != $folder['name'])
+    { ?>
+      <li><a href="/?folder_id=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=1" title="View Folder '<?php echo $foldername; ?>'" class="btn btn-primary text-uppercase"><?php echo $foldername; ?> (<?php echo $foldercount; ?>)</a></li>
+<?php
+    }
+} ?>
+    </ul>
+</div>
 	
 <?php if(!$release_id) { ?>	
   <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Sort by Artist or Date Added">
@@ -474,7 +489,7 @@ function wrap_accordian_rows($header, $data, $open=0) {
 
 function display_gallery_item($release) { 
 
-global $IMAGE_PATH_ROOT_URL, $IMAGE_PATH_ROOT
+global $IMAGE_PATH_ROOT_URL, $IMAGE_PATH_ROOT;
 $artists = implode(", ", array_column($release['basic_information']['artists'], "name"));
 $title = $release['basic_information']['title'];
 $id = $release['basic_information']['id'];
