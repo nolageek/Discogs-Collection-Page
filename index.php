@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-include('settings.php');
+require('settings.php');
 
 // DEFAULT VALUES FOR ATTRIBUTES
 $folder_id = "0";
@@ -50,9 +50,9 @@ foreach ($folders['folders'] as $folder) {
 	} 
 
 
-$DISCOGS_CACHE_FILE = 'jsondata/110000.json';
+$DISCOGS_CACHE_FILE = 'collection.json';
 
-function get_collection_cached($per_page) {
+function get_collection_cached() {
 	
 	global $DISCOGS_API_URL, $DISCOGS_USERNAME, $DISCOGS_CACHE_FILE, $folder_id, $sort_by, $order, $page;
 	global $per_page, $DISCOGS_TOKEN, $context;
@@ -102,7 +102,7 @@ function get_collection_cached($per_page) {
 		// decode the JSON feed;
 		} 
 
-	#get_collection_cached('1000');
+	#get_collection_cached();
 #if (time()-filemtime($DISCOGS_CACHE_FILE) > 24 * 3600) {
 		// file older than 24 hours
 #	get_collection_cached();
@@ -214,19 +214,22 @@ if ($release_id) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
+
 
 <title>Discogs Collection Page</title>
 <meta name="viewport" content="width=device-width, initial-scale=.8">
 
 <script src="https://kit.fontawesome.com/7e1a0bb728.js" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous"> -->
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap-night.min.css" rel="stylesheet">
+
+<!--<link href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap-night.min.css" rel="stylesheet">-->
 
 <style>
 /*
@@ -254,7 +257,7 @@ if ($release_id) {
  <!-- Banner header -->
     <div class="row">
       <div class="col-12 mx-auto my-1">
-        <div class="text-white p-3 shadow-sm rounded banner">
+        <div class="p-3 shadow-sm rounded banner">
 
 <!-- Add this within the <body> tag -->
 <div class="row mb-3">
@@ -264,17 +267,17 @@ if ($release_id) {
 </div>
 
 
-          <h2 class="lead">Discogs Collection Page for <?php echo $DISCOGS_USERNAME ?></h2>
+          <p class="fw-normal">Discogs Collection Page for <?php echo $DISCOGS_USERNAME ?></p>
 
 		  <?php if ($release_id): 
 		  get_release_information($release_id);?>
 		  
-					<p class="display-6">
+					<p class="fw-bold">
 						"<?php echo $releaseinfo['title'];?>" by <?php echo implode (", ", array_column($releaseinfo['artists'], "name"));?>
 					</p>
 		  <?php else: ?>
-					<p class="display-6">
-						<b><?php echo $current_folder_name;?></b> (<?php echo $current_folder_count;?> items) Sorted by: <?php echo $sort_by ?>, <?php echo $order ?>ending
+					<p class="fw-bold">
+						<?php echo $current_folder_name;?> (<?php echo $current_folder_count;?> items) Sorted by: <?php echo $sort_by ?>, <?php echo $order ?>ending
 					</p>
 		  <?php endif; ?>
         </div>
@@ -284,69 +287,91 @@ if ($release_id) {
 
 
 <!-- Pagination / Nav / Filter Bar-->
-<div class="btn-toolbar d-flex justify-content-center p-3" role="toolbar" aria-label="Toolbar with button groups">
-
- <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Pagination">
-	<?php if(!$release_id) { ?>
-        <a class="btn btn-primary text-uppercase <?php if($page == 1) echo "disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if($page != 1) echo (intval($page) - 1); ?>" tabindex="-1">&#12298;</a>
+<nav class="navbar navbar-expand-lg bg-body-tertiary justify-content-between sticky-top p-2">
+ <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+ <div class="btn-group btn-group-sm" role="group" aria-label="Pagination">
+	<?php if (!$release_id)
+{ ?>
+        <a class="btn btn-primary text-uppercase<?php if ($page == 1) echo " disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if ($page != 1) echo (intval($page) - 1); ?>" tabindex="-1"><i class="fa-solid fa-angles-left"></i></a>
 		<?php
-		$x = 1;
-		$pages = $collection['pagination']['pages'];
-		while($x <= $pages) {
-		?>
-			<a class="btn btn-primary text-uppercase <?php if($page == $x) echo "active disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php echo $x;?>"><?php echo $x;?></a>
-<?php 	$x++; } ?>
+    $x = 1;
+    $pages = $collection['pagination']['pages'];
+    while ($x <= $pages)
+    {
+?>
+			<a class="btn btn-primary text-uppercase<?php if ($page == $x) echo " active disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php echo $x; ?>"><?php echo $x; ?></a>
+<?php $x++;
+    } ?>
 
-		<a class="btn btn-primary text-uppercase <?php if($page == $collection['pagination']['pages']) echo "disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if($page != $pages) echo (intval($page) + 1); ?>" tabindex="-1">&#12299;</a>
+		<a class="btn btn-primary text-uppercase<?php if ($page == $collection['pagination']['pages']) echo " disabled"; ?>" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php if ($page != $pages) echo (intval($page) + 1); ?>" tabindex="-1"><i class="fa-solid fa-angles-right"></i></a>
   </div>
-	
-  <div class="dropdown btn-group btn-group-sm p-1">
+ </div>
+ 
+ <div class="btn-toolbar" role="toolbar" aria-label="Number of pages etc">
+ <div class="btn-group btn-group-sm me-2" role="group" aria-label="Per-Page">
   <button class="btn btn-primary text-uppercase dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
       <?php echo $per_page; ?> Per Page
     </button>
-  <ul class="dropdown-menu">
+  <ul class="dropdown-menu me-2">
       <li><a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=25&page=1">25</a></li>
       <li><a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=50&page=1">50</a></li>
 	  <li><a class="dropdown-item" href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=100&page=1">100</a></li>
   </ul>
 	
-	<?php } else {?>
+	<?php
+}
+else
+{ ?>
 	<button type="button" class="btn btn-primary text-uppercase" onclick="javascript:history.go(-1)">Back</button>
-    <?php } ?>
+    <?php
+} ?>
 </div>
+ <div class="btn-group btn-group-sm" role="group" aria-label="Folders">
+  <button class="btn btn-primary text-uppercase dropdown-toggle me-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <?php echo $current_folder_name . ' <span class="badge text-bg-secondary">'. $current_folder_count . '</span>'; ?>
+    </button>
+  <ul class="dropdown-menu">
+  <?php foreach ($folders['folders'] as $folder)
+{
 
-  
-  <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Folder Navigation">
-<?php foreach ($folders['folders'] as $folder) { 
+    $folderid = $folder['id'];
+    $foldername = $folder['name'];
+    $foldercount = $folder['count'];
 
-		$folderid = $folder['id'];
-		$foldername = $folder['name'];
-		$foldercount = $folder['count'];
-
-		if ($foldercount > 1) { ?>
-    <a href="/?folder_id=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=1" title="View Folder '<?php echo $foldername; ?>'" class="btn btn-primary text-uppercase<?php if ($folder_id == $folderid) echo " disabled"; ?>"><?php echo $foldername; ?> (<?php echo $foldercount; ?>)</a>
-<?php } } ?>
-  </div>
+    if ($foldercount > 1 && $current_folder_name != $folder['name'])
+    { ?>
+<li>
+    <a href="/?folder_id=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=1" title="View Folder '<?php echo $foldername; ?>'" class="dropdown-item"><?php echo $foldername; ?> <span class="badge text-bg-secondary"><?php echo $foldercount; ?></span></a></li>
+<?php
+    }
+} ?>
+    </ul>
+</div>
 	
 <?php if(!$release_id) { ?>	
-  <div class="btn-group btn-group-sm mr-2 p-1" role="group" aria-label="Sort by Artist or Date Added">
-     <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=added&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" title="Sort By Added" class="btn btn-info text-uppercase<?php if ($sort_by == "added") echo " disabled"; ?>"><i class="fa-solid fa-clock"></i></A>
-      <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=artist&order=<?php echo $order; ?>&page=<?php echo $page; ?>" title="Sort By Artist" class="btn btn-info text-uppercase<?php if ($sort_by == "artist") echo " disabled"; ?>"><i class="fa-solid fa-user-group"></i></a> 
-  </div>
-  
-  <div class="btn-group btn-group-sm  p-1" role="group" aria-label="Ascending or Descending">
-    <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=asc&per_page=<?php echo $per_page; ?>" title="Ascending" class="btn btn-secondary text-uppercase<?php if ($order == "asc") echo " disabled"; ?>"><i class="fa-solid fa-circle-arrow-down"></i></a>
-     <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=desc&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" title="Descending" class="btn btn-secondary text-uppercase<?php if ($order == "desc") echo " disabled"; ?>"><i class="fa-solid fa-circle-arrow-up"></i></a> 
- </div>
 
+
+ <div class="btn-group btn-group-sm me-2" role="group" aria-label="Per-Page">
+     <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=added&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" title="Sort By Added" class="btn btn-info text-uppercase<?php if ($sort_by == "added") echo " disabled"; ?>"><i class="fa-solid fa-clock"></i></A>
+     <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=artist&order=<?php echo $order; ?>&page=<?php echo $page; ?>" title="Sort By Artist" class="btn btn-info text-uppercase<?php if ($sort_by == "artist") echo " disabled"; ?>"><i class="fa-solid fa-user-group"></i></a> 
+ </div>
+  <div class="btn-group btn-group-sm  me-2" role="group" aria-label="Per-Page">
+     <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=asc&per_page=<?php echo $per_page; ?>" title="Ascending" class="btn btn-secondary text-uppercase<?php if ($order == "asc") echo " disabled"; ?>"><i class="fa-solid fa-circle-arrow-down"></i></a>
+     <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=desc&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" title="Descending" class="btn btn-secondary text-uppercase<?php if ($order == "desc") echo " disabled"; ?>"><i class="fa-solid fa-circle-arrow-up"></i></a> 
+     </div>
+    
 <?php } ?>	
+
 <!-- Add a Random Button -->
-  <div class="btn-group btn-group-sm p-1" aria-label="Randomize">
+    <div class="btn-group btn-group-sm me-2" role="group" aria-label="Per-Page">
     <a href="/?releaseid=random&folder_id=<?php echo $folder_id ?>" title="Random Release" class="btn btn-info text-uppercase"><i class="fa-solid fa-circle-question"></i></a>
+    </div>
+    <div class="btn-group btn-group-sm" role="group" aria-label="Per-Page">
+    <button class="btn btn-secondary" id="btnSwitch" title="Toggle Dark/Light Mode"><i class="fa-solid fa-circle-half-stroke"></i></button>
   </div>
 <!-- End of Random Button-->
-
-</div> <!-- Pagination / Nav / Filter Bar-->
+</div>
+</nav> <!-- Pagination / Nav / Filter Bar-->
 
 <div id="searchResults" class="row"></div>
 
@@ -474,28 +499,29 @@ function wrap_accordian_rows($header, $data, $open=0) {
 
 function display_gallery_item($release) { 
 
-global $IMAGE_PATH_ROOT_URL, $IMAGE_PATH_ROOT
+global $IMAGE_PATH_ROOT_URL, $IMAGE_PATH_ROOT;
 $artists = implode(", ", array_column($release['basic_information']['artists'], "name"));
 $title = $release['basic_information']['title'];
 $id = $release['basic_information']['id'];
-$imageupdatedtext = '*';
-$valid_image=0;
-$image_path = $IMAGE_PATH_ROOT_URL . $release["basic_information"]["id"] . '.jpeg';
-$imagefile = $image_path;
+$imageupdatedtext = '';
+$valid_image = 0;
+$image_url = $IMAGE_PATH_ROOT_URL . $release["basic_information"]["id"] . '.jpeg';
+$image_file = $IMAGE_PATH_ROOT . $release["basic_information"]["id"] . '.jpeg';
+#$imagefile = $image_path;
 	if ( !is_dir( $IMAGE_PATH_ROOT ) ):
         $imageupdatedtext = "Missing file has been hotlinked from Discogs server.";  
-        $imagefile = $release['basic_information']['cover_image'];
+        $image_url = $release['basic_information']['cover_image'];
 		$valid_image=1;
-	elseif ( !file_exists($image_path) ):
+	elseif ( !file_exists($image_file) ):
         $imageupdatedtext = "Missing file has been downloaded from Discogs server.";  
         $cover_image = file_get_contents($release['basic_information']['cover_image']);
-		file_put_contents($imagefile, $cover_image);
+		file_put_contents($image_file, $cover_image);
 		#valid_image=1;
-	elseif (filesize($image_path) <= 200 ):
-        $imageupdatedtext = filesize($imagefile) . " byte file has been downloaded from Discogs server. Hotlinking.";  
+	elseif (filesize($image_file) <= 200 ):
+        $imageupdatedtext = filesize($image_file) . " byte file has been downloaded from Discogs server. Hotlinking.";  
         $cover_image = file_get_contents($release['basic_information']['cover_image']);
-		file_put_contents($imagefile, $cover_image);
-		$imagefile = $release['basic_information']['cover_image'];
+		file_put_contents($image_file, $cover_image);
+		$image_url = $release['basic_information']['cover_image'];
 		$valid_image=1;
     endif;
 
@@ -515,7 +541,7 @@ endif;
 
 
 <a href="/?releaseid=<?php echo $id ?>">
-   <img class="card-img-top rounded p-2" src="<?php echo $imagefile; ?>" alt="<?php echo $title; ?>">
+   <img class="card-img-top rounded p-2" src="<?php echo $image_url; ?>" alt="<?php echo $title; ?>">
 </a>
         
    <div class="card-body d-flex flex-column">
@@ -757,7 +783,7 @@ endif;
 			
 
 <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
- <div class="bg-white rounded shadow-sm">
+ <div class="rounded shadow-sm">
  
  <div class="card h-100">
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
@@ -775,12 +801,12 @@ endif;
 			'; } ?>
    </div>
    
-<button class="carousel-control-prev" href="#carouselExampleControls" data-bs-slide="prev">
+<button class="carousel-control-prev" data-href="#carouselExampleControls" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Previous</span>
   </button>
 
-<button class="carousel-control-next" href="#carouselExampleControls" data-bs-slide="next">
+<button class="carousel-control-next" data-href="#carouselExampleControls" data-bs-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
@@ -888,6 +914,15 @@ endif;
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
 
 <script>
+document.getElementById('btnSwitch').addEventListener('click',()=>{
+    if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
+        document.documentElement.setAttribute('data-bs-theme','light')
+    }
+    else {
+        document.documentElement.setAttribute('data-bs-theme','dark')
+    }
+})
+
 $(document).ready(function(){
     $("#searchInput").on("input", function() {
         var searchTerm = $(this).val().toLowerCase();
@@ -924,7 +959,7 @@ $(document).ready(function(){
             filteredReleases.forEach(function(release) {
                 var releaseHtml = '<div class="col-md-4 mb-4">';
                 releaseHtml += '<div class="card">';
-                releaseHtml += `<a href="https://discogs.nolageek.com/?releaseid=${release.id}"> <img src="/img/${release.id}.jpeg" class="card-img-top" alt="${release.basic_information.title}"></a>`;
+                releaseHtml += `<a href="/?releaseid=${release.id}"> <img src="<?php echo $IMAGE_PATH_ROOT_URL; ?>${release.id}.jpeg" class="card-img-top" alt="${release.basic_information.title}"></a>`;
 
                 releaseHtml += '<div class="card-body">';
                 releaseHtml += '<h5 class="card-title">' + release.basic_information.title + '</h5>';
