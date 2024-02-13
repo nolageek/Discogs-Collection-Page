@@ -8,8 +8,8 @@ import getopt, sys, json, urllib, os.path, time
 
 # You can either hardcode your Discogs token and username here
 # or you can pass them via the --token and/or --username arguments
-DISCOGS_TOKEN = "ZylBbtsdWZrBEdEwhAdVSBZuuthKdDmqJvllmjBg"
-DISCOGS_USERNAME = "nolageek"
+DISCOGS_TOKEN = ""
+DISCOGS_USERNAME = ""
 
 # As of this release set PER to a value larger than your total collection.
 # At one point I may add the ability to create paginated files.
