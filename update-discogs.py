@@ -13,13 +13,13 @@ DISCOGS_USERNAME = ""
 
 # As of this release set PER to a value larger than your total collection.
 # At one point I may add the ability to create paginated files.
-PER = "500"
+#PER = "500"
 #
 # Setting up default values for variables
 # No need to change anything below.
 TYPE = ""
 DISCOGS_API_URL = "https://api.discogs.com"
-DATA_DIR = "./"
+DATA_DIR = "./jsondata/"
 ALL_RELEASES_DATA_FILE = "collection.json"
 FOLDERS_DATA_FILE = "folders.json"
 IMG_DIR = "./img/"
@@ -46,6 +46,13 @@ long_options = [
 
 # Main loop that takes your option and decides what it's going to do next.
 
+def sleep(t, step=1, msg='Pausing'):  # in seconds
+    pad_str = ' ' * len('%d' % step)
+    for i in range(t, 0, -step):
+        sys.stdout.write( '%s for %d seconds %s due to API limits.\r' % (msg, i, pad_str),)
+        sys.stdout.flush()
+        time.sleep(step)
+    print ''
 
 def main():
     try:
@@ -61,15 +68,17 @@ def main():
                 print("Task: Updating ALL")
                 print("Task: Updating Folder LIST")
                 download_folder_list()
+                sleep(5)
                 print("Task: Updating Folder DATA")
                 download_folder_data()
+                sleep(5)
                 print("Task: Updating IMAGES")
                 update_images()
             elif currentArgument in ("--updatefolderlist"):
                 print("Task: Updating Folder LIST")
                 download_folder_list()
             elif currentArgument in ("--updatefolderdata"):
-                print("Task: Updating Folder LIST")
+                print("Task: Updating Folder DATA")
                 download_folder_data()
             elif currentArgument in ("--updateimages"):
                 print("Task: Updating IMAGES")
@@ -145,7 +154,7 @@ def download_folder_data():
             + "/collection/folders/"
             + str(folder["id"])
             + "/releases?sort=added&sort_order=asc&per_page="
-            + PER
+            + str(folder["count"])
             + "&token="
             + DISCOGS_TOKEN,
             DATA_DIR + str(folder["id"]) + " -added-asc.json",
@@ -157,7 +166,7 @@ def download_folder_data():
             + "/collection/folders/"
             + str(folder["id"])
             + "/releases?sort=added&sort_order=desc&per_page="
-            + PER
+            + str(folder["count"])
             + "&token="
             + DISCOGS_TOKEN,
             DATA_DIR + str(folder["id"]) + "-added-desc.json",
@@ -169,7 +178,7 @@ def download_folder_data():
             + "/collection/folders/"
             + str(folder["id"])
             + "/releases?sort=artist&sort_order=asc&per_page="
-            + PER
+            + str(folder["count"])
             + "&token="
             + DISCOGS_TOKEN,
             DATA_DIR + str(folder["id"]) + "-artist-asc.json",
@@ -181,11 +190,12 @@ def download_folder_data():
             + "/collection/folders/"
             + str(folder["id"])
             + "/releases?sort=artist&sort_order=desc&per_page="
-            + PER
+            + str(folder["count"])
             + "&token="
             + DISCOGS_TOKEN,
             DATA_DIR + str(folder["id"]) + "-artist-desc.json",
         )
+        sleep(5)
 
 
 # This helper function downloads an image when given the url to the image and the release ID (to be used as the file basename.
@@ -193,14 +203,15 @@ def download_folder_data():
 # Image files are located in the ./img directory and are named after the release ID and use the .jpeg extension. ie: ./image/<ID>.jpeg
 def download_image(url, id, name):
     if name == "":
-        name = "No name Given"
+        name = "No name given."
     print("Downloading image for " + name)
-    #urllib.urlretrieve(url, IMG_DIR + str(id) + ".jpeg")
+    urllib.urlretrieve(url, IMG_DIR + str(id) + ".jpeg")
 
 
 # The following function parses the list of all items and if an image file is not found it will be downloaded using download_image().
 def update_images():
     loop = 1
+    sleep_time = 1
     with open(DATA_DIR + ALL_RELEASES_DATA_FILE) as releasedata:
         releases = json.load(releasedata)
         total_releases = len(releases["releases"])
@@ -208,24 +219,29 @@ def update_images():
         print(str(loop) + "/" + str(total_releases) + ": ")
         if os.path.exists(IMG_DIR + str(images["basic_information"]["id"]) + ".jpeg"):
             print(
-                IMG_DIR
-                + str(images["basic_information"]["id"])
-                + ".jpeg ("
                 + images["basic_information"]["title"]
-                + ") already exists."
+                + " already exists."
             )
         else:
+            print(
+                str(loop) + "/" + str(total_releases) + ": "
+                + " Downloading "
+                + images["basic_information"]["title"]
+                + " ("
+                + IMG_DIR
+                + str(images["basic_information"]["id"])
+                + ".jpeg)"
+            )
             download_image(
                 images["basic_information"]["cover_image"],
                 str(images["basic_information"]["id"]),
                 images["basic_information"]["title"],
             )
+            sleep_time = 3
         if not loop % 10:
-            print("Pausing for 5 seconds...")
-            time.sleep(5)
+            sleep(5)
         else:
-            print("Pausing for 2 seconds...")
-            time.sleep(2)
+            sleep(sleep_time)
         loop = loop + 1
 
 
