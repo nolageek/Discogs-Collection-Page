@@ -26,6 +26,9 @@ if (isset($_GET['artistid'])) $artistid = $_GET['artistid']; // Currently not us
 if (isset($_GET['per_page'])) $per_page = $_GET['per_page'];
 if (isset($_GET['releaseid'])) $release_id = $_GET['releaseid'];
 
+$DISCOGS_CURRENT_FOLDER_CACHE_FILE = $DATA_PATH_ROOT . $folder_id . '-' . $sort_by . '-' . $order . '.json';
+$DISCOGS_ALL_CACHE_FILE = $DATA_PATH_ROOT . "0-added-asc.json";
+
 $options  = array('http' => array('user_agent' => 'DiscogsCollectionPage'));
 $context  = stream_context_create($options);
 
@@ -51,7 +54,7 @@ foreach ($folders['folders'] as $folder) {
 	} 
 
 
-$DISCOGS_CACHE_FILE = 'collection.json';
+#$DISCOGS_CACHE_FILE = 'collection.json';
 
 
 function get_collection_cached() {
