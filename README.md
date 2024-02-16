@@ -26,3 +26,13 @@ Current and preview example can be found on my personal site: http://discogs.nol
 # Requirements:
 * A Discogs personal access token to access the Discogs API: https://www.discogs.com/settings/developers
 * PHP 7.4+ (Recommended)
+
+## Setup and Use
+* Upload to your web server's home directory.
+* Edit both settings.php.sample and discogs-update.php.sample and add your discogs username and API token. Be sure to save as settings.php and discogs-update.py, respectively.
+* Create the following directories:
+  * ./img/
+  * ./jsondata/
+* run the following command: python ./discogs-update.py --updateall
+  * This will download folder data and all images in your collection. This may take a long time if you have a large collection.*
+* Once finished, check your site and see if it worked! :)
