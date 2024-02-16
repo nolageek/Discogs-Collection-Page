@@ -4,4 +4,5 @@ $DISCOGS_USERNAME="";
 $DISCOGS_TOKEN="";
 $IMAGE_PATH_ROOT = './img/';
 $IMAGE_PATH_ROOT_URL = '/img/';
+$DATA_PATH_ROOT = './jsondata/'
 ?>
