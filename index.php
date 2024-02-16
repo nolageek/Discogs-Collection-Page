@@ -99,6 +99,11 @@ require('functions.php')
     </div>
 </form>
 
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="SearchAllCheckbox">
+  <label class="form-check-label" for="SearchAllCheckbox">Search All</label>
+</div>
+
  <div class="btn-toolbar" role="toolbar" aria-label="Items per page">
  <div class="btn-group my-2 mx-1" role="group" aria-label="Per-Page">
   <button class="btn btn-primary text-uppercase dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><?php echo $per_page; ?> Per Page</button>
@@ -120,7 +125,7 @@ else
 
  <div class="btn-group my-2 mx-1" role="group" aria-label="Folder Selection">
   <button class="btn btn-primary text-uppercase dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-      <?php echo $current_folder_name . ' <span class="badge text-bg-secondary">'. $current_folder_count . '</span>'; ?>
+      <?php echo $current_folder_name . ' <span class="badge text-bg-light">'. $current_folder_count . '</span>'; ?>
     </button>
   <ul class="dropdown-menu">
   <?php foreach ($folders['folders'] as $folder)
@@ -133,7 +138,7 @@ else
     if ($foldercount > 1 && $current_folder_name != $folder['name'])
     { ?>
 <li>
-    <a href="/?folder_id=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=1" title="View Folder '<?php echo $foldername; ?>'" class="dropdown-item"><?php echo $foldername; ?> <span class="badge text-bg-secondary"><?php echo $foldercount; ?></span></a></li>
+    <a href="/?folder_id=<?php echo $folderid; ?>&sort_by=<?php echo $sort_by; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=1" title="View Folder '<?php echo $foldername; ?>'" class="dropdown-item"><?php echo $foldername; ?> <span class="badge text-bg-light"><?php echo $foldercount; ?></span></a></li>
 <?php
     }
 } ?>
@@ -180,7 +185,7 @@ else
 
 
     <div class="py-5 text-center"><a href="#" class="btn btn-dark px-5 py-3 text-uppercase">BACK TO TOP</a>
-	<br> Like this page? Run your own: <a href="https://github.com/nolageek/Discogs-Collection-Page"><i class="fa-brands fa-github"></i> / Discogs Collection Page </a></div>
+	 <!-- <br> Like this page? Run your own: <a href="https://github.com/nolageek/Discogs-Collection-Page"><i class="fa-brands fa-github"></i> / Discogs Collection Page </a> --> </div>
 	<div class="d-block d-sm-none">xs</div>
 <div class="d-none d-sm-block d-md-none">sm</div>
 <div class="d-none d-md-block d-lg-none">md</div>
@@ -205,54 +210,74 @@ document.getElementById('btnSwitch').addEventListener('click',()=>{
 })
 
 $(document).ready(function(){
-    $("#searchInput").on("input", function() {
-        var searchTerm = $(this).val().toLowerCase();
-
-        // Get references to the divs
+    function fetchData() {
+        var searchTerm = $("#searchInput").val().toLowerCase();
         var releaseGalleryDiv = $("#releaseGallery");
         var searchResultsDiv = $("#searchResults");
 
-        // Toggle visibility based on the search term
-        if (searchTerm) {
-            // If there is a search term, hide releaseGallery and show searchResults
-            releaseGalleryDiv.hide();
-            searchResultsDiv.show();
+        if ($("#SearchAllCheckbox").is(":checked")) {
+            var url = '<?php echo $DISCOGS_ALL_CACHE_FILE; ?>';
         } else {
-            // If the search term is empty, show releaseGallery and hide searchResults
-            releaseGalleryDiv.show();
-            searchResultsDiv.hide();
+            var url = '<?php echo $DISCOGS_CURRENT_FOLDER_CACHE_FILE; ?>';
         }
 
-        // Clear previous search results
+        releaseGalleryDiv.toggle(!searchTerm);  // Hide releaseGalleryDiv if searchTerm is not empty
+
         searchResultsDiv.empty();
 
-        // Load JSON data from a local file
-        $.getJSON('<?php echo $DISCOGS_CACHE_FILE; ?>', function(data) {
-            var filteredReleases = data.releases.filter(function(release) {
-                var title = release.basic_information.title.toLowerCase();
-                var artists = release.basic_information.artists.map(function(artist) {
-                    return artist.name.toLowerCase();
-                }).join(", ");
-                return title.includes(searchTerm) || artists.includes(searchTerm);
-            });
+        console.log("Search term:", searchTerm);
 
-            // Display the search results
-            filteredReleases.forEach(function(release) {
-                var releaseHtml = '<div class="col-md-4 mb-4">';
-                releaseHtml += '<div class="card">';
-                releaseHtml += `<a href="/?releaseid=${release.id}"> <img src="<?php echo $IMAGE_PATH_ROOT_URL; ?>${release.id}.jpeg" class="card-img-top" alt="${release.basic_information.title}"></a>`;
+        if (searchTerm) {
+            $.getJSON(url, function(data) {
+                var filteredReleases = data.releases.filter(function(release) {
+                    var title = release.basic_information.title.toLowerCase();
+                    var artists = release.basic_information.artists.map(function(artist) {
+                        return artist.name.toLowerCase();
+                    });
 
-                releaseHtml += '<div class="card-body">';
-                releaseHtml += '<h5 class="card-title">' + release.basic_information.title + '</h5>';
-                releaseHtml += '<p class="card-text">' + release.basic_information.artists.map(function(artist) {
-                    return artist.name;
-                }).join(", ") + '</p>';
-                releaseHtml += '</div></div></div>';
-                searchResultsDiv.append(releaseHtml);
+                    console.log("Title:", title);
+                    console.log("Artists:", artists);
+
+                    // Check if the entire search term is found in the title or any artist name
+                    return title.includes(searchTerm) || artists.some(function(artist) {
+                        return artist.includes(searchTerm);
+                    });
+                });
+
+                if (filteredReleases.length === 0) {
+                    searchResultsDiv.append("<div class='container-fluid bg-warning bg-gradient'><div class='row'><div class='mx-auto'>No results found.</div></div></div>");
+                } else {
+                    filteredReleases.forEach(function(release) {
+                        var releaseHtml = '<div class="col-xl-3 col-md-6 col-sm-6 my-3">';
+                        releaseHtml += '<div class="card h-100 new">';
+                        releaseHtml += `<a href="/?releaseid=${release.id}"> <img class="card-img-top rounded p-2" loading="lazy" src="<?php echo $IMAGE_PATH_ROOT_URL; ?>${release.id}.jpeg" alt="${release.basic_information.title}"></a>`;
+
+                        releaseHtml += '<div class="card-body d-flex flex-column"><div class="d-flex flex-column mt-auto">';
+                        releaseHtml += '<h5 class="card-title">' + release.basic_information.title + '</h5>';
+                        releaseHtml += '<p class="card-text">' + release.basic_information.artists.map(function(artist) {
+                            return artist.name;
+                        }).join(", ") + '</p>';
+                        releaseHtml += '</div></div></div>';
+                        searchResultsDiv.append(releaseHtml);
+                    });
+                }
             });
-        });
-    });
+        } //else {
+          //  searchResultsDiv.append("<p>Enter a search term to get results.</p>");
+     //   }
+    }
+
+    // Call fetchData() when the search input changes
+    $("#searchInput").on("keyup", fetchData);
+
+    // Call fetchData() when the checkbox state changes
+    $("#SearchAllCheckbox").change(fetchData);
+
+    // Call fetchData() initially to fetch the initial data based on the initial state of the checkbox
+    fetchData();
 });
+
+    </script>
 
 </script>
 
