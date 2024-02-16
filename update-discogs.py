@@ -157,7 +157,7 @@ def download_folder_data():
             + str(folder["count"])
             + "&token="
             + DISCOGS_TOKEN,
-            DATA_DIR + str(folder["id"]) + " -added-asc.json",
+            DATA_DIR + str(folder["id"]) + "-added-asc.json",
         )
         urllib.urlretrieve(
             DISCOGS_API_URL
