@@ -1,3 +1,5 @@
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B1UQ1KC)
+
 # Discogs Collection Page
 
 This PHP script will generate a friendly view of your Discogs media collection organized by your Discogs folders.
