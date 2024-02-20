@@ -8,8 +8,8 @@ import getopt, sys, json, urllib, os.path, time
 
 # You can either hardcode your Discogs token and username here
 # or you can pass them via the --token and/or --username arguments
-DISCOGS_TOKEN = ""
-DISCOGS_USERNAME = ""
+DISCOGS_TOKEN = "ZylBbtsdWZrBEdEwhAdVSBZuuthKdDmqJvllmjBg"
+DISCOGS_USERNAME = "nolageek"
 
 # As of this release set PER to a value larger than your total collection.
 # At one point I may add the ability to create paginated files.
@@ -37,8 +37,7 @@ long_options = [
     "help",
     "type=",
     "updateall",
-    "updatefolderlist",
-    "updatefolderdata",
+    "updatecollection",
     "updateimages",
     "token=",
     "username=",
@@ -66,20 +65,14 @@ def main():
                 print("Displaying Help")
             elif currentArgument in ("--updateall"):
                 print("Task: Updating ALL")
-                print("Task: Updating Folder LIST")
-                download_folder_list()
-                sleep(5)
-                print("Task: Updating Folder DATA")
-                download_folder_data()
+                print("Task: Updating Collection")
+                download_collection_data()
                 sleep(5)
                 print("Task: Updating IMAGES")
                 update_images()
-            elif currentArgument in ("--updatefolderlist"):
-                print("Task: Updating Folder LIST")
-                download_folder_list()
-            elif currentArgument in ("--updatefolderdata"):
+            elif currentArgument in ("--updatecollection"):
                 print("Task: Updating Folder DATA")
-                download_folder_data()
+                download_collection_data()
             elif currentArgument in ("--updateimages"):
                 print("Task: Updating IMAGES")
                 update_images()
@@ -93,25 +86,6 @@ def main():
     except getopt.error as err:
         # output error, and return with an error code
         print(str(err))
-
-
-# This downloads the folder data for the collection of the username specified in json format.
-# Each account has a folder id of '0' that contains ALL of their items, and a '1' folder that
-# contains all items that are not in any other folders (uncategorized.) All other folders
-# have a unique numeric ID.
-def download_folder_list():
-    if DISCOGS_TOKEN == "" or DISCOGS_USERNAME == "":
-        print("Missing Discogs Token or Username")
-        exit()
-    FOLDERURL = (
-        DISCOGS_API_URL
-        + "/users/"
-        + DISCOGS_USERNAME
-        + "/collection/folders?token="
-        + DISCOGS_TOKEN
-    )
-    print("Downloading Folder List To " + DATA_DIR + FOLDERS_DATA_FILE)
-    urllib.urlretrieve(FOLDERURL, DATA_DIR + FOLDERS_DATA_FILE)
     
 def download_collection_data():
     if DISCOGS_TOKEN == "" or DISCOGS_USERNAME == "":
@@ -121,81 +95,12 @@ def download_collection_data():
         DISCOGS_API_URL
         + "/users/"
         + DISCOGS_USERNAME
-        + "/collection/folders?token="
+        + "/collection/folders/0/releases?per_page=500&sort=added&token="
         + DISCOGS_TOKEN
     )
-    print("Downloading Collection List To " + DATA_DIR + FOLDERS_DATA_FILE)
+
+    print("Downloading Collection List To " + ALL_RELEASES_DATA_FILE)
     urllib.urlretrieve(FOLDERURL, DATA_DIR + ALL_RELEASES_DATA_FILE)
-
-
-# This next function parses the above folder data and loops through each folder and downloads json files
-# containing the collection sorted by both date-added and by artist (each in ascending and descending order.)
-# I was going to add other sorting methods (title for example) but it didn't seem that useful and I wanted
-# to cut down on the number of API calls. Each file has a name in the following format:
-# <ID>-<sort>-<order>.json
-# For example the list(s) of all items in the collection would be 0-added-asc.json, and 0-added-desc.json
-def download_folder_data():
-    with open(DATA_DIR + FOLDERS_DATA_FILE) as folderdata:
-        folders = json.load(folderdata)
-    for folder in folders["folders"]:
-        print(
-            "Downloading Data For Folder "
-            + folder["name"]
-            + " (ID: "
-            + str(folder["id"])
-            + ", Count: "
-            + str(folder["count"])
-            + ")"
-        )
-        urllib.urlretrieve(
-            DISCOGS_API_URL
-            + "/users/"
-            + DISCOGS_USERNAME
-            + "/collection/folders/"
-            + str(folder["id"])
-            + "/releases?sort=added&sort_order=asc&per_page="
-            + str(folder["count"])
-            + "&token="
-            + DISCOGS_TOKEN,
-            DATA_DIR + str(folder["id"]) + "-added-asc.json",
-        )
-        urllib.urlretrieve(
-            DISCOGS_API_URL
-            + "/users/"
-            + DISCOGS_USERNAME
-            + "/collection/folders/"
-            + str(folder["id"])
-            + "/releases?sort=added&sort_order=desc&per_page="
-            + str(folder["count"])
-            + "&token="
-            + DISCOGS_TOKEN,
-            DATA_DIR + str(folder["id"]) + "-added-desc.json",
-        )
-        urllib.urlretrieve(
-            DISCOGS_API_URL
-            + "/users/"
-            + DISCOGS_USERNAME
-            + "/collection/folders/"
-            + str(folder["id"])
-            + "/releases?sort=artist&sort_order=asc&per_page="
-            + str(folder["count"])
-            + "&token="
-            + DISCOGS_TOKEN,
-            DATA_DIR + str(folder["id"]) + "-artist-asc.json",
-        )
-        urllib.urlretrieve(
-            DISCOGS_API_URL
-            + "/users/"
-            + DISCOGS_USERNAME
-            + "/collection/folders/"
-            + str(folder["id"])
-            + "/releases?sort=artist&sort_order=desc&per_page="
-            + str(folder["count"])
-            + "&token="
-            + DISCOGS_TOKEN,
-            DATA_DIR + str(folder["id"]) + "-artist-desc.json",
-        )
-        sleep(5)
 
 
 # This helper function downloads an image when given the url to the image and the release ID (to be used as the file basename.
