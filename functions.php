@@ -413,7 +413,7 @@ endif;
 ?>
 
 <!-- Gallery item -->
-<div class="col-xl-3 col-md-6 col-sm-6 my-3">
+<div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 my-3">
  <div class="card h-100 <?php echo $is_new_class; ?>">
 
 
@@ -659,7 +659,7 @@ endif;
 			
 
 
-<div class="  col-sm-6 col-md-6 col-xl-4 my-3">
+<div class="col-md-4 col-sm-6 my-3">
  <div class="rounded shadow-sm">
  
  <div class="card h-100">
@@ -759,7 +759,7 @@ endif;
 	   </div></div></div>	
 
 
-<div class="col-sm-6 col-md-6 col-xl-8 my-3">
+<div class="col-sm-6 col-md-8 my-3">
 	<div class="bg-white rounded shadow-sm">
 	
 <div class="accordion" id="accordionExample">
