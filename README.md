@@ -33,6 +33,6 @@ Current and preview example can be found on my personal site: http://discogs.nol
 * Create the following directories:
   * ./img/
   * ./jsondata/
-* run the following command: python ./discogs-update.py --updateall
+* run the following command: python ./update-discogs.py --updateall
   * This will download folder data and all images in your collection. This may take a long time if you have a large collection.*
 * Once finished, check your site and see if it worked! :)
