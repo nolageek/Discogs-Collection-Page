@@ -2,7 +2,8 @@
 
 This PHP script will generate a friendly view of your Discogs media collection organized by your Discogs folders.
 
-![image](https://github.com/nolageek/Discogs-Collection-Page/assets/2931834/ac3b17bc-3018-4ac6-adb8-14a9265548aa)
+![image](https://github.com/nolageek/Discogs-Collection-Page/assets/2931834/0cfc80cd-f30e-483d-aa65-7fd33f89a7f5)
+
 
 
 Current and preview example can be found on my personal site: http://discogs.nolageek.com / http://discogsdev.nolageek.com
