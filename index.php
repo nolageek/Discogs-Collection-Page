@@ -15,7 +15,6 @@ require('functions.php')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
@@ -46,23 +45,26 @@ word-wrap: break-word;
 
 <div class="container-fluid"> <!-- Outer Container -->
 
-
-    <div class="row">  <!-- Banner header -->
-      <div class="col-12 mx-auto my-1">
-        <div class="p-2 shadow-sm rounded banner">
-
-          <p><span class="text-primary"><i class="fa-fw fa-solid fa-circle-dot"></i> Discogs Collection Page for <?php echo $DISCOGS_USERNAME ?></span><br>
-          <span class="text-secondary"><?php if ($release_id): get_release_information($release_id);?>
-          <i class="fa-fw fa-solid fa-circle-dot"></i> <?php echo $releaseinfo['title'];?>" <i class="fa-solid fa-user-group"></i> <?php echo implode (", ", array_column($releaseinfo['artists'], "name"));?></span></p>
+    <div class="row mx-auto">  <!-- Banner header -->
+        
+        <div class="p-2 shadow-sm rounded banner my-2 bg-body-tertiary">
+          <div class="float-start">
+          <i class="fa-fw fa-solid fa-circle-dot bs-success"></i> Discogs Collection Page for <?php echo $DISCOGS_USERNAME ?><br>
+          <?php if ($release_id): get_release_information($release_id);?>
+          <i class="fa-fw fa-solid fa-quote-right"></i> <?php echo $releaseinfo['title'];?> <i class="fa-fw fa-solid fa-people-group"></i> <?php echo implode (", ", array_column($releaseinfo['artists'], "name"));?>
 		  <?php else: ?>
- 		  <?php echo '<i class="fa-fw fa-regular fa-folder-open"></i> <span class="badge text-bg-secondary">' . $current_folder_name;?> <?php echo $current_folder_count;?> items</span> <span class="badge text-bg-success"><?php echo $sort_by ?></span> <span class="badge text-bg-info"><?php echo $order ?>ending</span></span></p>
+ 		  <?php echo '<i class="fa-fw fa-regular fa-folder-open "></i> <span class="badge text-bg-secondary">' . $current_folder_name;?> <?php echo $current_folder_count;?> items</span> <span class="badge text-bg-success"><?php echo $sort_by ?></span> <span class="badge text-bg-info"><?php echo $order ?>ending</span>
 		  <?php endif; ?>
         </div>
+        <div class="float-end h-100 d-flex align-items-center">
+        <button class="btn btn-primary" id="btnSwitch"  data-toggle="button" title="Toggle Dark/Light Mode"><i class="fa-fw fa-solid fa-circle-half-stroke"></i></button>
+        </div>
       </div>
+
     </div> <!-- Banner header End -->
 
 <!-- Pagination / Nav / Filter Bar-->
-<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top p-0 mx-auto">
+<nav class="navbar navbar-expand-lg bg-body-tertiary rounded sticky-top p-0 mx-auto">
 <div class="container-fluid">
 
 
@@ -92,10 +94,7 @@ word-wrap: break-word;
 <div class="btn-toolbar" role="toolbar" aria-label="Items per page">
 <div class="input-group my-2 mx-1 col-md-1" role="group" aria-label="Search Form">
 
-        <input type="text" id="searchInput" class="form-control w-10" placeholder="Search...">
-        <input class="btn-check" type="checkbox" value="" id="SearchAllCheckbox">
-        <label class="btn btn-primary" for="SearchAllCheckbox">Search All</label>
-
+        <input type="text" id="searchInput" class="form-control w-10" placeholder="Search All">
 </div> <!-- End Search Form -->
 </div>
 
@@ -156,24 +155,24 @@ else
     
       <?php
               $sorted_icon = "";
-              if ($sort_by == 'added') { $sorted_icon = "fa-fw fa-solid fa-clock";}
-              if ($sort_by == 'artist') { $sorted_icon = "fa-fw fa-solid fa-user-group";}
-              if ($sort_by == 'title') { $sorted_icon = "fa-fw fa-solid fa-t";}
-              if ($sort_by == 'year') { $sorted_icon = "fa-fw fa-solid fa-calendar-days";}
+              if ($sort_by == 'added') { $sorted_icon = "fa-clock";}
+              if ($sort_by == 'artist') { $sorted_icon = "fa-people-group";}
+              if ($sort_by == 'title') { $sorted_icon = "fa-quote-right";}
+              if ($sort_by == 'year') { $sorted_icon = "fa-calendar-days";}
 
-      echo "<i class='" . $sorted_icon . "'></i> Sort"; ?>
+      echo "<i class='fa-fw fa-solid " . $sorted_icon . "'></i> Sort"; ?>
     </button>
   <ul class="dropdown-menu">
   <li><h6 class="dropdown-header">Sort-by Options</h6></li>	
 <?PHP foreach ($sort_type as $sortby){
         $sorted_icon = "";
-        if ($sortby == 'added') { $sorted_icon = "fa-fw fa-solid fa-clock";}
-        if ($sortby == 'artist') { $sorted_icon = "fa-fw fa-solid fa-user-group";}
-        if ($sortby == 'title') { $sorted_icon = "fa-fw fa-solid fa-t";}
-        if ($sortby == 'year') { $sorted_icon = "fa-fw fa-solid fa-calendar-days";}
+        if ($sortby == 'added') { $sorted_icon = "fa-solid fa-clock";}
+        if ($sortby == 'artist') { $sorted_icon = "fa-people-group";}
+        if ($sortby == 'title') { $sorted_icon = "fa-quote-right";}
+        if ($sortby == 'year') { $sorted_icon = "fa-calendar-days";}
 
   ?>
-    <li><a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?PHP echo $sortby; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" title="Sort by <?PHP echo $sortby; ?>" class="dropdown-item text-capitalize <?php if ($sortby == $sort_by) echo " active"; ?>"><i class="<?PHP echo $sorted_icon; ?>"></i> <?PHP echo $sortby; ?></a></li>
+    <li><a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?PHP echo $sortby; ?>&order=<?php echo $order; ?>&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" title="Sort by <?PHP echo $sortby; ?>" class="dropdown-item text-capitalize <?php if ($sortby == $sort_by) echo " active"; ?>"><i class="fa-fw fa-solid <?PHP echo $sorted_icon; ?>"></i> <?PHP echo $sortby; ?></a></li>
     <?PHP } ?>
   </ul>
 </div>
@@ -181,23 +180,22 @@ else
       <?PHP 
         $sorted_icon = "";
         if ($sort_by == 'added' || $sort_by == 'year') { 
-            $asc_icon = "fa-fw fa-solid fa-arrow-down-9-1";
-            $desc_icon = "fa-fw fa-solid fa-arrow-down-1-9";
+            $asc_icon = "fa-arrow-down-9-1";
+            $desc_icon = "fa-arrow-down-1-9";
         } elseif ($sort_by == 'artist' || $sort_by == 'title'){ 
-            $asc_icon = "fa-fw fa-solid fa-solid fa-arrow-down-z-a";
-            $desc_icon = "fa-fw fa-solid fa-arrow-down-a-z";
+            $asc_icon = "fa-solid fa-arrow-down-z-a";
+            $desc_icon = "fa-arrow-down-a-z";
         }
 
   ?>
-     <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=asc&per_page=<?php echo $per_page; ?>" title="Toggle Sort: Ascending/Descending" class="btn btn-primary text-capitalize me-1 <?php if ($order == "asc") echo " none"; ?>"><i class="<?php echo $asc_icon; ?>"></i></a>
-     <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=desc&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" title="Ascending/Descending" class="btn btn-secondary text-capitalize me-1 <?php if ($order == "desc") echo " none"; ?>"><i class="<?php echo $desc_icon; ?>"></i></a> 
+     <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=asc&per_page=<?php echo $per_page; ?>" title="Toggle Sort: Ascending/Descending" class="btn btn-primary text-capitalize me-1 <?php if ($order == "asc") echo " none"; ?>"><i class="fa-fw fa-solid <?php echo $asc_icon; ?>"></i></a>
+     <a href="/?folder_id=<?php echo $folder_id; ?>&sort_by=<?php echo $sort_by; ?>&order=desc&per_page=<?php echo $per_page; ?>&page=<?php echo $page; ?>" title="Ascending/Descending" class="btn btn-secondary text-capitalize me-1 <?php if ($order == "desc") echo " none"; ?>"><i class="fa-fw fa-solid <?php echo $desc_icon; ?>"></i></a> 
      </div>
 <?php } ?>
 
 <!-- Add a Random Button -->
 <div class="btn-group my-2" role="group" aria-label="Sorting Options Tool Bar">	
     <a href="/?releaseid=random&folder_id=<?php echo $folder_id ?>" title="Random Release" class="btn btn-primary text-uppercase"><i class="fa-solid fa-circle-question"></i></a>
-    <button class="btn btn-primary" id="btnSwitch" title="Toggle Dark/Light Mode"><i class="fa-solid fa-regular fa-moon"></i></button>
 </div>
 <!-- End of Random Button-->
 
@@ -271,12 +269,7 @@ $(document).ready(function(){
         var searchTerm = $("#searchInput").val().toLowerCase();
         var releaseGalleryDiv = $("#releaseGallery");
         var searchResultsDiv = $("#searchResults");
-
-        if ($("#SearchAllCheckbox").is(":checked")) {
-            var url = '<?php echo $DISCOGS_ALL_CACHE_FILE; ?>';
-        } else {
-            var url = '<?php echo $DISCOGS_CURRENT_FOLDER_CACHE_FILE; ?>';
-        }
+	var url = '<?php echo $DISCOGS_ALL_CACHE_FILE; ?>';
 
         releaseGalleryDiv.toggle(!searchTerm);  // Hide releaseGalleryDiv if searchTerm is not empty
 
@@ -291,13 +284,25 @@ $(document).ready(function(){
                     var artists = release.basic_information.artists.map(function(artist) {
                         return artist.name.toLowerCase();
                     });
+                    var genres = release.basic_information.genres.map(function(genre) {
+                        return genre.toLowerCase();
+                    });
+                    var styles = release.basic_information.styles.map(function(style) {
+                        return style.toLowerCase();
+                    });
 
                     console.log("Title:", title);
                     console.log("Artists:", artists);
+                    console.log("Genres:", genres);
+                    console.log("Styles:", styles);
 
                     // Check if the entire search term is found in the title or any artist name
                     return title.includes(searchTerm) || artists.some(function(artist) {
                         return artist.includes(searchTerm);
+                    }) || genres.some(function(genre) {
+                        return genre.includes(searchTerm);
+                    }) || styles.some(function(style) {
+                        return style.includes(searchTerm);
                     });
                 });
 
