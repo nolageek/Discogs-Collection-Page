@@ -1,0 +1,83 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 2148850,
+            "instance_id": 2011956501,
+            "date_added": "2025-04-28T20:29:08-07:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 2148850,
+                "master_id": 29481,
+                "master_url": "https:\/\/api.discogs.com\/masters\/29481",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/2148850",
+                "thumb": "https:\/\/i.discogs.com\/BByYRRc38-qeCKnouPAboXTusb8HedJsIkdTFKwabZs\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTIxNDg4\/NTAtMTQwNzkzNzIx\/OS0xMjYyLmpwZWc.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/Y835HxEu2KJscY6VpZSshILSdXbhJU684FZXlhWyuWU\/rs:fit\/g:sm\/q:90\/h:600\/w:593\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTIxNDg4\/NTAtMTQwNzkzNzIx\/OS0xMjYyLmpwZWc.jpeg",
+                "title": "Balls To The Wall",
+                "year": 1983,
+                "formats": [
+                    {
+                        "name": "Vinyl",
+                        "qty": "1",
+                        "descriptions": [
+                            "LP",
+                            "Album"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Lark",
+                        "catno": "INL 3563",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 215533,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/215533"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Accept",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 271475,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/271475"
+                    }
+                ],
+                "genres": [
+                    "Rock"
+                ],
+                "styles": [
+                    "Heavy Metal"
+                ]
+            },
+            "folder_id": 6663049,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Very Good (VG)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Very Good (VG)"
+                },
+                {
+                    "field_id": 3,
+                    "value": "Unsure of pressing. \nDig Records, Leesburg, VA"
+                },
+                {
+                    "field_id": 4,
+                    "value": "Vinyl 12"
+                }
+            ]
+        }
+    ]
+}

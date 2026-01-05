@@ -1,0 +1,82 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 24794861,
+            "instance_id": 1171077949,
+            "date_added": "2022-11-02T16:38:45-07:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 24794861,
+                "master_id": 739791,
+                "master_url": "https:\/\/api.discogs.com\/masters\/739791",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/24794861",
+                "thumb": "https:\/\/i.discogs.com\/-KSrHOcxl2Y_Na5y4gHUuYPD3mNJkKG2467LYEd_ttU\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTI0Nzk0\/ODYxLTE2NjU1MzA2\/NzgtNjkwNi5qcGVn.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/bIPJBt7XGyeoF7jgV_S0aGIXIVV-mJnU4wg6Azi68o4\/rs:fit\/g:sm\/q:90\/h:600\/w:590\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTI0Nzk0\/ODYxLTE2NjU1MzA2\/NzgtNjkwNi5qcGVn.jpeg",
+                "title": "Friday The 13th (Original Motion Picture Score)",
+                "year": 2022,
+                "formats": [
+                    {
+                        "name": "Vinyl",
+                        "qty": "1",
+                        "text": "Green Translucent Colors Splaters [Camp Crystal Lake], 180 Gram",
+                        "descriptions": [
+                            "LP",
+                            "Album",
+                            "Limited Edition",
+                            "Reissue"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Waxwork Records",
+                        "catno": "WW13",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 573483,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/573483"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Harry Manfredini",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 106215,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/106215"
+                    }
+                ],
+                "genres": [
+                    "Stage & Screen"
+                ],
+                "styles": [
+                    "Score"
+                ]
+            },
+            "folder_id": 6663046,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Near Mint (NM or M-)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Near Mint (NM or M-)"
+                },
+                {
+                    "field_id": 4,
+                    "value": "Vinyl 12"
+                }
+            ]
+        }
+    ]
+}

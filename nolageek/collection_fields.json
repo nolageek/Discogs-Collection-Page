@@ -1,0 +1,62 @@
+{
+    "fields": [
+        {
+            "id": 1,
+            "name": "Media Condition",
+            "type": "dropdown",
+            "position": 1,
+            "public": false,
+            "options": [
+                "Mint (M)",
+                "Near Mint (NM or M-)",
+                "Very Good Plus (VG+)",
+                "Very Good (VG)",
+                "Good Plus (G+)",
+                "Good (G)",
+                "Fair (F)",
+                "Poor (P)"
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Sleeve Condition",
+            "type": "dropdown",
+            "position": 2,
+            "public": false,
+            "options": [
+                "Generic",
+                "No Cover",
+                "Mint (M)",
+                "Near Mint (NM or M-)",
+                "Very Good Plus (VG+)",
+                "Very Good (VG)",
+                "Good Plus (G+)",
+                "Good (G)",
+                "Fair (F)",
+                "Poor (P)"
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Notes",
+            "type": "textarea",
+            "position": 3,
+            "public": false,
+            "lines": 3
+        },
+        {
+            "id": 4,
+            "name": "Format",
+            "type": "dropdown",
+            "position": 4,
+            "public": false,
+            "options": [
+                "CD",
+                "Vinyl 7",
+                "Vinyl 10",
+                "Vinyl 12",
+                "File Download"
+            ]
+        }
+    ]
+}

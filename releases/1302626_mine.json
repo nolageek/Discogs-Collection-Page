@@ -1,0 +1,96 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 1302626,
+            "instance_id": 852275647,
+            "date_added": "2021-11-08T20:13:45-08:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 1302626,
+                "master_id": 183959,
+                "master_url": "https:\/\/api.discogs.com\/masters\/183959",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/1302626",
+                "thumb": "https:\/\/i.discogs.com\/dHdUmAw1ZBH0w_t-LY9X1B5bo_Tgdgp1YlwveyqzMr0\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEzMDI2\/MjYtMTY4OTA0OTgw\/MS01MzM5LmpwZWc.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/AcO2H2q9s1r-n8gSkooUx57UlK252V9wcjEqWqTImLk\/rs:fit\/g:sm\/q:90\/h:600\/w:600\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEzMDI2\/MjYtMTY4OTA0OTgw\/MS01MzM5LmpwZWc.jpeg",
+                "title": "A Chorus Line - Original Cast Recording",
+                "year": 0,
+                "formats": [
+                    {
+                        "name": "Vinyl",
+                        "qty": "1",
+                        "text": "Pitman Pressing, Gatefold",
+                        "descriptions": [
+                            "LP",
+                            "Album",
+                            "Reissue",
+                            "Stereo"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "CBS Masterworks",
+                        "catno": "JS 33581",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 46453,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/46453"
+                    },
+                    {
+                        "name": "Columbia Masterworks",
+                        "catno": "33581",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 73845,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/73845"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Various",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 194,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/194"
+                    }
+                ],
+                "genres": [
+                    "Jazz",
+                    "Stage & Screen"
+                ],
+                "styles": [
+                    "Musical",
+                    "Swing"
+                ]
+            },
+            "folder_id": 6663046,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 3,
+                    "value": "No P in matrix (not pitmann pressing)"
+                },
+                {
+                    "field_id": 4,
+                    "value": "Vinyl 12"
+                }
+            ]
+        }
+    ]
+}

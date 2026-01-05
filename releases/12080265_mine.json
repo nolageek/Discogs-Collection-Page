@@ -1,0 +1,65 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 12080265,
+            "instance_id": 504102974,
+            "date_added": "2020-09-05T04:28:54-07:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 12080265,
+                "master_id": 76468,
+                "master_url": "https:\/\/api.discogs.com\/masters\/76468",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/12080265",
+                "thumb": "https:\/\/i.discogs.com\/Tc_rNV17cujCTGdOr8T6wNiSWG6g0_0pYXZ3wdLT8mE\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEyMDgw\/MjY1LTE1Mjc4ODg1\/NTctOTY1Mi5qcGVn.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/n5rHmCGTb7PlolYsGz7dDXSA8JbMpPa4X47mKtOkCK0\/rs:fit\/g:sm\/q:90\/h:524\/w:600\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEyMDgw\/MjY1LTE1Mjc4ODg1\/NTctOTY1Mi5qcGVn.jpeg",
+                "title": "Recovering The Satellites",
+                "year": 1998,
+                "formats": [
+                    {
+                        "name": "CD",
+                        "qty": "1",
+                        "descriptions": [
+                            "Album",
+                            "Club Edition"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "DGC",
+                        "catno": "DGCD-24975",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 86487,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/86487"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Counting Crows",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 262643,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/262643"
+                    }
+                ],
+                "genres": [
+                    "Rock"
+                ],
+                "styles": [
+                    "Alternative Rock"
+                ]
+            },
+            "folder_id": 3220306
+        }
+    ]
+}

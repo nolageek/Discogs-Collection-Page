@@ -1,0 +1,80 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 4713809,
+            "instance_id": 1101034178,
+            "date_added": "2022-08-10T19:28:04-07:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 4713809,
+                "master_id": 201336,
+                "master_url": "https:\/\/api.discogs.com\/masters\/201336",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/4713809",
+                "thumb": "https:\/\/i.discogs.com\/AJqY8WsOnhJBQ_Y0xNBJWNGVBDthTg9eAiw-ZR_HUoU\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTQ3MTM4\/MDktMTM3MzEyNjA3\/Ny0zNjI0LmpwZWc.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/w3SieUrBx62k0itckUHeJBGM8xGM01dvbOmR6orjro4\/rs:fit\/g:sm\/q:90\/h:600\/w:595\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTQ3MTM4\/MDktMTM3MzEyNjA3\/Ny0zNjI0LmpwZWc.jpeg",
+                "title": "Lace And Whiskey",
+                "year": 1977,
+                "formats": [
+                    {
+                        "name": "Vinyl",
+                        "qty": "1",
+                        "text": "Santa Maria Pressing",
+                        "descriptions": [
+                            "LP",
+                            "Album"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Warner Bros. Records",
+                        "catno": "BSK 3027",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 1000,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/1000"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Alice Cooper (2)",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 463597,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/463597"
+                    }
+                ],
+                "genres": [
+                    "Rock"
+                ],
+                "styles": [
+                    "Hard Rock"
+                ]
+            },
+            "folder_id": 6663052,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Very Good (VG)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Very Good (VG)"
+                },
+                {
+                    "field_id": 4,
+                    "value": "Vinyl 12"
+                }
+            ]
+        }
+    ]
+}

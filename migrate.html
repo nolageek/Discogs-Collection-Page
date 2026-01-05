@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migration Progress</title>
+    <script>
+        function startMigration() {
+            document.getElementById("status").innerText = "Starting...";
+            fetch("migrate.php").then(response => response.json()).then(data => {
+                console.log("Migration started", data);
+                updateProgress();
+            });
+        }
+
+        function updateProgress() {
+            fetch("migrate.php?action=progress").then(response => response.json()).then(data => {
+                document.getElementById("progress").innerText = `${data.processed} / ${data.total}`;
+                document.getElementById("status").innerText = `Status: ${data.status}`;
+                
+                if (data.status === "paused") {
+                    document.getElementById("continue-btn").style.display = "block";
+                } else if (data.status === "in_progress") {
+                    setTimeout(updateProgress, 5000);
+                } else if (data.status === "completed") {
+                    document.getElementById("status").innerText = "✅ Migration Completed!";
+                }
+            });
+        }
+
+        function continueMigration() {
+            document.getElementById("continue-btn").style.display = "none";
+            fetch("migrate.php?action=resume").then(response => response.json()).then(data => {
+                console.log("Migration resumed", data);
+                updateProgress();
+            });
+        }
+    </script>
+</head>
+<body>
+    <h2>Database Migration</h2>
+    <p id="status">Ready to start.</p>
+    <p>Progress: <span id="progress">0 / 0</span></p>
+    <button onclick="startMigration()">Start Migration</button>
+    <button id="continue-btn" onclick="continueMigration()" style="display:none;">Continue</button>
+</body>
+</html>

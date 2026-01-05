@@ -1,0 +1,76 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 5862814,
+            "instance_id": 836367421,
+            "date_added": "2021-10-20T20:55:59-07:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 5862814,
+                "master_id": 751837,
+                "master_url": "https:\/\/api.discogs.com\/masters\/751837",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/5862814",
+                "thumb": "https:\/\/i.discogs.com\/RlUyegUrrsTHMQDcAb35suvAkJ0HlNpFdt6Rtqzc7-8\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTU4NjI4\/MTQtMTQwNDc2Nzc3\/OS02MDM3LmpwZWc.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/BlRpBjhjvghOsHPXLKtSuFZaLFb880jF-y_hHAgoL1w\/rs:fit\/g:sm\/q:90\/h:300\/w:296\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTU4NjI4\/MTQtMTQwNDc2Nzc3\/OS02MDM3LmpwZWc.jpeg",
+                "title": "It Means Escape",
+                "year": 1994,
+                "formats": [
+                    {
+                        "name": "CD",
+                        "qty": "1",
+                        "descriptions": [
+                            "Album"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Monkey Hill",
+                        "catno": "MON-6128-2",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 159866,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/159866"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Cowboy Mouth",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 407525,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/407525"
+                    }
+                ],
+                "genres": [
+                    "Rock"
+                ],
+                "styles": []
+            },
+            "folder_id": 3220306,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Near Mint (NM or M-)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Near Mint (NM or M-)"
+                },
+                {
+                    "field_id": 3,
+                    "value": "Only booklet, no tray art.\nDifferent track order, probably not this exact release."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,45 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 2,
+        "urls": []
+    },
+    "lists": [
+        {
+            "id": 1598474,
+            "user": {
+                "id": 8187821,
+                "avatar_url": "https:\/\/gravatar.com\/avatar\/fb7e9202c27dbe05d7c8a8dabc39dea8708efa3cab9aedb1807ffbbc383747f2?s=500&r=pg&d=mm",
+                "username": "nolageek",
+                "resource_url": "https:\/\/api.discogs.com\/users\/nolageek"
+            },
+            "name": "Purchased From Live Show",
+            "description": "",
+            "public": false,
+            "date_added": "2025-04-10T14:14:24-07:00",
+            "date_changed": "2025-04-24T10:45:28-07:00",
+            "uri": "https:\/\/www.discogs.com\/lists\/Purchased-From-Live-Show\/1598474",
+            "resource_url": "https:\/\/api.discogs.com\/lists\/1598474",
+            "image_url": "https:\/\/i.discogs.com\/xEeOnySWFC0fEqUkxIC0WOA7zKax2TK978LhtjSfOIw\/rs:fit\/g:sm\/q:40\/h:100\/w:100\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTE5NDI3\/MDI2LTE2MjU3OTMy\/MjgtMTg2My5qcGVn.jpeg"
+        },
+        {
+            "id": 1305648,
+            "user": {
+                "id": 8187821,
+                "avatar_url": "https:\/\/gravatar.com\/avatar\/fb7e9202c27dbe05d7c8a8dabc39dea8708efa3cab9aedb1807ffbbc383747f2?s=500&r=pg&d=mm",
+                "username": "nolageek",
+                "resource_url": "https:\/\/api.discogs.com\/users\/nolageek"
+            },
+            "name": "Kay\u2019s Collection ",
+            "description": "",
+            "public": false,
+            "date_added": "2023-06-12T23:19:17-07:00",
+            "date_changed": "2023-12-19T19:09:09-08:00",
+            "uri": "https:\/\/www.discogs.com\/lists\/Kays-Collection-\/1305648",
+            "resource_url": "https:\/\/api.discogs.com\/lists\/1305648",
+            "image_url": "https:\/\/i.discogs.com\/joEwmio4WGLqFyGeQ7RZ49AiYrp8_2kI36-MHoOyiDU\/rs:fit\/g:sm\/q:40\/h:100\/w:100\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTYyOTMy\/MTktMTQxNTc1MzYz\/NC00MjAxLmpwZWc.jpeg"
+        }
+    ]
+}

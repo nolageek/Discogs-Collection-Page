@@ -1,0 +1,92 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 620938,
+            "instance_id": 1616407999,
+            "date_added": "2024-03-06T11:21:15-08:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 620938,
+                "master_id": 152252,
+                "master_url": "https:\/\/api.discogs.com\/masters\/152252",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/620938",
+                "thumb": "https:\/\/i.discogs.com\/3m3ZHc3WbuCtYbIwrMmAHOiw0RDVorD3UlvKIkVi7Oc\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTYyMDkz\/OC0xNzYwNTU5NTY2\/LTM1NzEuanBlZw.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/XtJBFAKEKKNBLqNZFvWj6yoDGsuKQ_0JnD36jO_xXz0\/rs:fit\/g:sm\/q:90\/h:600\/w:600\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTYyMDkz\/OC0xNzYwNTU5NTY2\/LTM1NzEuanBlZw.jpeg",
+                "title": "Short Sharp Shocked",
+                "year": 1988,
+                "formats": [
+                    {
+                        "name": "Vinyl",
+                        "qty": "1",
+                        "text": "49 - Specialty Pressing",
+                        "descriptions": [
+                            "LP",
+                            "Album",
+                            "Stereo"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Mercury",
+                        "catno": "834 924-1",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 39357,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/39357"
+                    },
+                    {
+                        "name": "Mercury",
+                        "catno": "422 834 924-1",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 39357,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/39357"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Michelle Shocked",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 260406,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/260406"
+                    }
+                ],
+                "genres": [
+                    "Rock",
+                    "Folk, World, & Country"
+                ],
+                "styles": [
+                    "Folk Rock",
+                    "Acoustic",
+                    "Country Rock"
+                ]
+            },
+            "folder_id": 5812940,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 4,
+                    "value": "Vinyl 12"
+                }
+            ]
+        }
+    ]
+}

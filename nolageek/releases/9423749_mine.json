@@ -1,0 +1,85 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 9423749,
+            "instance_id": 1637744108,
+            "date_added": "2024-03-28T18:32:13-07:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 9423749,
+                "master_id": 0,
+                "master_url": null,
+                "resource_url": "https:\/\/api.discogs.com\/releases\/9423749",
+                "thumb": "https:\/\/i.discogs.com\/BfCloz-qoUWSKig9bsTRmOxPjVOt7nflRrHvGERkpNk\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTk0MjM3\/NDktMTQ4MDMyMzk0\/NS03NDg1LmpwZWc.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/XPPyiNhPybHsyhGOon8XkS5VAKgMiVUW_fL7WtFE4dE\/rs:fit\/g:sm\/q:90\/h:497\/w:500\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTk0MjM3\/NDktMTQ4MDMyMzk0\/NS03NDg1LmpwZWc.jpeg",
+                "title": "Jeff's Last Dance Vol.II",
+                "year": 1995,
+                "formats": [
+                    {
+                        "name": "CD",
+                        "qty": "1",
+                        "descriptions": [
+                            "Album"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "SMG Records",
+                        "catno": "none",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 409632,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/409632"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Shawn Mullins",
+                        "anv": "",
+                        "join": "&",
+                        "role": "",
+                        "tracks": "",
+                        "id": 328338,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/328338"
+                    },
+                    {
+                        "name": "Matthew Kahler",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 1957604,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/1957604"
+                    }
+                ],
+                "genres": [
+                    "Folk, World, & Country"
+                ],
+                "styles": []
+            },
+            "folder_id": 3220306,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Near Mint (NM or M-)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Near Mint (NM or M-)"
+                },
+                {
+                    "field_id": 4,
+                    "value": "CD"
+                }
+            ]
+        }
+    ]
+}

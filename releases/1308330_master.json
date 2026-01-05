@@ -1,0 +1,114 @@
+{
+    "id": 661470,
+    "main_release": 1308330,
+    "most_recent_release": 25134373,
+    "resource_url": "https:\/\/api.discogs.com\/masters\/661470",
+    "uri": "https:\/\/www.discogs.com\/master\/661470-Bad-News-3-Bootleg",
+    "versions_url": "https:\/\/api.discogs.com\/masters\/661470\/versions",
+    "main_release_url": "https:\/\/api.discogs.com\/releases\/1308330",
+    "most_recent_release_url": "https:\/\/api.discogs.com\/releases\/14349835",
+    "num_for_sale": 50,
+    "lowest_price": 7.53,
+    "images": [
+        {
+            "type": "primary",
+            "uri": "https:\/\/i.discogs.com\/SD_n-95r1kL4fPY6lEk_sxZHM9Vl7VmKAOObfhoDAkg\/rs:fit\/g:sm\/q:90\/h:500\/w:500\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEzMDgz\/MzAtMTQzODA5NDk3\/OS0yMzEyLmpwZWc.jpeg",
+            "resource_url": "https:\/\/i.discogs.com\/SD_n-95r1kL4fPY6lEk_sxZHM9Vl7VmKAOObfhoDAkg\/rs:fit\/g:sm\/q:90\/h:500\/w:500\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEzMDgz\/MzAtMTQzODA5NDk3\/OS0yMzEyLmpwZWc.jpeg",
+            "uri150": "https:\/\/i.discogs.com\/FJ7pasmnS5_GpahOQJEz2Rzca8dUNHhGblhVtDg4bvk\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEzMDgz\/MzAtMTQzODA5NDk3\/OS0yMzEyLmpwZWc.jpeg",
+            "width": 500,
+            "height": 500
+        }
+    ],
+    "genres": [
+        "Rock"
+    ],
+    "styles": [
+        "Heavy Metal"
+    ],
+    "year": 1988,
+    "tracklist": [
+        {
+            "position": "A1",
+            "type_": "track",
+            "title": "Bad Dreams",
+            "duration": ""
+        },
+        {
+            "position": "A2",
+            "type_": "track",
+            "title": "Agm",
+            "duration": ""
+        },
+        {
+            "position": "A3",
+            "type_": "track",
+            "title": "Double Entendre",
+            "duration": ""
+        },
+        {
+            "position": "A4",
+            "type_": "track",
+            "title": "Locked In",
+            "duration": ""
+        },
+        {
+            "position": "A5",
+            "type_": "track",
+            "title": "Aids",
+            "duration": ""
+        },
+        {
+            "position": "A6",
+            "type_": "track",
+            "title": "O' Levels",
+            "duration": ""
+        },
+        {
+            "position": "A7",
+            "type_": "track",
+            "title": "Wedding",
+            "duration": ""
+        },
+        {
+            "position": "B1",
+            "type_": "track",
+            "title": "H.m. Farmer",
+            "duration": ""
+        },
+        {
+            "position": "B2",
+            "type_": "track",
+            "title": "Masturbike",
+            "duration": ""
+        },
+        {
+            "position": "B3",
+            "type_": "track",
+            "title": "Cashing In On Christmas (Dub)",
+            "duration": ""
+        }
+    ],
+    "artists": [
+        {
+            "name": "Bad News (3)",
+            "anv": "",
+            "join": "",
+            "role": "",
+            "tracks": "",
+            "id": 517648,
+            "resource_url": "https:\/\/api.discogs.com\/artists\/517648",
+            "thumbnail_url": "https:\/\/i.discogs.com\/Pa_b5B9BWCIDAgYOvw0AbOYlh_MFyybHxwpkELF7j_Y\/rs:fit\/g:sm\/q:90\/h:283\/w:380\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9BLTUxNzY0\/OC0xMTY5MjU3NjQ3\/LmpwZWc.jpeg"
+        }
+    ],
+    "title": "Bootleg",
+    "data_quality": "Correct",
+    "videos": [
+        {
+            "uri": "https:\/\/www.youtube.com\/watch?v=Mz6wwXoBuFU",
+            "title": "Bad News 15 - Double Entendre",
+            "description": "\"Double Entendre\".  From the Bad News self-titled album.",
+            "duration": 216,
+            "embed": true
+        }
+    ]
+}

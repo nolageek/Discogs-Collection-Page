@@ -1,0 +1,95 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 8414359,
+            "instance_id": 2067614364,
+            "date_added": "2025-10-05T20:17:39-07:00",
+            "rating": 4,
+            "basic_information": {
+                "id": 8414359,
+                "master_id": 46402,
+                "master_url": "https:\/\/api.discogs.com\/masters\/46402",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/8414359",
+                "thumb": "https:\/\/i.discogs.com\/dGvZs0bleIP7akG2KRSJz5NBEbRNDr589L9CDRoRouU\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTg0MTQz\/NTktMTU5MTc5NjA2\/Ny05ODIzLmpwZWc.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/RRsLr85J7rIJvkdFsZxwozmzMrEettMo15NtYkcBMaE\/rs:fit\/g:sm\/q:90\/h:592\/w:600\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTg0MTQz\/NTktMTU5MTc5NjA2\/Ny05ODIzLmpwZWc.jpeg",
+                "title": "The Beatles",
+                "year": 1968,
+                "formats": [
+                    {
+                        "name": "Vinyl",
+                        "qty": "2",
+                        "text": "Capitol Text, 2nd Scranton Press ",
+                        "descriptions": [
+                            "LP",
+                            "Album",
+                            "Numbered",
+                            "Stereo"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Apple Records",
+                        "catno": "SWBO 101",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 25693,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/25693"
+                    },
+                    {
+                        "name": "Apple Records",
+                        "catno": "SWBO-101",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 25693,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/25693"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "The Beatles",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 82730,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/82730"
+                    }
+                ],
+                "genres": [
+                    "Rock"
+                ],
+                "styles": [
+                    "Psychedelic Rock",
+                    "Pop Rock"
+                ]
+            },
+            "folder_id": 6663052,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Very Good (VG)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 3,
+                    "value": "Smash Records\n\nNo poster\nNo photos"
+                },
+                {
+                    "field_id": 4,
+                    "value": "Vinyl 12"
+                }
+            ]
+        }
+    ]
+}

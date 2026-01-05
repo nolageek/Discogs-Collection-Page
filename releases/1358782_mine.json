@@ -1,0 +1,76 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 1358782,
+            "instance_id": 825222298,
+            "date_added": "2021-10-06T20:13:46-07:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 1358782,
+                "master_id": 31513,
+                "master_url": "https:\/\/api.discogs.com\/masters\/31513",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/1358782",
+                "thumb": "https:\/\/i.discogs.com\/rgT2lMRUv2pwCf5zoaXqGri0p5j6oYe5PI38QPyIOJU\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEzNTg3\/ODItMTU1MDUxMDE4\/MS0xMDEyLmpwZWc.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/Q_lyj4a6FhqC1BrqDJwVfxIsvudxPrXgYuwN1ZugJIQ\/rs:fit\/g:sm\/q:90\/h:600\/w:600\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEzNTg3\/ODItMTU1MDUxMDE4\/MS0xMDEyLmpwZWc.jpeg",
+                "title": "Jagged Little Pill",
+                "year": 0,
+                "formats": [
+                    {
+                        "name": "CD",
+                        "qty": "1",
+                        "descriptions": [
+                            "Album",
+                            "Reissue",
+                            "Stereo"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Maverick",
+                        "catno": "CDW 45901",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 1685,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/1685"
+                    },
+                    {
+                        "name": "Reprise Records",
+                        "catno": "CDW 45901",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 157,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/157"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Alanis Morissette",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 102789,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/102789"
+                    }
+                ],
+                "genres": [
+                    "Rock"
+                ],
+                "styles": [
+                    "Alternative Rock",
+                    "Acoustic",
+                    "Pop Rock"
+                ]
+            },
+            "folder_id": 3220306
+        }
+    ]
+}

@@ -1,0 +1,100 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 1277129,
+            "instance_id": 2028330558,
+            "date_added": "2025-05-31T17:20:24-07:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 1277129,
+                "master_id": 42965,
+                "master_url": "https:\/\/api.discogs.com\/masters\/42965",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/1277129",
+                "thumb": "https:\/\/i.discogs.com\/f3_P7X31j_dsF6cJF1nYwYpZUi7eTOM5VJKP8wWz0eE\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEyNzcx\/MjktMTYzNTExNjc1\/Ny0zNTUyLmpwZWc.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/OhV0LoZBQ3aJtahGmp2WHfrYpt1sEPOzy7tIgfPdiCM\/rs:fit\/g:sm\/q:90\/h:596\/w:600\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEyNzcx\/MjktMTYzNTExNjc1\/Ny0zNTUyLmpwZWc.jpeg",
+                "title": "King Of America",
+                "year": 1986,
+                "formats": [
+                    {
+                        "name": "Vinyl",
+                        "qty": "1",
+                        "text": "Carrollton Pressing",
+                        "descriptions": [
+                            "LP",
+                            "Album"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Columbia",
+                        "catno": "FC 40173",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 1866,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/1866"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "The Costello Show",
+                        "anv": "",
+                        "join": "Featuring",
+                        "role": "",
+                        "tracks": "",
+                        "id": 288605,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/288605"
+                    },
+                    {
+                        "name": "Elvis Costello",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 55029,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/55029"
+                    }
+                ],
+                "genres": [
+                    "Rock",
+                    "Blues",
+                    "Folk, World, & Country"
+                ],
+                "styles": [
+                    "Rhythm & Blues",
+                    "Country",
+                    "Blues Rock",
+                    "Vocal",
+                    "Folk",
+                    "Lounge"
+                ]
+            },
+            "folder_id": 6663049,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 3,
+                    "value": "Unsure of pressing"
+                },
+                {
+                    "field_id": 4,
+                    "value": "Vinyl 12"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,92 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 1306409,
+            "instance_id": 1217412568,
+            "date_added": "2022-12-27T15:00:03-08:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 1306409,
+                "master_id": 291560,
+                "master_url": "https:\/\/api.discogs.com\/masters\/291560",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/1306409",
+                "thumb": "https:\/\/i.discogs.com\/k6qn-LO5WsmoWY0_ANxqZsZSKj-sdKs-_zvjlZmmhR8\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEzMDY0\/MDktMTU4NTIwODA3\/Ni01NDUyLmpwZWc.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/ORbdEimKQu9PItbl18vUOu6eiHDlt3dOYVWC_7BIFQM\/rs:fit\/g:sm\/q:90\/h:600\/w:600\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEzMDY0\/MDktMTU4NTIwODA3\/Ni01NDUyLmpwZWc.jpeg",
+                "title": "The Amazing Adventures Of Pac-Man",
+                "year": 1982,
+                "formats": [
+                    {
+                        "name": "Vinyl",
+                        "qty": "1",
+                        "descriptions": [
+                            "LP",
+                            "Album"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Kid Stuff Records",
+                        "catno": "KSS-5023",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 95913,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/95913"
+                    },
+                    {
+                        "name": "Kid Stuff Records",
+                        "catno": "KSS 5023",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 95913,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/95913"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Pac-Man (2)",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 920128,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/920128"
+                    }
+                ],
+                "genres": [
+                    "Electronic",
+                    "Children's"
+                ],
+                "styles": [
+                    "Dialogue",
+                    "Story",
+                    "Disco",
+                    "Electro",
+                    "Video Game Music"
+                ]
+            },
+            "folder_id": 7808963,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Very Good (VG)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Very Good (VG)"
+                },
+                {
+                    "field_id": 4,
+                    "value": "Vinyl 12"
+                }
+            ]
+        }
+    ]
+}

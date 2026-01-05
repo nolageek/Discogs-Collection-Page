@@ -1,0 +1,80 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 7119855,
+            "instance_id": 1783407893,
+            "date_added": "2024-09-12T21:14:34-07:00",
+            "rating": 4,
+            "basic_information": {
+                "id": 7119855,
+                "master_id": 19526,
+                "master_url": "https:\/\/api.discogs.com\/masters\/19526",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/7119855",
+                "thumb": "https:\/\/i.discogs.com\/vTzAW2x2Wg3gXmgtEv_nIRZLRI8qBAdr_ezRWyaQWKc\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTcxMTk4\/NTUtMTU0NjcwNjE5\/Mi03OTM4LmpwZWc.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/rVrxu-wfy1HcyLaGETLS2AxOVIH4Q8Ow8AVw33HgT6U\/rs:fit\/g:sm\/q:90\/h:600\/w:600\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTcxMTk4\/NTUtMTU0NjcwNjE5\/Mi03OTM4LmpwZWc.jpeg",
+                "title": "Quality Control",
+                "year": 2015,
+                "formats": [
+                    {
+                        "name": "Vinyl",
+                        "qty": "2",
+                        "descriptions": [
+                            "LP",
+                            "Album",
+                            "Reissue"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Get On Down",
+                        "catno": "GET 56035-LP",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 208012,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/208012"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Jurassic 5",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 17477,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/17477"
+                    }
+                ],
+                "genres": [
+                    "Hip Hop"
+                ],
+                "styles": [
+                    "Conscious"
+                ]
+            },
+            "folder_id": 6663049,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 4,
+                    "value": "Vinyl 12"
+                }
+            ]
+        }
+    ]
+}

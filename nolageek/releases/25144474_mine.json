@@ -1,0 +1,86 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 25144474,
+            "instance_id": 2096739154,
+            "date_added": "2026-01-01T19:56:33-08:00",
+            "rating": 4,
+            "basic_information": {
+                "id": 25144474,
+                "master_id": 90341,
+                "master_url": "https:\/\/api.discogs.com\/masters\/90341",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/25144474",
+                "thumb": "https:\/\/i.discogs.com\/IIjxwEv4jsZyvKsgqDgPuz2wXsMcpIFgg897ccGuBnI\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTI1MTQ0\/NDc0LTE2NjgyODYx\/NDctMzY4OS5qcGVn.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/V4o3lU4YsuBVETOk_TYuhHMJl4lPR-mWOJiPGpDs63E\/rs:fit\/g:sm\/q:90\/h:600\/w:600\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTI1MTQ0\/NDc0LTE2NjgyODYx\/NDctMzY4OS5qcGVn.jpeg",
+                "title": "Doubt",
+                "year": 2022,
+                "formats": [
+                    {
+                        "name": "Vinyl",
+                        "qty": "1",
+                        "text": "Transparent Orange",
+                        "descriptions": [
+                            "LP",
+                            "Album"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Demon Records",
+                        "catno": "DEMREC953",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 8522,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/8522"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Jesus Jones",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 10422,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/10422"
+                    }
+                ],
+                "genres": [
+                    "Electronic",
+                    "Rock"
+                ],
+                "styles": [
+                    "Alternative Rock",
+                    "Synth-pop"
+                ]
+            },
+            "folder_id": 6663049,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 3,
+                    "value": "$5 at B&N"
+                },
+                {
+                    "field_id": 4,
+                    "value": "Vinyl 12"
+                }
+            ]
+        }
+    ]
+}

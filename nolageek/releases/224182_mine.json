@@ -1,0 +1,94 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 224182,
+            "instance_id": 2032474905,
+            "date_added": "2025-06-14T05:36:37-07:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 224182,
+                "master_id": 39301,
+                "master_url": "https:\/\/api.discogs.com\/masters\/39301",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/224182",
+                "thumb": "https:\/\/i.discogs.com\/LbP5DlAZ_TMrMawPwcRzuckIK-yn8LfV4LdZ6T01gjE\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTIyNDE4\/Mi0xNjk0NjMwNDU5\/LTE0NzYuanBlZw.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/YhqsPSI5Kh4r526bOEDtHMSgn16zEic-J8c6xJREDO0\/rs:fit\/g:sm\/q:90\/h:600\/w:590\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTIyNDE4\/Mi0xNjk0NjMwNDU5\/LTE0NzYuanBlZw.jpeg",
+                "title": "Little Creatures",
+                "year": 1985,
+                "formats": [
+                    {
+                        "name": "Vinyl",
+                        "qty": "1",
+                        "text": "Specialty Pressing",
+                        "descriptions": [
+                            "LP",
+                            "Album"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Sire",
+                        "catno": "9 25305-1",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 27031,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/27031"
+                    },
+                    {
+                        "name": "Sire",
+                        "catno": "1-25305",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 27031,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/27031"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Talking Heads",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 22854,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/22854"
+                    }
+                ],
+                "genres": [
+                    "Rock"
+                ],
+                "styles": [
+                    "Alternative Rock",
+                    "Pop Rock",
+                    "New Wave"
+                ]
+            },
+            "folder_id": 6663049,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Very Good Plus (VG+)"
+                },
+                {
+                    "field_id": 3,
+                    "value": "Unsure of pressing"
+                },
+                {
+                    "field_id": 4,
+                    "value": "Vinyl 12"
+                }
+            ]
+        }
+    ]
+}

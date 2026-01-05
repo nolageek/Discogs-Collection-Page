@@ -1,0 +1,72 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 451867,
+            "instance_id": 1054594313,
+            "date_added": "2022-06-13T14:54:27-07:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 451867,
+                "master_id": 28307,
+                "master_url": "https:\/\/api.discogs.com\/masters\/28307",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/451867",
+                "thumb": "https:\/\/i.discogs.com\/tJptKwigGHnvQull4HYqjI1Izm8JeDIlZ609iRyq3rQ\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTQ1MTg2\/Ny0xNDMyODE2MjEw\/LTM5MjQucG5n.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/TBTzo8vOG5phWJgDkx1rbvIb72pVQ_yiMnpuRfh47vo\/rs:fit\/g:sm\/q:90\/h:600\/w:600\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTQ1MTg2\/Ny0xNDMyODE2MjEw\/LTM5MjQucG5n.jpeg",
+                "title": "Comfort Eagle",
+                "year": 2001,
+                "formats": [
+                    {
+                        "name": "CD",
+                        "qty": "1",
+                        "descriptions": [
+                            "Album"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Columbia",
+                        "catno": "CK 62132",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 1866,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/1866"
+                    },
+                    {
+                        "name": "Columbia",
+                        "catno": "62132",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 1866,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/1866"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Cake",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 141809,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/141809"
+                    }
+                ],
+                "genres": [
+                    "Rock"
+                ],
+                "styles": [
+                    "Alternative Rock"
+                ]
+            },
+            "folder_id": 3220306
+        }
+    ]
+}

@@ -1,0 +1,95 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 35788246,
+            "instance_id": 2085395017,
+            "date_added": "2025-11-30T15:41:53-08:00",
+            "rating": 4,
+            "basic_information": {
+                "id": 35788246,
+                "master_id": 87448,
+                "master_url": "https:\/\/api.discogs.com\/masters\/87448",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/35788246",
+                "thumb": "https:\/\/i.discogs.com\/ez9_EaVFtqBo0h91KjnTivO0LMscNoF-FjZemBaotDw\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTM1Nzg4\/MjQ2LTE3NjQzNTA2\/NDUtODI0NS5qcGVn.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/86zbQ_s62KixYoT7Dh9BI6evntAvnvOxzSHTAxzVtBo\/rs:fit\/g:sm\/q:90\/h:600\/w:600\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTM1Nzg4\/MjQ2LTE3NjQzNTA2\/NDUtODI0NS5qcGVn.jpeg",
+                "title": "Trace",
+                "year": 2025,
+                "formats": [
+                    {
+                        "name": "Vinyl",
+                        "qty": "2",
+                        "text": "Purple",
+                        "descriptions": [
+                            "LP",
+                            "Album",
+                            "Record Store Day",
+                            "Reissue"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Rhino Records (2)",
+                        "catno": "RCV1 728077",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 33244,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/33244"
+                    },
+                    {
+                        "name": "Warner Records",
+                        "catno": "081227809232",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 134882,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/134882"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Son Volt",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 496382,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/496382"
+                    }
+                ],
+                "genres": [
+                    "Rock"
+                ],
+                "styles": [
+                    "Alternative Rock",
+                    "Country Rock"
+                ]
+            },
+            "folder_id": 6663049,
+            "notes": [
+                {
+                    "field_id": 1,
+                    "value": "Near Mint (NM or M-)"
+                },
+                {
+                    "field_id": 2,
+                    "value": "Near Mint (NM or M-)"
+                },
+                {
+                    "field_id": 3,
+                    "value": "Karma Indianapolis"
+                },
+                {
+                    "field_id": 4,
+                    "value": "Vinyl 12"
+                }
+            ]
+        }
+    ]
+}

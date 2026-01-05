@@ -1,0 +1,58 @@
+{
+    "folders": [
+        {
+            "id": 0,
+            "name": "All",
+            "count": 621,
+            "resource_url": "https:\/\/api.discogs.com\/users\/nolageek\/collection\/folders\/0"
+        },
+        {
+            "id": 3220306,
+            "name": "CDs",
+            "count": 85,
+            "resource_url": "https:\/\/api.discogs.com\/users\/nolageek\/collection\/folders\/3220306"
+        },
+        {
+            "id": 6663043,
+            "name": "Compilations",
+            "count": 9,
+            "resource_url": "https:\/\/api.discogs.com\/users\/nolageek\/collection\/folders\/6663043"
+        },
+        {
+            "id": 6663052,
+            "name": "Kay's",
+            "count": 56,
+            "resource_url": "https:\/\/api.discogs.com\/users\/nolageek\/collection\/folders\/6663052"
+        },
+        {
+            "id": 6663049,
+            "name": "Primary",
+            "count": 411,
+            "resource_url": "https:\/\/api.discogs.com\/users\/nolageek\/collection\/folders\/6663049"
+        },
+        {
+            "id": 5812940,
+            "name": "Purge",
+            "count": 6,
+            "resource_url": "https:\/\/api.discogs.com\/users\/nolageek\/collection\/folders\/5812940"
+        },
+        {
+            "id": 7808963,
+            "name": "Secondary",
+            "count": 10,
+            "resource_url": "https:\/\/api.discogs.com\/users\/nolageek\/collection\/folders\/7808963"
+        },
+        {
+            "id": 6663046,
+            "name": "Soundtracks",
+            "count": 44,
+            "resource_url": "https:\/\/api.discogs.com\/users\/nolageek\/collection\/folders\/6663046"
+        },
+        {
+            "id": 1,
+            "name": "Uncategorized",
+            "count": 0,
+            "resource_url": "https:\/\/api.discogs.com\/users\/nolageek\/collection\/folders\/1"
+        }
+    ]
+}

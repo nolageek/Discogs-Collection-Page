@@ -1,0 +1,74 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 1,
+        "per_page": 50,
+        "items": 1,
+        "urls": []
+    },
+    "releases": [
+        {
+            "id": 1371354,
+            "instance_id": 504103035,
+            "date_added": "2020-09-05T04:29:26-07:00",
+            "rating": 0,
+            "basic_information": {
+                "id": 1371354,
+                "master_id": 83982,
+                "master_url": "https:\/\/api.discogs.com\/masters\/83982",
+                "resource_url": "https:\/\/api.discogs.com\/releases\/1371354",
+                "thumb": "https:\/\/i.discogs.com\/h0jHMY8m-cyNyl2SrHI024SXD12lZkQNEhRPnmMXcLA\/rs:fit\/g:sm\/q:40\/h:150\/w:150\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEzNzEz\/NTQtMTUyMDU3MDQ5\/MC0yMzg2LmpwZWc.jpeg",
+                "cover_image": "https:\/\/i.discogs.com\/ygE6rC8jPXd3U8OPsPlhi-CQczX_ppZyjCtjDQur1o0\/rs:fit\/g:sm\/q:90\/h:543\/w:600\/czM6Ly9kaXNjb2dz\/LWRhdGFiYXNlLWlt\/YWdlcy9SLTEzNzEz\/NTQtMTUyMDU3MDQ5\/MC0yMzg2LmpwZWc.jpeg",
+                "title": "O Brother, Where Art Thou?",
+                "year": 2000,
+                "formats": [
+                    {
+                        "name": "CD",
+                        "qty": "1",
+                        "descriptions": [
+                            "Compilation",
+                            "Enhanced"
+                        ]
+                    }
+                ],
+                "labels": [
+                    {
+                        "name": "Mercury",
+                        "catno": "088 170-069-2",
+                        "entity_type": "1",
+                        "entity_type_name": "Label",
+                        "id": 39357,
+                        "resource_url": "https:\/\/api.discogs.com\/labels\/39357"
+                    }
+                ],
+                "artists": [
+                    {
+                        "name": "Various",
+                        "anv": "",
+                        "join": "",
+                        "role": "",
+                        "tracks": "",
+                        "id": 194,
+                        "resource_url": "https:\/\/api.discogs.com\/artists\/194"
+                    }
+                ],
+                "genres": [
+                    "Folk, World, & Country",
+                    "Stage & Screen"
+                ],
+                "styles": [
+                    "Soundtrack",
+                    "Country",
+                    "Bluegrass"
+                ]
+            },
+            "folder_id": 3220306,
+            "notes": [
+                {
+                    "field_id": 4,
+                    "value": "CD\n"
+                }
+            ]
+        }
+    ]
+}
