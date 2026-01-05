@@ -3,6 +3,27 @@
 //error_reporting(E_ALL);
 //ini_set('display_errors', 'On');
 
+class Debug {
+    private static bool $enabled = false;
+    
+    public static function init(bool $enabled): void {
+        self::$enabled = $enabled;
+    }
+    
+    public static function log(string $message): void {
+        if (self::$enabled) {
+            echo htmlspecialchars($message) . "<br>";
+        }
+    }
+    
+    public static function isEnabled(): bool {
+        return self::$enabled;
+    }
+}
+
+Debug::init(!empty($_GET['debug']));
+
+
 require_once('settings.php');
 
 /* ******************************************************** */
@@ -145,7 +166,7 @@ function add_debug($DEBUG_STR = "")
     endif;
 }
 
-if (!empty($PARAMS['debug'])) add_debug("No master id");
+Debug::log("No master id");
 
 function build_url($baseUrl = "/", $PARAMS = [])
 {
@@ -247,7 +268,7 @@ function fetchCollectionData($username, $token, $data_file)
 
     // Check if the file exists, is valid, and not older than the max age
     if (isValidJsonFile($collection_file, 'releases') && $age_of_collection_file < $MAX_AGE_IN_SECONDS) {
-        if (!empty($PARAMS['debug'])) add_debug("Collection data is up-to-date. $age_of_collection_file secs old.");
+        Debug::log("Collection data is up-to-date. $age_of_collection_file secs old.");
         return;
     }
 
@@ -289,9 +310,9 @@ function fetchCollectionData($username, $token, $data_file)
     if (isValidFetchedData(['releases' => $allReleases], 'releases')) {
         $fileData = ['releases' => $allReleases];
         file_put_contents($collection_file, json_encode($fileData, JSON_PRETTY_PRINT));
-        if (!empty($PARAMS['debug'])) add_debug("Collection data updated and saved to $collection_file.");
+        Debug::log("Collection data updated and saved to $collection_file.");
     } else {
-        if (!empty($PARAMS['debug'])) add_debug("Invalid data fetched, skipping save for collection data.");
+        Debug::log("Invalid data fetched, skipping save for collection data.");
     }
 }
 
@@ -311,14 +332,14 @@ function fetchUserProfileData($username)
 
 function fetchMusicbrainzReleaseData($master_id, $data_file_musicbrainz, $data_file_coverartarchive)
 {   
-    if (!empty($PARAMS['debug'])) add_debug( "Fetching MB Release Data");
-    if (!empty($PARAMS['debug'])) add_debug( "Master ID: $master_id");
+    Debug::log( "Fetching MB Release Data");
+    Debug::log( "Master ID: $master_id");
 
     if (is_numeric($master_id)) : 
         $release_group_id = get_musicbrainz_master_release_group($master_id);
 
     else:
-        if (!empty($PARAMS['debug'])) add_debug("No master id");
+        Debug::log("No master id");
         return;
     endif;
 
@@ -331,15 +352,15 @@ function fetchMusicbrainzReleaseData($master_id, $data_file_musicbrainz, $data_f
             . "&fmt=json";
         
         $urls_mb = ["related_sites" => $url_mb_rs, "release_group" => $url_bm_rg];
-        if (!empty($PARAMS['debug'])) add_debug("MB Data_file: $data_file_musicbrainz");
-        //if (!empty($PARAMS['debug'])) add_debug("MB URL: $urls_mb");
+        Debug::log("MB Data_file: $data_file_musicbrainz");
+        //Debug::log("MB URL: $urls_mb");
 
         // Fetch new folder data if file is invalid or too old
         check_data_file($data_file_musicbrainz, rand(110,128), $urls_mb);
 
         $url_caa = "https://coverartarchive.org/release-group/$release_group_id";
-        if (!empty($PARAMS['debug'])) add_debug("CAA Data_file: $data_file_coverartarchive");
-        if (!empty($PARAMS['debug'])) add_debug("CAA URL: $url_caa");
+        Debug::log("CAA Data_file: $data_file_coverartarchive");
+        Debug::log("CAA URL: $url_caa");
         // Fetch new folder data if file is invalid or too old
         check_data_file($data_file_coverartarchive, 118, $url_caa);
     endif;
@@ -404,7 +425,7 @@ function fetchWantlistData($username, $token, $data_file)
     // Check if the file exists, is valid, and not older than the max age
     if (isValidJsonFile($data_file, 'wants') && (time() - filemtime($data_file)) < $MAX_AGE_IN_SECONDS) {
 
-        if (!empty($PARAMS['debug'])) add_debug("Wantlist data is up-to-date.");
+        Debug::log("Wantlist data is up-to-date.");
 
         return;
     }
@@ -419,7 +440,7 @@ function fetchWantlistData($username, $token, $data_file)
     while ($hasMorePages) {
         $url = $apiUrl . '?page=' . $page . '&per_page=' . $perPage . '&token=' . $token;
 
-        if (!empty($PARAMS['debug'])) add_debug("$url<br>");
+        Debug::log("$url<br>");
 
 
         $response = file_get_contents($url, false, $CONTEXT);
@@ -441,12 +462,12 @@ function fetchWantlistData($username, $token, $data_file)
         $fileData = ['wants' => $allWants];
         file_put_contents($data_file, json_encode($fileData, JSON_PRETTY_PRINT));
 
-        if (!empty($PARAMS['debug'])) add_debug("Wantlist data updated and saved to $data_file.");
+        Debug::log("Wantlist data updated and saved to $data_file.");
 
 
     } else {
 
-        if (!empty($PARAMS['debug'])) add_debug("Invalid data fetched, skipping save for wantlist data.");
+        Debug::log("Invalid data fetched, skipping save for wantlist data.");
 
     }
 }
@@ -495,7 +516,7 @@ function get_statistics()
 
     // Only regenerate if collection file is newer than statistics file
     if (file_exists($statistics_file) && filemtime($statistics_file) >= filemtime($collection_file)) {
-        if (!empty($PARAMS['debug'])) add_debug("Using cached statistics file: $statistics_file");
+        Debug::log("Using cached statistics file: $statistics_file");
         return json_decode(file_get_contents($statistics_file), true);
     }
 
@@ -505,10 +526,10 @@ function get_statistics()
 
     if (file_exists($folder_file)) {
         $folder_data = json_decode(file_get_contents($folder_file), true);
-        if (!empty($PARAMS['debug'])) add_debug("Folder data file found: $folder_file<br>");
+        Debug::log("Folder data file found: $folder_file<br>");
     } else {
         $folder_data = ['folders' => []];
-        if (!empty($PARAMS['debug'])) add_debug("Folder data file not found: $folder_file<br>");
+        Debug::log("Folder data file not found: $folder_file<br>");
     }
 
     // Initialize statistics structure
@@ -690,14 +711,14 @@ function get_statistics()
     $statistics['top_5_most_expensive_releases'] = array_slice($release_values, 0, 5);
 
     file_put_contents($statistics_file, json_encode($statistics, JSON_PRETTY_PRINT));
-    if (!empty($PARAMS['debug'])) add_debug("Statistics generated and saved to statistics.json.");
+    Debug::log("Statistics generated and saved to statistics.json.");
 
     if (isset($folder_data['folders']) && is_array($folder_data['folders'])) {
         foreach ($folder_data['folders'] as $folder) {
             $statistics['folder_counts'][$folder['name']] = $folder['count'];
         }
     } else {
-        if (!empty($PARAMS['debug'])) add_debug("No valid folder data found.");
+        Debug::log("No valid folder data found.");
     }
 
     return $statistics;
@@ -1427,14 +1448,14 @@ function get_release_information($release_id, $return = 1)
 
 
     if (is_numeric($release_id)) {
-        if (!empty($PARAMS['debug'])) add_debug("$release_id is numeric!");
+        Debug::log("$release_id is numeric!");
         $LOCAL_RELEASE_DATA_FILE = $LOCAL_RELEASES_DATA_ROOT . $release_id . '.json';
         $releasedata = check_data_file($LOCAL_RELEASE_DATA_FILE, 64, $releasejson);
         if ($return) 
             return process_release_data($releasedata);
 
     } else {
-        if (!empty($PARAMS['debug'])) add_debug("$release_id is not numeric!");
+        Debug::log("$release_id is not numeric!");
         return;
     }
     
@@ -1461,13 +1482,13 @@ function get_release_master_information($master_id, $release_id)
 
     // Save the my-release data to the local file
     if (is_numeric($master_id)) {
-        if (!empty($PARAMS['debug'])) add_debug("Master $master_id is numeric!");
+        Debug::log("Master $master_id is numeric!");
         $LOCAL_RELEASE_MASTER_DATA_FILE = $LOCAL_RELEASES_DATA_ROOT . $release_id . '_master.json';
         $masterreleaseinfo = check_data_file($LOCAL_RELEASE_MASTER_DATA_FILE, 64, $masterreleasejson);
         return $masterreleaseinfo;
 
     } else {
-        if (!empty($PARAMS['debug'])) add_debug("Master $release_id is not numeric!");
+        Debug::log("Master $release_id is not numeric!");
         return;
     }
 
@@ -1480,7 +1501,7 @@ function get_musicbrainz_master_release_group($master_id)
         . $master_id
         . "&fmt=json";
 
-    if (!empty($PARAMS['debug'])) add_debug("MB Json URL: $musicbrainzjson");
+    Debug::log("MB Json URL: $musicbrainzjson");
 
 
     $musicbrainzdata = @file_get_contents($musicbrainzjson, false, $CONTEXT2);
@@ -1495,7 +1516,7 @@ function get_musicbrainz_master_release_group($master_id)
     }
 
     $release_group = $data['relations'][0]['release_group'];
-    if (!empty($PARAMS['debug'])) add_debug("Release Group ID: " . $release_group['id']);
+    Debug::log("Release Group ID: " . $release_group['id']);
     return $release_group['id'];
 }
 
@@ -1504,7 +1525,7 @@ function get_musicbrainz_id($release_id)
     global $LOCAL_USER_RELEASES_DATA_ROOT;
     $MUSICBRAINZ_DATA_FILE = $LOCAL_USER_RELEASES_DATA_ROOT . $release_id . '_musicbrainz.json';
 
-    if (!empty($PARAMS['debug'])) add_debug("MB Datafile: $MUSICBRAINZ_DATA_FILE");
+    Debug::log("MB Datafile: $MUSICBRAINZ_DATA_FILE");
 
     $musicbrainzid = 0;
 
@@ -1515,7 +1536,7 @@ function get_musicbrainz_id($release_id)
         $musicbrainzdata = file_get_contents($MUSICBRAINZ_DATA_FILE);
         $musicbrainzinfo = json_decode($musicbrainzdata, true);
 
-        if (!empty($PARAMS['debug'])) add_debug($musicbrainzdata);
+        Debug::log($musicbrainzdata);
 
         // Check if the JSON is valid and not null
         if (json_last_error() === JSON_ERROR_NONE && $musicbrainzinfo !== null) {
@@ -1541,7 +1562,7 @@ function fetch_json_with_throttle($url)
 
     $response = curl_exec($ch);
     if ($response === false) {
-        if (!empty($PARAMS['debug'])) add_debug("cURL error for $url: " . curl_error($ch));
+        Debug::log("cURL error for $url: " . curl_error($ch));
         curl_close($ch);
         return null;
     }
@@ -1567,14 +1588,14 @@ function fetch_json_with_throttle($url)
     if (isset($headers['X-Discogs-Ratelimit-Remaining'])) {
         $remaining = (int) $headers['X-Discogs-Ratelimit-Remaining'];
         if ($remaining <= 1) {
-            if (!empty($PARAMS['debug'])) add_debug("Approaching rate limit. Sleeping 60s...");
+            Debug::log("Approaching rate limit. Sleeping 60s...");
             sleep(60);
         }
     }
 
     // Retry on 429
     if ($status_code === 429) {
-        if (!empty($PARAMS['debug'])) add_debug("429 Too Many Requests. Sleeping 60s and retrying...");
+        Debug::log("429 Too Many Requests. Sleeping 60s and retrying...");
         sleep(60);
         return fetch_json_with_throttle($url);
     }
@@ -1582,7 +1603,7 @@ function fetch_json_with_throttle($url)
 // Detect "See: ..." redirect to archive.org JSON
 if (preg_match('/See:\s*(https?:\/\/\S+)/', $body, $matches)) {
     $redirect_url = trim($matches[1]);
-    if (!empty($PARAMS['debug'])) add_debug("Redirecting to archive.org JSON: $redirect_url");
+    Debug::log("Redirecting to archive.org JSON: $redirect_url");
     return fetch_json_with_throttle($redirect_url); // try again with the new URL
 }
 
@@ -1608,7 +1629,7 @@ function fetch_data_file($data_file, $data_file_json, $flags = 0)
     global $PARAMS;
 
     if (empty($data_file_json)) {
-        if (!empty($PARAMS['debug'])) add_debug("No input provided.");
+        Debug::log("No input provided.");
         return null;
     }
 
@@ -1616,12 +1637,12 @@ function fetch_data_file($data_file, $data_file_json, $flags = 0)
     $sources = is_array($data_file_json) ? $data_file_json : ['single' => $data_file_json];
 
     foreach ($sources as $key => $url) {
-        if (!empty($PARAMS['debug'])) add_debug("Fetching data from: $url");
+        Debug::log("Fetching data from: $url");
         $decoded_data = fetch_json_with_throttle($url);
         //echo $decoded_data;
 
         if ($decoded_data === null) {
-            if (!empty($PARAMS['debug'])) add_debug("Failed to decode JSON from $url");
+            Debug::log("Failed to decode JSON from $url");
             continue;
         }
 
@@ -1635,7 +1656,7 @@ function fetch_data_file($data_file, $data_file_json, $flags = 0)
     if ($combined_data !== null) {
         $json = json_encode($combined_data, JSON_PRETTY_PRINT);
         if ($json === false) {
-            if (!empty($PARAMS['debug'])) add_debug("JSON encoding failed: " . json_last_error_msg());
+            Debug::log("JSON encoding failed: " . json_last_error_msg());
             return null;
         }
 
@@ -1643,7 +1664,7 @@ function fetch_data_file($data_file, $data_file_json, $flags = 0)
         return $combined_data;
     }
 
-    if (!empty($PARAMS['debug'])) add_debug("No valid data retrieved, not saving file.");
+    Debug::log("No valid data retrieved, not saving file.");
     return null;
 }
 
@@ -1656,7 +1677,7 @@ function check_data_file($data_file, $age_in_hours = 8, $data_file_json = "")
 
     $max_seconds = $age_in_hours * 60 * 60;
 
-    if (!empty($PARAMS['debug'])) add_debug("Checking $data_file");
+    Debug::log("Checking $data_file");
 
     // IF DATA IS VALID AND IS NOT OLD, RETURN DATA
 
@@ -1664,22 +1685,22 @@ function check_data_file($data_file, $age_in_hours = 8, $data_file_json = "")
         file_exists($data_file) && (time() - filemtime($data_file)) < $max_seconds
     ) {
 
-        if (!empty($PARAMS['debug'])) add_debug("-> $data_file is not old.");
+        Debug::log("-> $data_file is not old.");
         // Check if the file contains valid JSON
         $data_file_data = file_get_contents($data_file);
         $data_file_info = json_decode($data_file_data, true);
 
         // Check if the JSON is valid and not null
         if (json_last_error() === JSON_ERROR_NONE && $data_file_json !== null) {
-            if (!empty($PARAMS['debug'])) add_debug("-> $data_file is valid.");
+            Debug::log("-> $data_file is valid.");
             return $data_file_info;
 
         }
     }
 
     if ($age_in_hours > 0) {
-        if (!empty($PARAMS['debug'])) add_debug("-> $data_file is $age_in_hours hours old.");
-        if (!empty($PARAMS['debug'])) add_debug("-> Updating $data_file.");
+        Debug::log("-> $data_file is $age_in_hours hours old.");
+        Debug::log("-> Updating $data_file.");
         $data_file_info = fetch_data_file($data_file, $data_file_json);
     }
 
@@ -1702,13 +1723,13 @@ function get_my_release_information($release_id)
         . "?token=" . $DISCOGS_TOKEN;
 
     if (is_numeric($release_id)) {
-        if (!empty($PARAMS['debug'])) add_debug("My $release_id is numeric!");
+        Debug::log("My $release_id is numeric!");
         $LOCAL_USER_MYRELEASE_DATA_FILE = $LOCAL_USER_RELEASES_DATA_ROOT . $release_id . '_mine.json';
         $myreleaseinfo = check_data_file($LOCAL_USER_MYRELEASE_DATA_FILE, rand(128,168), $myreleasejson);
         return $myreleaseinfo;
 
     } else {
-        if (!empty($PARAMS['debug'])) add_debug("My $release_id is not numeric!");
+        Debug::log("My $release_id is not numeric!");
         return;
     }
 
@@ -1717,7 +1738,7 @@ function get_my_release_information($release_id)
 
 function process_release_data($releasedata)
 {
-    if (!empty($PARAMS['debug'])) add_debug("Processing Release Data");
+    Debug::log("Processing Release Data");
     $myreleaseinfo = get_my_release_information($releasedata['id']);
 
     $releaseinfo = $releasedata;
@@ -2262,7 +2283,7 @@ function save_meta_file($meta_file, $image_url)
 {
     $meta_data = ['image_url' => $image_url];
     file_put_contents($meta_file, json_encode($meta_data, JSON_PRETTY_PRINT));
-    if (!empty($PARAMS['debug'])) add_debug("Saved image URL to _meta.json: " . $meta_file);
+    Debug::log("Saved image URL to _meta.json: " . $meta_file);
 }
 
 
@@ -2272,7 +2293,7 @@ function get_valid_cover_image($release_id)
 {
     $releaseinfo = get_release_information($release_id);
     $cover_image_discogs_source_url = $releaseinfo['cover_image'] ?? '';
-    if (!empty($PARAMS['debug'])) add_debug("Master ID: " . ($release['basic_information']['master_id'] ?? 'No Master ID'));
+    Debug::log("Master ID: " . ($release['basic_information']['master_id'] ?? 'No Master ID'));
 
     // Initialize variables
     $release_group_id = '';
@@ -2284,7 +2305,7 @@ function get_valid_cover_image($release_id)
 
         if ($release_group_data && !empty($release_group_data['release_group_id'])) {
             $release_group_id = $release_group_data['release_group_id'];
-            if (!empty($PARAMS['debug'])) add_debug("Release Group ID: " . $release_group_id);
+            Debug::log("Release Group ID: " . $release_group_id);
 
             $cover_image_musicbrainz_source_url = "https://coverartarchive.org/release-group/$release_group_id/front";
         }
@@ -2292,17 +2313,17 @@ function get_valid_cover_image($release_id)
 
     // Try MusicBrainz first
     if (!empty($cover_image_musicbrainz_source_url)) {
-        if (!empty($PARAMS['debug'])) add_debug("Trying MusicBrainz: " . $cover_image_musicbrainz_source_url);
+        Debug::log("Trying MusicBrainz: " . $cover_image_musicbrainz_source_url);
 
         if (is_valid_image_url($cover_image_musicbrainz_source_url, true)) {
-            if (!empty($PARAMS['debug'])) add_debug("✅ Using MusicBrainz Image: " . $cover_image_musicbrainz_source_url);
+            Debug::log("✅ Using MusicBrainz Image: " . $cover_image_musicbrainz_source_url);
             return [$cover_image_musicbrainz_source_url, "MusicBrainz"];
         }
     }
 
     // If MusicBrainz fails, try Discogs
     if (!empty($cover_image_discogs_source_url) && is_valid_image_url($cover_image_discogs_source_url, false)) {
-        if (!empty($PARAMS['debug'])) add_debug("⚠️ MusicBrainz failed, using Discogs.");
+        Debug::log("⚠️ MusicBrainz failed, using Discogs.");
         return [$cover_image_discogs_source_url, "Discogs"];
     }
 
@@ -2320,28 +2341,28 @@ function is_valid_image_url($url, $allow_redirects = false)
     // Get headers from URL
     $headers = @get_headers($url, 1);
     if (!$headers) {
-        if (!empty($PARAMS['debug'])) add_debug("❌ No headers found for URL: $url");
+        Debug::log("❌ No headers found for URL: $url");
         return false;
     }
 
-    if (!empty($PARAMS['debug'])) add_debug("Headers for $url: " . print_r($headers, true));
+    Debug::log("Headers for $url: " . print_r($headers, true));
 
     // Check if response contains 200 OK
     if (isset($headers[0]) && str_contains(strtolower($headers[0]), '200 ok')) {
-        if (!empty($PARAMS['debug'])) add_debug("✅ Found valid image for URL: $url");
+        Debug::log("✅ Found valid image for URL: $url");
         return true;
     }
 
     // Handle redirects (MusicBrainz)
     if ($allow_redirects && isset($headers['Location'])) {
         $final_url = is_array($headers['Location']) ? end($headers['Location']) : $headers['Location'];
-        if (!empty($PARAMS['debug'])) add_debug("🔄 Following redirect to: $final_url");
+        Debug::log("🔄 Following redirect to: $final_url");
 
         // Recursively check if final URL is valid
         return is_valid_image_url($final_url, false);
     }
 
-    if (!empty($PARAMS['debug'])) add_debug("❌ Image not found at URL: $url");
+    Debug::log("❌ Image not found at URL: $url");
     return false;
 }
 
