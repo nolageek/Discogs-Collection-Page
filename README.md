@@ -1,11 +1,8 @@
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B1UQ1KC)
-
 # Discogs Collection Page
 
 This PHP script will generate a friendly view of your Discogs media collection organized by your Discogs folders.
 
-![image](https://github.com/nolageek/Discogs-Collection-Page/assets/2931834/0cfc80cd-f30e-483d-aa65-7fd33f89a7f5)
-
+![image](https://github.com/nolageek/Discogs-Collection-Page/assets/2931834/ac3b17bc-3018-4ac6-adb8-14a9265548aa)
 
 
 Current and preview example can be found on my personal site: http://discogs.nolageek.com / http://discogsdev.nolageek.com
@@ -36,6 +33,6 @@ Current and preview example can be found on my personal site: http://discogs.nol
 * Create the following directories:
   * ./img/
   * ./jsondata/
-* run the following command: python ./update-discogs.py --updateall
+* run the following command: python ./discogs-update.py --updateall
   * This will download folder data and all images in your collection. This may take a long time if you have a large collection.*
 * Once finished, check your site and see if it worked! :)

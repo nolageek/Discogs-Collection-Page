@@ -1,0 +1,37 @@
+Database connection failed: could not find driver
+Database connection failed: SQLSTATE[08006] [7] could not connect to server: Connection refused
+	Is the server running on host "ep-shiny-cell-a408dy15-pooler.us-east-1.aws.neon.tech" (23.23.229.9) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "ep-shiny-cell-a408dy15-pooler.us-east-1.aws.neon.tech" (44.207.148.149) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "ep-shiny-cell-a408dy15-pooler.us-east-1.aws.neon.tech" (44.199.59.172) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "ep-shiny-cell-a408dy15-pooler.us-east-1.aws.neon.tech" (100.26.116.133) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "ep-shiny-cell-a408dy15-pooler.us-east-1.aws.neon.tech" (52.20.107.131) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "ep-shiny-cell-a408dy15-pooler.us-east-1.aws.neon.tech" (34.194.100.28) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "ep-shiny-cell-a408dy15-pooler.us-east-1.aws.neon.tech" (2600:1f18:240c:543b:a8aa:14fb:d008:11fe) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "ep-shiny-cell-a408dy15-pooler.us-east-1.aws.neon.tech" (2600:1f18:240c:540b:c14a:4d57:1251:234d) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "ep-shiny-cell-a408dy15-pooler.us-east-1.aws.neon.tech" (2600:1f18:240c:544d:621b:957c:81:5e5b) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "ep-shiny-cell-a408dy15-pooler.us-east-1.aws.neon.tech" (2600:1f18:240c:5454:82a4:8209:20f8:a5c1) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "ep-shiny-cell-a408dy15-pooler.us-east-1.aws.neon.tech" (2600:1f18:240c:5419:4ecf:2a7c:cf52:31ae) and accepting
+	TCP/IP connections on port 5432?
+could not connect to server: Connection refused
+	Is the server running on host "ep-shiny-cell-a408dy15-pooler.us-east-1.aws.neon.tech" (2600:1f18:240c:5421:acd1:6284:5a8a:d6e9) and accepting
+	TCP/IP connections on port 5432?
