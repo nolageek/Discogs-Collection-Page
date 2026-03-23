@@ -138,7 +138,7 @@ $options = array('http' => array('user_agent' => 'DiscogsCollectionPage'));
 $CONTEXT = stream_context_create($options);
 $options2 = array('http' => array('user_agent' => "User-Agent: MyMusicApp/1.0 (your@email.com)\r\n"));
 $CONTEXT2 = stream_context_create($options2);
-$user_bio = "This collection belongs to " . $PARAMS['username'] . ". There are many just like it, but this one is his.";
+$user_bio = "This collection belongs to " . $PARAMS['username'] . ". There are many just like it, but this one is theirs.";
 
 // GET FOLDER DATA FOR NAVIGATION BAR
 $folderdata = file_get_contents($DATA_FILES['folders']);
@@ -380,15 +380,15 @@ function fetchCustomFieldsData($username, $token)
 
 
 
-function fetchCoverArtArchiveData($username, $token)
-{
-    global $DISCOGS_API_URL_USERS, $DATA_FILES;
-
-    // Fetch new folder data if file is invalid or too old
-    $url = $DISCOGS_API_URL_USERS . "$username/collection/fields?token=$token";
-
-    check_data_file($DATA_FILES['fields'], 24, $url);
-}
+//function fetchCoverArtArchiveData($username, $token)
+//{
+//    global $DISCOGS_API_URL_USERS, $DATA_FILES;
+//
+//    // Fetch new folder data if file is invalid or too old
+//    $url = $DISCOGS_API_URL_USERS . "$username/collection/fields?token=$token";
+//
+//    check_data_file($DATA_FILES['fields'], 24, $url);
+//}
 
 
 
@@ -637,12 +637,12 @@ function get_statistics()
             $country_count[$country]++;
         }
 
-        foreach ($genres as $genre) {
-            if (!isset($statistics['releases_per_genre'][$genre])) {
-                $statistics['releases_per_genre'][$genre] = 0;
-            }
-            $statistics['releases_per_genre'][$genre]++;
-        }
+//        foreach ($genres as $genre) {
+//           if (!isset($statistics['releases_per_genre'][$genre])) {
+//                $statistics['releases_per_genre'][$genre] = 0;
+//            }
+//            $statistics['releases_per_genre'][$genre]++;
+//        }
 
         $styles = $basic_info['styles'] ?? [];
         foreach ($styles as $style) {
