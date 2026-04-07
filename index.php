@@ -22,7 +22,8 @@ if ($PARAMS['release_id']) :
 endif;
 
 if ($IS_STATISTICS)
-    get_statistics();
+  $statistics_data = get_statistics();
+    //get_statistics();
 
 ?>
 
@@ -161,6 +162,14 @@ body {
 
 .bg-limegreen {
   background-color: #32CD32;
+}
+
+.bg-blue {
+  background-color: blue;
+}
+
+.bg-red {
+  background-color: red;
 }
 
 .navbar {
@@ -413,8 +422,10 @@ background-color: aqua;
          'per_page' => '0',
          'order' => '0',
          'sort_by' => '0',
-         'type' => '0'
+         'type' => '0',
+		 'format_filter' => ''
      ];
+	 
      $topWantsParams = [
          'release_id' => '',
          'type' => 'wants',
@@ -626,7 +637,22 @@ background-color: aqua;
 
     <?php } ?>
 
-
+<?php
+        $distinct_formats = get_distinct_formats($DATA_FILES['releases']);
+        $current_format_label = $PARAMS['format_filter'] ?: 'All Formats';
+    ?>
+    <button class="btn btn-dark rounded-0 text-muted text-uppercase dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa fa-fw fa-compact-disc"></i> <?php echo htmlspecialchars($current_format_label); ?>
+    </button>
+    <ul class="dropdown-menu">
+        <li><h6 class="dropdown-header">Filter by Format</h6></li>
+        <li><a href="<?php echo build_url("/", set_params($PARAMS, ['format_filter' => '', 'page' => '1'])); ?>" class="dropdown-item text-capitalize<?php if (empty($PARAMS['format_filter'])) echo ' bg-secondary'; ?>"><i class="fa fa-fw fa-compact-disc"></i> All Formats</a></li>
+        <?php foreach ($distinct_formats as $fmt_name => $fmt_count) { ?>
+            <li><a href="<?php echo build_url("/", set_params($PARAMS, ['format_filter' => $fmt_name, 'page' => '1'])); ?>" class="dropdown-item text-capitalize<?php if ($PARAMS['format_filter'] === $fmt_name) echo ' bg-secondary'; ?>"><i class="fa fa-fw fa-compact-disc"></i> <?php echo htmlspecialchars($fmt_name); ?> <span class="badge badge-primary"><?php echo $fmt_count; ?></span></a></li>
+        <?php } ?>
+    </ul>
+	
+	
     <?php
 
 
@@ -761,6 +787,26 @@ background-color: aqua;
         [$labels, $data] = extract_labels_and_data($statistics_data['releases_per_style']);
         echo createTreemapChartCard('releases_per_style', $labels, $data, 'Releases Per Style');
 
+        // Releases by decade
+[$labels, $data] = extract_labels_and_data($statistics_data['releases_per_decade']);
+echo createBarChartCard('releases_per_decade', $labels, $data, 'Releases by Decade');
+
+// Collection growth
+[$labels, $data] = extract_labels_and_data($statistics_data['collection_growth']);
+echo createLineChartCard('collection_growth', $labels, $data, 'Collection Growth');
+
+// Top 10 labels
+[$labels, $data] = extract_labels_and_data($statistics_data['top_10_labels']);
+echo createBarChartCard('top_10_labels', $labels, $data, 'Top 10 Labels');
+
+// Coloured vinyl
+[$labels, $data] = extract_labels_and_data($statistics_data['coloured_vinyl']);
+echo createPieChartCard('coloured_vinyl', $labels, $data, 'Vinyl: Coloured vs Black');
+
+// Average release year (already calculated, just not displayed)
+echo SimpleDataItemCard($statistics_data['average_release_year'], 'Average Release Year');
+
+
     else:
 
         foreach ($collection as $release) {
@@ -797,7 +843,8 @@ background-color: aqua;
 
   <ul class="list-group cardReleaseData <?php echo css_is_hidden("releases"); ?>">
   <li class="card-header list-group-item list-group-item-action">Collection Totals</li>
-  <?php $statistics = load_statistics_data($DATA_FILES['statistics']) ?>
+<?php //$statistics = load_statistics_data($DATA_FILES['statistics']) ?>
+<?php $statistics = load_statistics_summary(); ?>
   <li class="list-group-item list-group-item-action"><?php echo "<strong>Releases: </strong>" . $statistics['total_releases'] . ", <strong>Artists: </strong>" . $statistics['unique_artists'] . ", <strong>Genres: </strong>" . $statistics['unique_genres'] . "</li>"; ?>
   </ul>
 
